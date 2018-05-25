@@ -2,6 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from bbn import HorseIDBayesianNetwork;
+
+
+bbn = HorseIDBayesianNetwork();
+bbn.clear_values(None);
+bbn.declere_variables(None);
+
 
 # Create your models here.
 
@@ -23,7 +30,31 @@ class Variables(models.Model):
 	good_id 				= models.BooleanField(default=False);
 
 	def __str__(self):
-		return self.good_id;
+		return str({ bbn.IDENTIFIABILITY:	self.identifiablity,
+		bbn.LOCATION:					self.location,
+		bbn.CHIP_WORK:					self.chip_work,
+		bbn.PASSPORT:					self.passport,
+		bbn.PASSPORT_AVAILABLE:			self.passport_available,
+		bbn.ID_USING:					self.id_using,
+		bbn.ID_VERIFYING:				self.id_verifying,
+		bbn.ID_USING_MARKING:			self.id_using_marking,
+		bbn.MARKINGS_CORRECT:			self.markings_correct,
+		bbn.DISTINCTIVE_TRAITS:			self.distinctive_traits,
+		bbn.OWNER_STA:					self.owner_sta,
+		bbn.GOOD_ID:					self.good_id });
+
+
+
+
+
+class Graph(model.Model):
+	nodes					= models.Array();
+	edges 					= models.Array();
+
+	def __str__(self):
+		return str({'nodes': nodes, 'edges':edges});
+
+
 
 
 
@@ -36,7 +67,7 @@ class FunctionResponse(models.Model):
 	data	 				= models.CharField(max_length=100, blank=True, default='');
 
 	def __str__(self):
-		return self.state;
+		return str({'state': state, 'status':status, 'data':data});
 		
 
 

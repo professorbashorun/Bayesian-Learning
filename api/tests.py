@@ -33,15 +33,41 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 	def update(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		request = {'data': {
-			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
-			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
-			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
-			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
-			bbn.GOOD_ID:			[[]]
+			bbn.IDENTIFIABILITY:		[[0.1], [0.9]],		
+			bbn.LOCATION:				[[0.9], [0.1]],		
+			bbn.CHIP_WORK:				[[0.3, 0.3], [0.7, 0.7]],
+			bbn.CHIPPED:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT_AVAILABLE:		[[0.7, 0.3], [0.3, 0.7]],
+			bbn.ID_USING:				[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],		
+			bbn.ID_VERIFYING:			[[0.8], [0.2]],		
+			bbn.ID_USING_MARKING:		[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],
+			bbn.MARKINGS_CORRECT:		[[0.9], [0.1]],		
+			bbn.DISTINCTIVE_TRAITS:		[[0.7], [0.3]],		
+			bbn.OWNER_STA:				[[0.7], [0.3]],
+			bbn.GOOD_ID:				[[0.1,0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1], 
+												   [0.9,0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]]
 			},
-			'graph':[]
+			'graph':[			
+				#VARIABLES FROM 			VARIABLES TO							#ARROW FROM 							ARROW TO
+				(bbn.identifiability, 		bbn.good_id),							#identifiability 		------> 		good_id
+				(bbn.location, 				bbn.chipped),							#location 				------> 		chipped
+				(bbn.location, 				bbn.chip_work),							#location 				------> 		chip_work
+				(bbn.location, 				bbn.passport),							#location  				------> 		passport
+				(bbn.chipped, 				bbn.id_using),							#chipped 				------> 		id_using	
+				(bbn.chip_work, 			bbn.id_using),							#chip_work  			------> 		id_using
+				(bbn.passport, 				bbn.passport_available),				#passport 				------> 		passport_available			
+				(bbn.passport_available, 	bbn.id_using),							#passport_available 	------> 		id_using
+				(bbn.markings_correct, 		bbn.id_using_marking),					#markings_correct 		------> 		id_using_marking
+				(bbn.distinctive_traits, 	bbn.id_using_marking),					#distinctive_traits 	------> 		id_using_marking
+				(bbn.passport_available, 	bbn.id_using_marking),					#passport_available  	------>		 	id_using_marking
+				(bbn.id_verifying, 			bbn.good_id),							#id_verifying  			------> 		good_id
+				(bbn.id_using, 				bbn.good_id),							#id_using 				------> 		good_id
+				(bbn.id_using_marking, 		bbn.good_id),							#id_using_marking 		------> 		good_id
+				(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
+			]
 		};
-		self.assertEquals(bbn.update_model(request), True);
+		self.assertEquals(bbn.update(request), True);
 
 
 
@@ -82,11 +108,20 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 	def update_values(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }}
 		request={'data': {
-			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
-			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
-			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
-			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
-			bbn.GOOD_ID:			[[]]
+			bbn.IDENTIFIABILITY:		[[0.1], [0.9]],		
+			bbn.LOCATION:				[[0.9], [0.1]],		
+			bbn.CHIP_WORK:				[[0.3, 0.3], [0.7, 0.7]],
+			bbn.CHIPPED:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT_AVAILABLE:		[[0.7, 0.3], [0.3, 0.7]],
+			bbn.ID_USING:				[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],		
+			bbn.ID_VERIFYING:			[[0.8], [0.2]],		
+			bbn.ID_USING_MARKING:		[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],
+			bbn.MARKINGS_CORRECT:		[[0.9], [0.1]],		
+			bbn.DISTINCTIVE_TRAITS:		[[0.7], [0.3]],		
+			bbn.OWNER_STA:				[[0.7], [0.3]],
+			bbn.GOOD_ID:				[[0.1,0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1], 
+												   [0.9,0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]]
 			}
 		};
 		self.assertEquals(bbn.update_values(request), True);
@@ -130,7 +165,25 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def draw_graph(self):#request={'graph': [(A1,B1),(A2,B2), ... (AN,BN),]}
-		request = {'graph': []};
+		request={'graph':[			
+				#VARIABLES FROM 			VARIABLES TO							#ARROW FROM 							ARROW TO
+				(bbn.identifiability, 		bbn.good_id),							#identifiability 		------> 		good_id
+				(bbn.location, 				bbn.chipped),							#location 				------> 		chipped
+				(bbn.location, 				bbn.chip_work),							#location 				------> 		chip_work
+				(bbn.location, 				bbn.passport),							#location  				------> 		passport
+				(bbn.chipped, 				bbn.id_using),							#chipped 				------> 		id_using	
+				(bbn.chip_work, 			bbn.id_using),							#chip_work  			------> 		id_using
+				(bbn.passport, 				bbn.passport_available),				#passport 				------> 		passport_available			
+				(bbn.passport_available, 	bbn.id_using),							#passport_available 	------> 		id_using
+				(bbn.markings_correct, 		bbn.id_using_marking),					#markings_correct 		------> 		id_using_marking
+				(bbn.distinctive_traits, 	bbn.id_using_marking),					#distinctive_traits 	------> 		id_using_marking
+				(bbn.passport_available, 	bbn.id_using_marking),					#passport_available  	------>		 	id_using_marking
+				(bbn.id_verifying, 			bbn.good_id),							#id_verifying  			------> 		good_id
+				(bbn.id_using, 				bbn.good_id),							#id_using 				------> 		good_id
+				(bbn.id_using_marking, 		bbn.good_id),							#id_using_marking 		------> 		good_id
+				(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
+			]
+		};
 		self.assertEquals(bbn.draw_graph(request), True);
 
 
