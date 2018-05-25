@@ -11,30 +11,33 @@ import pandas as pd;
 class HorseIDBayesianNetwork(object):
 
 
-	def build(self, request):
-		self.initialise_space(request);
-		self.define_universe(request);
-		self.use_default_values(request);
-		self.declare_variables(request);
-		self.define_evidences(request);
-		self.define_cpds(request);
-		self.draw_default_graph(request);
-		return True;#DONE
-
-
-
-
-	def run(self, request):
-		self.load_model(request);
-		return True;#DONE
-
-
-
-
-
-	def update(self, request):
-		self.update_model(request);
+	def build(self, request):#request=void
+		self.initialise_space(request);#request=void
+		self.define_universe(request);#request=void
+		self.use_default_values(request);#request=void
+		self.declare_variables(request);#request=void
+		self.define_evidences(request);#request=void
+		self.define_cpds(request);#request=void
+		self.draw_default_graph(request);#request=void
 		return True;
+		#DONE
+
+
+
+
+	def run(self, request):#request=void
+		self.load_model(request);#request=void
+		return True;
+		#DONE
+
+
+
+
+
+	def update(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+		self.update_model(request);#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+		return True;
+		#DONE
 
 
 
@@ -56,16 +59,18 @@ class HorseIDBayesianNetwork(object):
 		self.distinctive_traits_space			= [True, False];
 		self.owner_sta_space					= [True, False];
 		self.good_id_space						= [True, False];
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
 
 
 	def define_universe(self, request):#request=void
-		self.clear_values(request);
-		self.declare_variables(request);
-		return True;#DONE
+		self.clear_values(request);#request=void
+		self.declare_variables(request);#request=void
+		return True;
+		#DONE
 
 
 
@@ -88,7 +93,8 @@ class HorseIDBayesianNetwork(object):
 		self.distinctive_traits_values 			= [[]];			
 		self.owner_sta_values 					= [[]];		
 		self.good_id_values						= [[]];
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -112,7 +118,8 @@ class HorseIDBayesianNetwork(object):
 		self.owner_sta_values 					= [[0.8], [0.2]];				
 		self.good_id_values						= [[0.2,0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], 
 												   [0.8,0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -140,7 +147,8 @@ class HorseIDBayesianNetwork(object):
 			self.GOOD_ID,				self.good_id, 				self.good_id_size 				= "good_id",				"V12",		len(self.good_id_values);
 		except Exception as e:
 			raise e
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -153,7 +161,7 @@ class HorseIDBayesianNetwork(object):
 		#use this to update dataset values for cpds
 		try:
 			#request.data;
-			self.clear_values(request);
+			self.clear_values(request);#request=void
 			#DEFINE VARIBLES 						SET VALUES 
 			self.identifiability_values 			= self.identifiability_values.append(request.data[self.IDENTIFIABILITY]);
 			self.location_values 					= self.location_values.append(request.data[self.LOCATION]);
@@ -168,10 +176,11 @@ class HorseIDBayesianNetwork(object):
 			self.distinctive_traits_values 			= self.distinctive_traits_values.append(request.data[self.DISTINCTIVE_TRAITS]);
 			self.owner_sta_values 					= self.owner_sta_values.append(request.data[self.OWNER_STA]);
 			self.good_id_values 					= self.good_id_values.append(request.data[self.GOOD_ID]);
-			load_sizes(request);
+			load_sizes(request);#request=void
 		except Exception as e:
 			raise e
-		return True; #DONE
+		return True; 
+		#DONE
 
 
 
@@ -200,7 +209,8 @@ class HorseIDBayesianNetwork(object):
 			self.good_id_size					= len(self.good_id_values);
 		except Exception as e:
 			raise e
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -231,7 +241,8 @@ class HorseIDBayesianNetwork(object):
 			self.good_id_evidence,				self.good_id_evidence_card					= [self.id_verifying, 				self.id_using, 			self.id_using_marking, 			self.owner_sta, self.identifiability],	[self.id_verifying_size, 			self.id_using_size, 	self.id_using_marking_size, 	self.owner_sta_size, self.identifiability_size];
 		except Exception as e:
 			raise e
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -262,7 +273,8 @@ class HorseIDBayesianNetwork(object):
 			self.good_id_cpd 			= TabularCPD(variable=self.good_id, 			variable_card=self.good_id_size, 			values=self.good_id_values, 				evidence=self.good_id_evidence, 				evidence_card=self.good_id_evidence_card);
 		except Exception as e:
 			raise e		
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -271,7 +283,8 @@ class HorseIDBayesianNetwork(object):
 
 
 	def load_cpds(self, request):#request=void
-		return self.define_cpds(request);#DONE
+		return self.define_cpds(request);#request=void 
+		#DONE
 
 
 
@@ -301,7 +314,8 @@ class HorseIDBayesianNetwork(object):
 			(self.id_using_marking, 	self.good_id),							#id_using_marking 		------> 		good_id
 			(self.owner_sta, 			self.good_id),							#owner_sta 				------> 		good_id
 		];
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -312,7 +326,8 @@ class HorseIDBayesianNetwork(object):
 	#define set graph
 	def draw_graph(self, request):#request={'graph': [(A1,B1),(A2,B2), ... (AN,BN),]}
 		self.horse_id_graph	= request.graph;
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -329,7 +344,8 @@ class HorseIDBayesianNetwork(object):
 		self.horse_id_model 				= BayesianModel(				self.horse_id_graph);
 		self.load_cpds_to_model(request);
 		self.horse_inference 				= VariableElimination(			self.horse_id_model); 
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -352,7 +368,8 @@ class HorseIDBayesianNetwork(object):
 			self.id_using_cpd, 				self.id_verifying_cpd, 			self.id_using_marking_cpd, 		
 			self.markings_correct_cpd,		self.distinctive_traits_cpd, 	self.owner_sta_cpd, 
 			self.good_id_cpd);
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -365,7 +382,8 @@ class HorseIDBayesianNetwork(object):
 		self.build_model(request);
 		#load cpds to model
 		self.load_cpds_to_model(request);
-		return True;#DONE
+		return True;
+		#DONE
 
 
 
@@ -391,7 +409,8 @@ class HorseIDBayesianNetwork(object):
 		self.load_model(request);
 		self.last_updated_time = "";
 		self.current_accuracy 	=	self.test_model(request);
-		return {time: self.last_updated_time, accuracy: self.current_accuracy}#NEED REVIEW
+		return {time: self.last_updated_time, accuracy: self.current_accuracy}
+		#NEED REVIEW
 
 
 
@@ -402,7 +421,7 @@ class HorseIDBayesianNetwork(object):
 	def update_model(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 
 		#use this to train model online. 
-		
+
 		# Cross validate dataset
 		self.update_values(request);
 		self.load_cpds(request);
@@ -414,7 +433,8 @@ class HorseIDBayesianNetwork(object):
 		self.load_model(request);
 		self.last_updated_time = "";
 		self.current_accuracy 	=	self.test_model(request);
-		return {time: self.last_updated_time, accuracy: self.current_accuracy}#NEED REVIEW
+		return {time: self.last_updated_time, accuracy: self.current_accuracy}
+		#NEED REVIEW
 
 
 
@@ -429,7 +449,8 @@ class HorseIDBayesianNetwork(object):
 	def test_model(self, request):
 		# TODO: test model based on dataframe and return test accuracy.
 		# self.horse_id_model.query() 	
-		return 0;#NEED REVIEW	
+		return 0;
+		#NEED REVIEW	
 
 
 
@@ -475,8 +496,9 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def describe_node(self, request):
+	def describe_node(self, request):#request={'node':value}
 		return self.get_cpds(request);
+		#DONE
 
 
 
@@ -485,9 +507,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def check_model(self, request):
+	def check_model(self, request):#request=void
 		#no input request required.
 		return self.horse_id_model.check_model();
+		#DONE
 
 
 
@@ -495,19 +518,23 @@ class HorseIDBayesianNetwork(object):
 
 	def get_nodes(self, request):#come back and check
 		return self.horse_id_model.get_nodes();
+		#DONE
 
 
 
 
 	def get_edges(self, request):#come back and check
 		return self.horse_id_model.get_edges();
+		#DONE
 
 
 
 
 
-	def get_cpds(self, request):
+	def get_cpds(self, request):#request={'node':value}
 		return self.horse_id_model.get_cpds(node=request.node);
+		#DONE
+	
 
 
 
@@ -515,8 +542,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def get_cardinality(self, request):
+	def get_cardinality(self, request):#request={'node':value}
 		return self.horse_id_model.get_cardinality(node=request.node);
+		#DONE
+	
 
 
 
@@ -524,9 +553,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def get_local_independencies(self, request):
+	def get_local_independencies(self, request):#request={'variables':values}
 		#request.variables
 		return self.horse_id_model.local_independencies(variables=request.variables);
+		#DONE
 
 
 
@@ -534,9 +564,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def get_active_trail_nodes(self, request):
+	def get_active_trail_nodes(self, request):#request={'get_active_trial_nodes':values, 'observed':values}
 		#request.variables, 	request.observed;
 		return self.horse_id_model.active_trail_nodes(variables=request.variables, observed=request.observed)
+		#DONE
 
 
 
@@ -544,9 +575,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def query(self, request):
+	def query(self, request):#request={'variables':value, 'evidence':value, 'elimination_order':value}
 		#request.variables 		request.evidence 		request.elimination_order
 		return self.horse_inference.query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
+		#DONE
 
 
 
@@ -554,9 +586,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def map_query(self, request):
+	def map_query(self, request)::#request={'variables':value, 'evidence':value, 'elimination_order':value}
 		#request.variables 	request.evidence 	request.elimination_order
 		return self.horse_inference.map_query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
+		#DONE
 
 
 
