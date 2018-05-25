@@ -41,7 +41,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def initialise_space(self, request):
+	def initialise_space(self, request):#request=void
 		
 		# VARIABLE SPACE 						POSSIBLE VALUES
 		self.identifiablity_space 				= [0, 1];														# If the outcome of the previous id is GOOD, then 1; else if it is not GOOD then 0;
@@ -62,7 +62,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def define_universe(self, request):
+	def define_universe(self, request):#request=void
 		self.clear_values(request);
 		self.declare_variables(request);
 		return True;#DONE
@@ -72,7 +72,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def clear_values(self, request):
+	def clear_values(self, request):#request=void
 
 		#DEFINE VARIBLES 						SET EMPTY MATRIX 
 		self.identifiability_values 			= [[]];		
@@ -95,11 +95,8 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#define variables' conditional probability distribution values
-	"""
-		
-	"""
-	def use_default_values(self, request):
+	def use_default_values(self, request):#request=void
+
 		#VARIABLES 								DEFAULT PROBABILITY TENSORS
 		self.identifiability_values 			= [[0.1], [0.9]];				
 		self.location_values					= [[0.5], [0.5]];	
@@ -123,7 +120,8 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def declare_variables(self, request):
+	def declare_variables(self, request):#request=void
+
 		#define variables and variables size
 		try:
 			#VARIABLE DEFINATION    	SYMBOLICS					VARIABLE SIZE 					VARIABLE DEFINITION 	SYMBOLICS 		SET VARIABLE SIZE
@@ -148,8 +146,11 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#use this to update dataset values for cpds
-	def update_values(self, request):
+	
+	def update_values(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }}
+
+
+		#use this to update dataset values for cpds
 		try:
 			#request.data;
 			self.clear_values(request);
@@ -178,8 +179,11 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#this declares and initialises the variables sizes to be used
-	def load_sizes(self, request):
+	
+	def load_sizes(self, request):#request=void
+
+
+		#this declares and initialises the variables sizes to be used
 		try:
 			self.identifiability_size 			= len(self.identifiability_values);
 			self.location_size					= len(self.location_values);
@@ -205,8 +209,11 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#define variable dependencies and dependency size(evidence and evidence card)
-	def define_evidences(self, request):
+	
+	def define_evidences(self, request):#request=void
+
+
+		#define variable dependencies and dependency size(evidence and evidence card)
 		try:
 			#EVIDENCE 								EVIDENCE CARD 							EVIDEDENCE VALUE 											ENVIDENCE CARD VALUES
 			self.identifiability_evidence, 		self.identifiability_evidence_card 			= None, 													None;
@@ -233,8 +240,11 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#define node cpds: load this on start
-	def define_cpds(self, request):
+	
+	def define_cpds(self, request):#request=void (to be modified for flexible as time goes on)
+
+
+		#define node cpds: load this on start
 		try:
 			#	CPDs  						CPD TYPE 				VARIABLE 					VARIABLE SIZE 							VALUES 										EVIDENCE(DEPENDENCIES) 							EVIDENCE CARD (DEPENDENCY SIZE)
 			self.identifiability_cpd 	= TabularCPD(variable=self.identifiability, 	variable_card=self.identifiability_size, 	values=self.identifiability_values);		#		None												None
@@ -260,7 +270,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def load_cpds(self, request):
+	def load_cpds(self, request):#request=void
 		return self.define_cpds(request);#DONE
 
 
@@ -269,7 +279,9 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def draw_default_graph(self, request):
+	def draw_default_graph(self, request):#request=void
+
+
 		#define causuality/dependency graph.	
 		self.horse_id_graph = [			
 			#VARIABLES FROM 			VARIABLES TO							#ARROW FROM 							ARROW TO
@@ -295,8 +307,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
+
+
 	#define set graph
-	def draw_graph(self, request):
+	def draw_graph(self, request):#request={'graph': [(A1,B1),(A2,B2), ... (AN,BN),]}
 		self.horse_id_graph	= request.graph;
 		return True;#DONE
 
@@ -306,8 +320,11 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#Build graph and load model: load on start
-	def build_model(self, request):
+
+	
+	def build_model(self, request):#request=void
+
+		#Build graph and load model: load on start
 		#methods							METHOD CLASS 					FIRST ARG
 		self.horse_id_model 				= BayesianModel(				self.horse_id_graph);
 		self.load_cpds_to_model(request);
@@ -322,8 +339,11 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#add nodes/CPDs to HorseID model graph: load this on start
-	def load_cpds_to_model(self, request):
+	
+	def load_cpds_to_model(self, request):#request=void
+
+
+		#add nodes/CPDs to HorseID model graph: load this on start
 		#add cpds to horse model
 		self.horse_id_model.add_cpds(
 			#SET 1							#SET 2							#SET 3
@@ -340,7 +360,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def load_model(self, request):
+	def load_model(self, request):#request=void
 		#update model
 		self.build_model(request);
 		#load cpds to model
@@ -355,10 +375,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
+	def train_model(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 
 
-	#use this to train model. Takes in pandas dataframe as input to train the model based on define graph as define above
-	def train_model(self, request):
+		#use this to train model.
 
 		# Cross validate dataset
 		self.update_values(request);
@@ -379,10 +399,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
+	def update_model(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 
-
-	#use this to train model online. Takes in pandas dataframe.
-	def update_model(self, request):
+		#use this to train model online. 
+		
 		# Cross validate dataset
 		self.update_values(request);
 		self.load_cpds(request);
