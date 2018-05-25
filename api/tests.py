@@ -18,152 +18,152 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def build(self):
+	def build(self):#request=void
 		request = None;
 		self.assertEquals(bbn.build(request), True);
 
 
 
-	def run(self):
+	def run(self)::#request=void
 		request = None;
 		self.assertEquals(bbn.run(request),	True);
 
 
 
 
-	def update(self):
+	def update(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		request = None;
 		self.assertEquals(bbn.update_model(request), True);
 
 
 
 
-	def initialise_space(self):
+	def initialise_space(self):#request=void
 		request = None;
 		self.assertEquals(bbn.initialise_space(request), True);
 
 
 
 
-	def define_universe(self):
+	def define_universe(self):#request=void
 		request = None;
 		self.assertEquals(bbn.define_universe(request), True);
 
 
 
 
-	def clear_values(self):
+	def clear_values(self):#request=void
 		request = None;
 		self.assertEquals(bbn.clear_values(request), True);
 
 
 
 
-	def use_default_values(self):
+	def use_default_values(self):#request=void
 		request = None;
 		self.assertEquals(bbn.use_default_values(request), True);
 
 
 
-	def declare_variables(self):
+	def declare_variables(self):#request=void
 		request = None;
 		self.assertEquals(bbn.declare_variables(request), True);
 
 
 
 
-	def update_values(self):
+	def update_values(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }}
 		request = None;
 		self.assertEquals(bbn.update_values(request), True);
 
 
 
 
-	def load_sizes(self):
+	def load_sizes(self):#request=void
 		request = None;
 		self.assertEquals(bbn.load_sizes(request), True);
 
 
 
 
-	def define_evidence(self):
+	def define_evidence(self):#request=void
 		request = None;
 		self.assertEquals(bbn.define_evidence(request), True);
 
 
 
 
-	def define_cpds(self):
+	def define_cpds(self):#request=void
 		request = None;
 		self.assertEquals(bbn.define_cpds(request), True);
 
 
 
 
-	def load_cpds(self):
+	def load_cpds(self):#request=void
 		request = None;
 		self.assertEquals(bbn.define_cpds(request), True);
 
 
 
 
-	def draw_default_graph(self):
+	def draw_default_graph(self):#request=void
 		request = None;
 		self.assertEquals(bbn.draw_default_graph(request), True);
 
 
 
 
-	def draw_graph(self):
+	def draw_graph(self):#request={'graph': [(A1,B1),(A2,B2), ... (AN,BN),]}
 		request = None;
 		self.assertEquals(bbn.draw_graph(request), True);
 
 
 
 
-	def build_model(self):
+	def build_model(self):#request=void
 		request = None;
 		self.assertEquals(bbn.build_model(request), True);
 
 
 
 
-	def load_cpds_to_model(self):
+	def load_cpds_to_model(self):#request=void
 		request = None;
 		self.assertEquals(bbn.load_cpds_to_model(request), True);
 
 
 
-	def load_model(self):
+	def load_model(self):#request=void
 		request = None;
 		self.assertEquals(bbn.load_model(request), True);
 
 
 
-	def train_model(self):
+	def train_model(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		request = None;
 		self.assertEquals(bbn.train_model(request), True);
 
 
 
-	def test_model(self):
+	def test_model(self):#
 		request = None;
 		self.assertEquals(bbn.test_model(request), True);
 
 
 
-	def update_model(self):
+	def update_model(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		request = None;
 		self.assertEquals(bbn.update_model(request), True);
 
 
-	def describe_node(self):
+	def describe_node(self):#request={'node':value}
 		request = None;
 		self.assertEquals(bbn.describe_node(request), True);
 
 
 
-	def check_model(self):
+	def check_model(self):#request=void
 		request = None;
 		self.assertEquals(bbn.check_model(request), True);
 
@@ -182,38 +182,38 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def get_cpds(self):
+	def get_cpds(self):#request={'node':value}
 		request = None;
 		self.assertEquals(bbn.get_cpds(request), True);
 
 
 
-	def get_cardinality(self):
+	def get_cardinality(self):#request={'node':value}
 		request = None;
 		self.assertEquals(bbn.get_cardinality(request), True);
 
 
 
 
-	def get_local_independencies(self):
+	def get_local_independencies(self):#request={'variables':values}
 		request = None;
 		self.assertEquals(bbn.get_local_independencies(request), True);
 
 
 
-	def get_active_trail_nodes(self):
+	def get_active_trail_nodes(self):#request={'get_active_trial_nodes':values, 'observed':values}
 		request = None;
 		self.assertEquals(bbn.get_active_trail_nodes(request), True);
 
 
 
-	def query(self):
+	def query(self):#request={'variables':value, 'evidence':value, 'elimination_order':value}
 		request = None;
 		self.assertEquals(bbn.query(request), True);
 
 
 
-	def map_query(self):
+	def map_query(self):#request={'variables':value, 'evidence':value, 'elimination_order':value}
 		request = None;
 		self.assertEquals(bbn.map_query(request), True);
 
@@ -224,37 +224,36 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def test_all(self):
-		request = None;
 		return {
-		"build": 					self.build(request),
-		"run":						self.run(request),
-		"update":					self.update(request),
-		"initialise_space":			self.initialise_space(request),
-		"define_universe":			self.define_universe(request),
-		"clear_values":				self.clear_values(request),
-		"use_default_values":		self.use_default_values(request),
-		"declare_variables":		self.declare_variables(request),
-		"update_values":			self.update_values(request),
-		"load_sizes":				self.load_sizes(request),
-		"define_evidence":			self.define_evidence(request),
-		"define_cpds":				self.define_cpds(request),
-		"load_cpds":				self.load_cpds(request),
-		"draw_default_graph":		self.draw_default_graph(request),
-		"draw_graph":				self.draw_graph(request),
-		"build_model":				self.build_model(request),
-		"load_cpds_to_model":		self.load_cpds_to_model(request),
-		"load_model":				self.load_model(request),
-		"train_model":				self.train_model(request),
-		"test_model":				self.test_model(request),
-		"update_model":				self.update_model(request),
-		"describe_node":			self.describe_node(request),
-		"check_model":				self.check_model(request),
-		"get_nodes":				self.get_nodes(request),
-		"get_edges":				self.get_edges(request),
-		"get_cardinality":			self.get_cardinality(request),
-		"get_local_independencies":	self.get_local_independencies(request),
-		"get_active_trail_nodes":	self.get_active_trail_nodes(request),
-		"query":					self.query(request),
-		"map_query":				self.map_query(request)
+		"build": 					self.build(),
+		"run":						self.run(),
+		"update":					self.update(),
+		"initialise_space":			self.initialise_space(),
+		"define_universe":			self.define_universe(),
+		"clear_values":				self.clear_values(),
+		"use_default_values":		self.use_default_values(),
+		"declare_variables":		self.declare_variables(),
+		"update_values":			self.update_values(),
+		"load_sizes":				self.load_sizes(),
+		"define_evidence":			self.define_evidence(),
+		"define_cpds":				self.define_cpds(),
+		"load_cpds":				self.load_cpds(),
+		"draw_default_graph":		self.draw_default_graph(),
+		"draw_graph":				self.draw_graph(),
+		"build_model":				self.build_model(),
+		"load_cpds_to_model":		self.load_cpds_to_model(),
+		"load_model":				self.load_model(),
+		"train_model":				self.train_model(),
+		"test_model":				self.test_model(),
+		"update_model":				self.update_model(),
+		"describe_node":			self.describe_node(),
+		"check_model":				self.check_model(),
+		"get_nodes":				self.get_nodes(),
+		"get_edges":				self.get_edges(),
+		"get_cardinality":			self.get_cardinality(),
+		"get_local_independencies":	self.get_local_independencies(),
+		"get_active_trail_nodes":	self.get_active_trail_nodes(),
+		"query":					self.query(),
+		"map_query":				self.map_query()
 		}
 
