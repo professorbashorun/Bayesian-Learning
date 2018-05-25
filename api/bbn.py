@@ -151,25 +151,25 @@ class HorseIDBayesianNetwork(object):
 	#use this to update dataset values for cpds
 	def update_values(self, request):
 		try:
-			dataframe = request.data;
+			#request.data;
 			self.clear_values(request);
 			#DEFINE VARIBLES 						SET VALUES 
-			self.identifiability_values 			= self.identifiability_values.append(dataframe[self.IDENTIFIABILITY]);
-			self.location_values 					= self.location_values.append(dataframe[self.LOCATION]);
-			self.chip_work_values 					= self.chip_work_values.append(dataframe[self.CHIP_WORK]);
-			self.chipped_values 					= self.chipped_values.append(dataframe[self.CHIPPED]);
-			self.passport_values 					= self.passport_values.append(dataframe[self.PASSPORT]);
-			self.passport_available_values 			= self.passport_available_values.append(dataframe[self.PASSPORT_AVAILABLE]);
-			self.id_using_values 					= self.id_using_values.append(dataframe[self.ID_USING]);
-			self.id_verifying_values 				= self.id_verifying_values.append(dataframe[self.ID_VERIFYING]);
-			self.id_using_marking_values 			= self.id_using_marking_values.append(dataframe[self.ID_USING_MARKING]);
-			self.markings_correct_values 			= self.markings_correct_values.append(dataframe[self.MARKINGS_CORRECT]);
-			self.distinctive_traits_values 			= self.distinctive_traits_values.append(dataframe[self.DISTINCTIVE_TRAITS]);
-			self.owner_sta_values 					= self.owner_sta_values.append(dataframe[self.OWNER_STA]);
-			self.good_id_values 					= self.good_id_values.append(dataframe[self.GOOD_ID]);
+			self.identifiability_values 			= self.identifiability_values.append(request.data[self.IDENTIFIABILITY]);
+			self.location_values 					= self.location_values.append(request.data[self.LOCATION]);
+			self.chip_work_values 					= self.chip_work_values.append(request.data[self.CHIP_WORK]);
+			self.chipped_values 					= self.chipped_values.append(request.data[self.CHIPPED]);
+			self.passport_values 					= self.passport_values.append(request.data[self.PASSPORT]);
+			self.passport_available_values 			= self.passport_available_values.append(request.data[self.PASSPORT_AVAILABLE]);
+			self.id_using_values 					= self.id_using_values.append(request.data[self.ID_USING]);
+			self.id_verifying_values 				= self.id_verifying_values.append(request.data[self.ID_VERIFYING]);
+			self.id_using_marking_values 			= self.id_using_marking_values.append(request.data[self.ID_USING_MARKING]);
+			self.markings_correct_values 			= self.markings_correct_values.append(request.data[self.MARKINGS_CORRECT]);
+			self.distinctive_traits_values 			= self.distinctive_traits_values.append(request.data[self.DISTINCTIVE_TRAITS]);
+			self.owner_sta_values 					= self.owner_sta_values.append(request.data[self.OWNER_STA]);
+			self.good_id_values 					= self.good_id_values.append(request.data[self.GOOD_ID]);
 			load_sizes(request);
 		except Exception as e:
-			raise ValueError("Request.Data cannot be none. Must be a type dict");
+			raise e
 		return True; #DONE
 
 
@@ -297,8 +297,7 @@ class HorseIDBayesianNetwork(object):
 
 	#define set graph
 	def draw_graph(self, request):
-		graph = request.graph;
-		self.horse_id_graph	= graph;
+		self.horse_id_graph	= request.graph;
 		return True;#DONE
 
 
@@ -467,19 +466,20 @@ class HorseIDBayesianNetwork(object):
 
 
 	def check_model(self, request):
+		#no input request required.
 		return self.horse_id_model.check_model();
 
 
 
 
 
-	def get_nodes(self, request):
+	def get_nodes(self, request):#come back and check
 		return self.horse_id_model.get_nodes();
 
 
 
 
-	def get_edges(self, request):
+	def get_edges(self, request):#come back and check
 		return self.horse_id_model.get_edges();
 
 
@@ -487,7 +487,7 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_cpds(self, request):
-		return self.horse_id_model.get_cpds();
+		return self.horse_id_model.get_cpds(node=request.node);
 
 
 
@@ -496,7 +496,7 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_cardinality(self, request):
-		return self.horse_id_model.get_cardinality();
+		return self.horse_id_model.get_cardinality(node=request.node);
 
 
 
@@ -505,7 +505,8 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_local_independencies(self, request):
-		return self.horse_id_model.local_independencies();
+		#request.variables
+		return self.horse_id_model.local_independencies(variables=request.variables);
 
 
 
@@ -514,8 +515,8 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_active_trail_nodes(self, request):
-		node, observed	=	request.node, 	request.observed;
-		return self.horse_id_model.active_trail_nodes(node, observed=observed)
+		#request.variables, 	request.observed;
+		return self.horse_id_model.active_trail_nodes(variables=request.variables, observed=request.observed)
 
 
 
@@ -524,7 +525,8 @@ class HorseIDBayesianNetwork(object):
 
 
 	def query(self, request):
-		return self.horse_inference.query(variables=request.variables, evidence=request.evidence);
+		#request.variables 		request.evidence 		request.elimination_order
+		return self.horse_inference.query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
 
 
 
@@ -533,7 +535,8 @@ class HorseIDBayesianNetwork(object):
 
 
 	def map_query(self, request):
-		return self.horse_inference.map_query(variables=request.variables, evidence=request.evidence);
+		#request.variables 	request.evidence 	request.elimination_order
+		return self.horse_inference.map_query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
 
 
 
