@@ -19,7 +19,7 @@ class HorseIDBayesianNetwork(object):
 		self.define_evidences(request);#request=void
 		self.define_cpds(request);#request=void
 		self.draw_default_graph(request);#request=void
-		return True;
+		return True; #return=boolean
 		#DONE
 
 
@@ -27,7 +27,7 @@ class HorseIDBayesianNetwork(object):
 
 	def run(self, request):#request=void
 		self.load_model(request);#request=void
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -36,7 +36,7 @@ class HorseIDBayesianNetwork(object):
 
 	def update(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		self.update_model(request);#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -59,7 +59,7 @@ class HorseIDBayesianNetwork(object):
 		self.distinctive_traits_space			= [True, False];
 		self.owner_sta_space					= [True, False];
 		self.good_id_space						= [True, False];
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -69,7 +69,7 @@ class HorseIDBayesianNetwork(object):
 	def define_universe(self, request):#request=void
 		self.clear_values(request);#request=void
 		self.declare_variables(request);#request=void
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -93,7 +93,7 @@ class HorseIDBayesianNetwork(object):
 		self.distinctive_traits_values 			= [[]];			
 		self.owner_sta_values 					= [[]];		
 		self.good_id_values						= [[]];
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -109,7 +109,7 @@ class HorseIDBayesianNetwork(object):
 		self.chip_work_values 					= [[0.2, 0.2], [0.8, 0.8]];
 		self.chipped_values 					= [[0.2, 0.2], [0.8, 0.8]];
 		self.passport_values					= [[0.2, 0.2], [0.8, 0.8]];
-		self.passport_available_values  		= [[0.8, 0.2], [0.2, 0.8]];
+		self.passport_available_values  		= [[0.2, 0.2], [0.8, 0.8]];
 		self.id_using_values 					= [[0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
 		self.id_using_marking_values			= [[0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
 		self.id_verifying_values				= [[0.7], [0.3]];				
@@ -118,7 +118,7 @@ class HorseIDBayesianNetwork(object):
 		self.owner_sta_values 					= [[0.8], [0.2]];				
 		self.good_id_values						= [[0.2,0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], 
 												   [0.8,0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -147,7 +147,7 @@ class HorseIDBayesianNetwork(object):
 			self.GOOD_ID,				self.good_id, 				self.good_id_size 				= "good_id",				"V12",		len(self.good_id_values);
 		except Exception as e:
 			raise e
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -179,7 +179,7 @@ class HorseIDBayesianNetwork(object):
 			load_sizes(request);#request=void
 		except Exception as e:
 			raise e
-		return True; 
+		return True;#return=boolean
 		#DONE
 
 
@@ -209,7 +209,7 @@ class HorseIDBayesianNetwork(object):
 			self.good_id_size					= len(self.good_id_values);
 		except Exception as e:
 			raise e
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -225,23 +225,38 @@ class HorseIDBayesianNetwork(object):
 
 		#define variable dependencies and dependency size(evidence and evidence card)
 		try:
-			#EVIDENCE 								EVIDENCE CARD 							EVIDEDENCE VALUE 											ENVIDENCE CARD VALUES
-			self.identifiability_evidence, 		self.identifiability_evidence_card 			= None, 													None;
-			self.location_evidence,				self.location_evidence_card 				= None, 													None;
-			self.chip_work_evidence,			self.chip_work_evidence_card				= [self.location],											[self.location_size];
-			self.chipped_evidence, 				self.chipped_evidence_card					= [self.location],											[self.location_size];
-			self.passport_evidence,				self.passport_evidence_card					= [self.location],											[self.location_size];
-			self.passport_available_evidence,	self.passport_available_evidence_card		= [self.passport],											[self.passport_size];
-			self.id_using_evidence,				self.id_using_evidence_card					= [self.chip_work, self.chipped, self.passport_available],	[self.chip_work_size, self.chipped_size, self.passport_available_size];
-			self.id_verifying_evidence,			self.id_verifying_evidence_card				= None,														None;
-			self.id_using_marking_evidence,		self.id_using_marking_evidence_card			= [self.markings_correct, self.distinctive_traits, self.passport_available],			[self.markings_correct_size, self.distinctive_traits_size, self.passport_available_size];
-			self.markings_correct_evidence,		self.markings_correct_evidence_card			= None,														None;
-			self.distinctive_traits_evidence,	self.distinctive_traits_evidence_card		= None,														None;
-			self.owner_sta_evidence,			self.owner_sta_evidence_card				= None,														None;
-			self.good_id_evidence,				self.good_id_evidence_card					= [self.id_verifying, 				self.id_using, 			self.id_using_marking, 			self.owner_sta, self.identifiability],	[self.id_verifying_size, 			self.id_using_size, 	self.id_using_marking_size, 	self.owner_sta_size, self.identifiability_size];
+			if type(request) == type(None):
+				#EVIDENCE 								EVIDENCE CARD 							EVIDEDENCE VALUE 											ENVIDENCE CARD VALUES
+				self.identifiability_evidence, 		self.identifiability_evidence_card 			= None, 													None;
+				self.location_evidence,				self.location_evidence_card 				= None, 													None;
+				self.chip_work_evidence,			self.chip_work_evidence_card				= [self.location],											[self.location_size];
+				self.chipped_evidence, 				self.chipped_evidence_card					= [self.location],											[self.location_size];
+				self.passport_evidence,				self.passport_evidence_card					= [self.location],											[self.location_size];
+				self.passport_available_evidence,	self.passport_available_evidence_card		= [self.passport],											[self.passport_size];
+				self.id_using_evidence,				self.id_using_evidence_card					= [self.chip_work, self.chipped, self.passport_available],	[self.chip_work_size, self.chipped_size, self.passport_available_size];
+				self.id_verifying_evidence,			self.id_verifying_evidence_card				= None,														None;
+				self.id_using_marking_evidence,		self.id_using_marking_evidence_card			= [self.markings_correct, self.distinctive_traits, self.passport_available],			[self.markings_correct_size, self.distinctive_traits_size, self.passport_available_size];
+				self.markings_correct_evidence,		self.markings_correct_evidence_card			= None,														None;
+				self.distinctive_traits_evidence,	self.distinctive_traits_evidence_card		= None,														None;
+				self.owner_sta_evidence,			self.owner_sta_evidence_card				= None,														None;
+				self.good_id_evidence,				self.good_id_evidence_card					= [self.id_verifying, 				self.id_using, 			self.id_using_marking, 			self.owner_sta, self.identifiability],	[self.id_verifying_size, 			self.id_using_size, 	self.id_using_marking_size, 	self.owner_sta_size, self.identifiability_size];
+			else:
+				self.identifiability_evidence, 		self.identifiability_evidence_card 			= request.evidence.identifiability, 						request.evidence_card.identifiability;
+				self.location_evidence,				self.location_evidence_card 				= request.evidence.location, 								request.evidence_card.location;
+				self.chip_work_evidence,			self.chip_work_evidence_card				= request.evidence.chip_work,								request.evidence_card.chip_work;
+				self.chipped_evidence, 				self.chipped_evidence_card					= request.evidence.chipped,									request.evidence_card.chipped;
+				self.passport_evidence,				self.passport_evidence_card					= request.evidence.passport,								request.evidence_card.passport;
+				self.passport_available_evidence,	self.passport_available_evidence_card		= request.evidence.passport_available,						request.evidence_card.passport_available;
+				self.id_using_evidence,				self.id_using_evidence_card					= request.evidence.id_using,								request.evidence_card.id_using;
+				self.id_verifying_evidence,			self.id_verifying_evidence_card				= request.evidence.id_verifying,							request.evidence_card.id_verifying;
+				self.id_using_marking_evidence,		self.id_using_marking_evidence_card			= request.evidence.id_using_marking,						request.evidence_card.id_using_marking;
+				self.markings_correct_evidence,		self.markings_correct_evidence_card			= request.evidence.markings_correct,						request.evidence_card.markings_correct;
+				self.distinctive_traits_evidence,	self.distinctive_traits_evidence_card		= request.evidence.distinctive_traits,						request.evidence_card.distinctive_traits;
+				self.owner_sta_evidence,			self.owner_sta_evidence_card				= request.evidence.owner_sta,								request.evidence_card.owner_sta;
+				self.good_id_evidence,				self.good_id_evidence_card					= request.evidence.good_id,									request.evidence_card.good_id;
 		except Exception as e:
 			raise e
-		return True;
+		return True;#return=boolean
 		#DONE
 
 
@@ -518,14 +533,14 @@ class HorseIDBayesianNetwork(object):
 
 	def get_nodes(self, request):#come back and check
 		return self.horse_id_model.get_nodes();
-		#DONE
+		#NEED REVIEW
 
 
 
 
 	def get_edges(self, request):#come back and check
 		return self.horse_id_model.get_edges();
-		#DONE
+		#NEED REVIEW
 
 
 

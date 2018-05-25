@@ -5,28 +5,30 @@ from django.test import TestCase
 
 # Create your tests here.
 
-
-
 import unittest
-import bbn
+from bbn import HorseIDBayesianNetwork
 
 
+bbn = HorseIDBayesianNetwork();
 
 
 class HorseIDBayesianNetworkTest(unittest.TestCase):
-	"""docstring for BayesianNetwork"""
+	"""Brief Introduction to BayesianNetwork"""
 
 
 
 	def build(self):#request=void
+		""""""
 		request = None;
-		self.assertEquals(bbn.build(request), True);
+		return self.assertEquals(bbn.build(request), True);
+		#DONE
 
 
 
-	def run(self)::#request=void
+	def run(self):#request=void
 		request = None;
-		self.assertEquals(bbn.run(request),	True);
+		return self.assertEquals(bbn.run(request),	True);
+		#DONE
 
 
 
@@ -68,13 +70,14 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 			]
 		};
 		self.assertEquals(bbn.update(request), True);
-
+		#NEED REVIEW
 
 
 
 	def initialise_space(self):#request=void
 		request = None;
 		self.assertEquals(bbn.initialise_space(request), True);
+		#DONE
 
 
 
@@ -82,6 +85,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 	def define_universe(self):#request=void
 		request = None;
 		self.assertEquals(bbn.define_universe(request), True);
+		#DONE
 
 
 
@@ -89,6 +93,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 	def clear_values(self):#request=void
 		request = None;
 		self.assertEquals(bbn.clear_values(request), True);
+		#DONE
 
 
 
@@ -96,12 +101,14 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 	def use_default_values(self):#request=void
 		request = None;
 		self.assertEquals(bbn.use_default_values(request), True);
+		#DONE
 
 
 
 	def declare_variables(self):#request=void
 		request = None;
 		self.assertEquals(bbn.declare_variables(request), True);
+		#DONE
 
 
 
@@ -304,9 +311,6 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-
-
-
 	def test_all(self):
 		return {
 		"build": 					self.build(),
@@ -340,4 +344,8 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 		"query":					self.query(),
 		"map_query":				self.map_query()
 		}
+
+
+	def runTest(self):
+		return test_all();
 
