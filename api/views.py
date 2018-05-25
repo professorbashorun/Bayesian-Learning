@@ -51,7 +51,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.build(request))
 
 
 		def post(self, request):
@@ -68,7 +68,8 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.run(request));
+
 
 
 		def post(self, request):
@@ -104,7 +105,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.initialise_space(request));
 
 
 		def post(self, request):
@@ -122,12 +123,14 @@ class HorseIDBayesianNetworkAPI(object):
 			return createSerializedResponse(bbn.define_universe(request));
 
 
+
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.define_universe(request));
+
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.define_universe(request));
+			return createSerializedResponse(bbn_test.define_universe());
 
 
 
@@ -141,11 +144,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.clear_values(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.clear_values(request));
+			return createSerializedResponse(bbn_test.clear_values());
 
 
 
@@ -158,11 +161,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.use_default_values(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.use_default_values(request));
+			return createSerializedResponse(bbn_test.use_default_values());
 
 
 
@@ -175,11 +178,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.declare_variables(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.declare_variables(request));
+			return createSerializedResponse(bbn_test.declare_variables());
 
 
 
@@ -193,11 +196,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.update_values(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.update_values(request));
+			return createSerializedResponse(bbn_test.update_values());
 
 
 
@@ -212,11 +215,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.load_sizes(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.load_sizes(request));
+			return createSerializedResponse(bbn_test.load_sizes());
 
 
 
@@ -230,11 +233,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.define_evidences(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.define_evidences(request));
+			return createSerializedResponse(bbn_test.define_evidences());
 
 
 
@@ -248,11 +251,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.define_cpds(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.define_cpds(request));
+			return createSerializedResponse(bbn_test.define_cpds());
 
 
 
@@ -270,7 +273,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.load_cps(request));
+			return createSerializedResponse(bbn_test.load_cps());
 
 
 
@@ -287,7 +290,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.draw_default_graph(request));
+			return createSerializedResponse(bbn_test.draw_default_graph());
 
 
 
@@ -300,11 +303,11 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.draw_graph(request));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn.draw_graph(request));
+			return createSerializedResponse(bbn_test.draw_graph());
 
 
 
@@ -317,7 +320,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.build_model(request));
 
 
 		def post(self, request):
@@ -335,7 +338,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.load_cpds_to_model(request));
 
 
 		def post(self, request):
@@ -353,7 +356,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.load_model(request));
 
 
 		def post(self, request):
@@ -370,7 +373,7 @@ class HorseIDBayesianNetworkAPI(object):
 			return createSerializedResponse(bbn.load_data(request));
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.load_data(request));
 
 
 		def post(self, request):
@@ -387,7 +390,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.prepare_data(request));
 
 
 		def post(self, request):
@@ -405,7 +408,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.train_model(request));
 
 
 		def post(self, request):
@@ -424,7 +427,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.update_model(request));
 
 
 		def post(self, request):
@@ -443,7 +446,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.test_model(request));
 
 
 		def post(self, request):
@@ -461,7 +464,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.describe_data(request));
 
 
 		def post(self, request):
@@ -480,7 +483,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.check_model(request));
 
 
 		def post(self, request):
@@ -500,7 +503,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.get_cpds(request));
 
 
 		def post(self, request):
@@ -519,7 +522,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.get_cardinality(request));
 
 
 		def post(self, request):
@@ -538,7 +541,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.get_local_independencies(request));
 
 
 		def post(self, request):
@@ -557,11 +560,13 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.get_active_trail_nodes(request));
 
 
 		def post(self, request):
 			return createSerializedResponse(bbn_test.get_active_trail_nodes());
+
+
 
 
 
@@ -574,11 +579,13 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.query(request));
 
 
 		def post(self, request):
 			return createSerializedResponse(bbn_test.query());
+
+
 
 
 
@@ -593,7 +600,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 		def put(self, request):
-			pass
+			return createSerializedResponse(bbn.map_query(request));
 
 
 		def post(self, request):
