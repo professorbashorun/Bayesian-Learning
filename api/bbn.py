@@ -564,7 +564,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def get_active_trail_nodes(self, request):#request={'get_active_trial_nodes':values, 'observed':values}
+	def get_active_trail_nodes(self, request):#request={'variables':values, 'observed':values}
 		#request.variables, 	request.observed;
 		return self.horse_id_model.active_trail_nodes(variables=request.variables, observed=request.observed)
 		#DONE
@@ -586,7 +586,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def map_query(self, request)::#request={'variables':value, 'evidence':value, 'elimination_order':value}
+	def map_query(self, request):#request={'variables':value, 'evidence':value, 'elimination_order':value}
 		#request.variables 	request.evidence 	request.elimination_order
 		return self.horse_inference.map_query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
 		#DONE

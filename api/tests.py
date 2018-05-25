@@ -32,7 +32,15 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def update(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
-		request = None;
+		request = {'data': {
+			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
+			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
+			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
+			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
+			bbn.GOOD_ID:			[[]]
+			},
+			'graph':[]
+		};
 		self.assertEquals(bbn.update_model(request), True);
 
 
@@ -73,7 +81,14 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def update_values(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }}
-		request = None;
+		request={'data': {
+			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
+			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
+			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
+			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
+			bbn.GOOD_ID:			[[]]
+			}
+		};
 		self.assertEquals(bbn.update_values(request), True);
 
 
@@ -115,7 +130,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def draw_graph(self):#request={'graph': [(A1,B1),(A2,B2), ... (AN,BN),]}
-		request = None;
+		request = {'graph': []};
 		self.assertEquals(bbn.draw_graph(request), True);
 
 
@@ -141,7 +156,15 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def train_model(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
-		request = None;
+		request = {'data': {
+			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
+			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
+			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
+			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
+			bbn.GOOD_ID:			[[]]
+			},
+			'graph':[]
+		};
 		self.assertEquals(bbn.train_model(request), True);
 
 
@@ -153,12 +176,20 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def update_model(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
-		request = None;
+		request = {'data': {
+			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
+			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
+			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
+			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
+			bbn.GOOD_ID:			[[]]
+			},
+			'graph':[]
+		};
 		self.assertEquals(bbn.update_model(request), True);
 
 
 	def describe_node(self):#request={'node':value}
-		request = None;
+		request = {'node': []};
 		self.assertEquals(bbn.describe_node(request), True);
 
 
@@ -189,32 +220,32 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def get_cardinality(self):#request={'node':value}
-		request = None;
+		request = {'node': []};
 		self.assertEquals(bbn.get_cardinality(request), True);
 
 
 
 
 	def get_local_independencies(self):#request={'variables':values}
-		request = None;
+		request = {'variables': []};
 		self.assertEquals(bbn.get_local_independencies(request), True);
 
 
 
-	def get_active_trail_nodes(self):#request={'get_active_trial_nodes':values, 'observed':values}
-		request = None;
+	def get_active_trail_nodes(self):#request={'variables':values, 'observed':values}
+		request={'variables':[], 'observed':[]}
 		self.assertEquals(bbn.get_active_trail_nodes(request), True);
 
 
 
 	def query(self):#request={'variables':value, 'evidence':value, 'elimination_order':value}
-		request = None;
+		request={'variables':[], 'evidence':[], 'elimination_order':[]}
 		self.assertEquals(bbn.query(request), True);
 
 
 
 	def map_query(self):#request={'variables':value, 'evidence':value, 'elimination_order':value}
-		request = None;
+		request={'variables':[], 'evidence':[], 'elimination_order':[]}
 		self.assertEquals(bbn.map_query(request), True);
 
 
