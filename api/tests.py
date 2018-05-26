@@ -13,21 +13,21 @@ bbn = HorseIDBayesianNetwork();
 
 
 class HorseIDBayesianNetworkTest(unittest.TestCase):
-	"""Brief Introduction to BayesianNetwork"""
+	"""Brief Introduction to BayesianNetworkTest"""
 
 
 
 	def build(self):#request=void
 		""""""
 		request = None;
-		return self.assertEquals(bbn.build(request), True);
+		self.assertEquals(bbn.build(request), True);
 		#DONE
 
 
 
 	def run(self):#request=void
 		request = None;
-		return self.assertEquals(bbn.run(request),	True);
+		self.assertEquals(bbn.run(request),	True);
 		#DONE
 
 
@@ -217,39 +217,94 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 	def train_model(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		request = {'data': {
-			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
-			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
-			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
-			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
-			bbn.GOOD_ID:			[[]]
+			bbn.IDENTIFIABILITY:		[[0.1], [0.9]],		
+			bbn.LOCATION:				[[0.9], [0.1]],		
+			bbn.CHIP_WORK:				[[0.3, 0.3], [0.7, 0.7]],
+			bbn.CHIPPED:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT_AVAILABLE:		[[0.7, 0.3], [0.3, 0.7]],
+			bbn.ID_USING:				[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],		
+			bbn.ID_VERIFYING:			[[0.8], [0.2]],		
+			bbn.ID_USING_MARKING:		[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],
+			bbn.MARKINGS_CORRECT:		[[0.9], [0.1]],		
+			bbn.DISTINCTIVE_TRAITS:		[[0.7], [0.3]],		
+			bbn.OWNER_STA:				[[0.7], [0.3]],
+			bbn.GOOD_ID:				[[0.1,0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1], 
+												   [0.9,0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]]
 			},
-			'graph':[]
+			'graph':[			
+				#VARIABLES FROM 			VARIABLES TO							#ARROW FROM 							ARROW TO
+				(bbn.identifiability, 		bbn.good_id),							#identifiability 		------> 		good_id
+				(bbn.location, 				bbn.chipped),							#location 				------> 		chipped
+				(bbn.location, 				bbn.chip_work),							#location 				------> 		chip_work
+				(bbn.location, 				bbn.passport),							#location  				------> 		passport
+				(bbn.chipped, 				bbn.id_using),							#chipped 				------> 		id_using	
+				(bbn.chip_work, 			bbn.id_using),							#chip_work  			------> 		id_using
+				(bbn.passport, 				bbn.passport_available),				#passport 				------> 		passport_available			
+				(bbn.passport_available, 	bbn.id_using),							#passport_available 	------> 		id_using
+				(bbn.markings_correct, 		bbn.id_using_marking),					#markings_correct 		------> 		id_using_marking
+				(bbn.distinctive_traits, 	bbn.id_using_marking),					#distinctive_traits 	------> 		id_using_marking
+				(bbn.passport_available, 	bbn.id_using_marking),					#passport_available  	------>		 	id_using_marking
+				(bbn.id_verifying, 			bbn.good_id),							#id_verifying  			------> 		good_id
+				(bbn.id_using, 				bbn.good_id),							#id_using 				------> 		good_id
+				(bbn.id_using_marking, 		bbn.good_id),							#id_using_marking 		------> 		good_id
+				(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
+			]
 		};
 		self.assertEquals(bbn.train_model(request), True);
 
 
 
-	def test_model(self):#
+
+	def test_model(self):#void
 		request = None;
 		self.assertEquals(bbn.test_model(request), True);
 
 
 
+
 	def update_model(self):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		request = {'data': {
-			bbn.IDENTIFIABILITY:	[[]],		bbn.LOCATION:			[[]],		bbn.CHIP_WORK:			[[]],
-			bbn.CHIPPED:			[[]],		bbn.PASSPORT:			[[]],		bbn.PASSPORT_AVAILABLE:	[[]],
-			bbn.ID_USING:			[[]],		bbn.ID_VERIFYING:		[[]],		bbn.ID_USING_MARKING:	[[]],
-			bbn.MARKINGS_CORRECT:	[[]],		bbn.DISTINCTIVE_TRAITS:	[[]],		bbn.OWNER_STA:			[[]],
-			bbn.GOOD_ID:			[[]]
+			bbn.IDENTIFIABILITY:		[[0.1], [0.9]],		
+			bbn.LOCATION:				[[0.9], [0.1]],		
+			bbn.CHIP_WORK:				[[0.3, 0.3], [0.7, 0.7]],
+			bbn.CHIPPED:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT:				[[0.7, 0.3], [0.3, 0.7]],		
+			bbn.PASSPORT_AVAILABLE:		[[0.7, 0.3], [0.3, 0.7]],
+			bbn.ID_USING:				[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],		
+			bbn.ID_VERIFYING:			[[0.8], [0.2]],		
+			bbn.ID_USING_MARKING:		[[0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1], [0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]],
+			bbn.MARKINGS_CORRECT:		[[0.9], [0.1]],		
+			bbn.DISTINCTIVE_TRAITS:		[[0.7], [0.3]],		
+			bbn.OWNER_STA:				[[0.7], [0.3]],
+			bbn.GOOD_ID:				[[0.1,0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1, 0.1, 0.1 , 0.1, 0.1, 0.1 , 0.1], 
+										[0.9,0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]]
 			},
-			'graph':[]
+			'graph':[			
+				#VARIABLES FROM 			VARIABLES TO							#ARROW FROM 							ARROW TO
+				(bbn.identifiability, 		bbn.good_id),							#identifiability 		------> 		good_id
+				(bbn.location, 				bbn.chipped),							#location 				------> 		chipped
+				(bbn.location, 				bbn.chip_work),							#location 				------> 		chip_work
+				(bbn.location, 				bbn.passport),							#location  				------> 		passport
+				(bbn.chipped, 				bbn.id_using),							#chipped 				------> 		id_using	
+				(bbn.chip_work, 			bbn.id_using),							#chip_work  			------> 		id_using
+				(bbn.passport, 				bbn.passport_available),				#passport 				------> 		passport_available			
+				(bbn.passport_available, 	bbn.id_using),							#passport_available 	------> 		id_using
+				(bbn.markings_correct, 		bbn.id_using_marking),					#markings_correct 		------> 		id_using_marking
+				(bbn.distinctive_traits, 	bbn.id_using_marking),					#distinctive_traits 	------> 		id_using_marking
+				(bbn.passport_available, 	bbn.id_using_marking),					#passport_available  	------>		 	id_using_marking
+				(bbn.id_verifying, 			bbn.good_id),							#id_verifying  			------> 		good_id
+				(bbn.id_using, 				bbn.good_id),							#id_using 				------> 		good_id
+				(bbn.id_using_marking, 		bbn.good_id),							#id_using_marking 		------> 		good_id
+				(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
+			]
 		};
 		self.assertEquals(bbn.update_model(request), True);
 
 
+
 	def describe_node(self):#request={'node':value}
-		request = {'node': []};
+		request = {'node': bbn.identifiability};
 		self.assertEquals(bbn.describe_node(request), True);
 
 
@@ -274,38 +329,38 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 	def get_cpds(self):#request={'node':value}
-		request = None;
+		request = {'node': bbn.identifiability };
 		self.assertEquals(bbn.get_cpds(request), True);
 
 
 
 	def get_cardinality(self):#request={'node':value}
-		request = {'node': []};
+		request = {'node': bbn.identifiability };
 		self.assertEquals(bbn.get_cardinality(request), True);
 
 
 
 
 	def get_local_independencies(self):#request={'variables':values}
-		request = {'variables': []};
+		request = {'variables': [bbn.identifiability] };
 		self.assertEquals(bbn.get_local_independencies(request), True);
 
 
 
 	def get_active_trail_nodes(self):#request={'variables':values, 'observed':values}
-		request={'variables':[], 'observed':[]}
+		request={'variables':[bbn.identifiability], 'observed':None}
 		self.assertEquals(bbn.get_active_trail_nodes(request), True);
 
 
 
 	def query(self):#request={'variables':value, 'evidence':value, 'elimination_order':value}
-		request={'variables':[], 'evidence':[], 'elimination_order':[]}
+		request={'variables':[bbn.identifiability], 'evidence':None, 'elimination_order':None}
 		self.assertEquals(bbn.query(request), True);
 
 
 
 	def map_query(self):#request={'variables':value, 'evidence':value, 'elimination_order':value}
-		request={'variables':[], 'evidence':[], 'elimination_order':[]}
+		request={'variables':[bbn.identifiability], 'evidence':None, 'elimination_order':None}
 		self.assertEquals(bbn.map_query(request), True);
 
 

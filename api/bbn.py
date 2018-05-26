@@ -2,6 +2,7 @@
 from pgmpy.models import BayesianModel
 from pgmpy.factors.discrete import TabularCPD
 from pgmpy.inference import VariableElimination
+import pandas as pd;
 
 
 
@@ -13,7 +14,23 @@ class HorseIDBayesianNetwork(object):
 	last_updated_time = None;#Datetime
 
 
-	def build(self, request):#request=void
+
+
+	"""
+	This is general
+
+	"""
+
+
+	def build(self, request=None):#request=void
+		"""
+		This should be use for building the default Horse Identification Bayesian Belief Network graph from initialisation of the variables to drawing the graph.
+			
+			Request Format:
+				request=void
+			Mathematical Statement:
+				....
+		"""
 		self.initialise_space(request);#request=void
 		self.define_universe(request);#request=void
 		self.use_default_values(request);#request=void
@@ -27,7 +44,15 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def run(self, request):#request=void
+	def run(self, request=None):#request=void
+		"""
+		This function should be used for loading and running a Bayesian Belief Network on an already built Horse Identification Bayesian Belief Network
+			
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		self.load_model(request);#request=void
 		return True;#return=boolean
 		#DONE
@@ -36,7 +61,15 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def update(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+	def update(self, request):
+		"""
+		This function should be used for loading and running a Bayesian Belief Network on an already built Horse Identification Bayesian Belief Network
+			
+			Request Format:
+				request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+			Mathematical Statement:
+				...
+		"""
 		self.update_model(request);#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
 		return True;#return=boolean
 		#DONE
@@ -47,6 +80,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def initialise_space(self, request):#request=void
+		"""
+		This function should be use for initialising the variable spaces for identifiablity, location, chip_work, passport_space, and so on.
+			
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		
 		# VARIABLE SPACE 						POSSIBLE VALUES
 		self.identifiablity_space 				= [0, 1];														# If the outcome of the previous id is GOOD, then 1; else if it is not GOOD then 0;
@@ -69,6 +110,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def define_universe(self, request):#request=void
+		"""
+		This function should be used to define all possible values of the global variables such as IDENTIFIABILITY keyword, identifiability symbol, and the size of this variable.
+
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		self.clear_values(request);#request=void
 		self.declare_variables(request);#request=void
 		return True;#return=boolean
@@ -80,6 +129,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def clear_values(self, request):#request=void
+		"""
+		This function should be used to clear the values of the probability distribution matrix and set it to None or [[]];
+
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 
 		#DEFINE VARIBLES 						SET EMPTY MATRIX 
 		self.identifiability_values 			= [[]];		
@@ -104,6 +161,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def use_default_values(self, request):#request=void
+		"""
+		This function should be used to set probability distribution maxtrix to default values\
+
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 
 		#VARIABLES 								DEFAULT PROBABILITY TENSORS
 		self.identifiability_values 			= [[0.1], [0.9]];				
@@ -130,7 +195,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def declare_variables(self, request):#request=void
+		"""
+		This function should be used to declare the variable size
 
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		#define variables and variables size
 		try:
 			#VARIABLE DEFINATION    	SYMBOLICS					VARIABLE SIZE 					VARIABLE DEFINITION 	SYMBOLICS 		SET VARIABLE SIZE
@@ -148,7 +220,7 @@ class HorseIDBayesianNetwork(object):
 			self.OWNER_STA,				self.owner_sta, 			self.owner_sta_size 			= "owner_sta",				"V11",		len(self.owner_sta_values);
 			self.GOOD_ID,				self.good_id, 				self.good_id_size 				= "good_id",				"V12",		len(self.good_id_values);
 		except Exception as e:
-			raise e
+			return e
 		return True;#return=boolean
 		#DONE
 
@@ -158,13 +230,19 @@ class HorseIDBayesianNetwork(object):
 
 	
 	def update_values(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }}
+		"""
+		This function should be used to update the probability distribution matrix for all the variables/nodes.
 
-
+			Request Format:
+				request={data:{'variable1': values1, ... 'variableN': valuesN }}
+			Mathematical Statement:
+				...
+		"""
 		#use this to update dataset values for cpds
 		try:
 			#request.data;
 			self.clear_values(request);#request=void
-			#DEFINE VARIBLES 						SET VALUES 
+			#DEFINE VARIABLES 						SET VALUES 
 			self.identifiability_values 			= self.identifiability_values.append(request.data[self.IDENTIFIABILITY]);
 			self.location_values 					= self.location_values.append(request.data[self.LOCATION]);
 			self.chip_work_values 					= self.chip_work_values.append(request.data[self.CHIP_WORK]);
@@ -180,7 +258,7 @@ class HorseIDBayesianNetwork(object):
 			self.good_id_values 					= self.good_id_values.append(request.data[self.GOOD_ID]);
 			load_sizes(request);#request=void
 		except Exception as e:
-			raise e
+			return e
 		return True;#return=boolean
 		#DONE
 
@@ -192,8 +270,14 @@ class HorseIDBayesianNetwork(object):
 
 	
 	def load_sizes(self, request):#request=void
+		"""
+		This function should be used to load the sizes of the variables
 
-
+			Request Format:
+				request=void.
+			Mathematical Statement:
+				for all variables or nodes, load length or sizes of probability distribution matrix to the system.
+		"""
 		#this declares and initialises the variables sizes to be used
 		try:
 			self.identifiability_size 			= len(self.identifiability_values);
@@ -210,7 +294,7 @@ class HorseIDBayesianNetwork(object):
 			self.owner_sta_size					= len(self.owner_sta_values);
 			self.good_id_size					= len(self.good_id_values);
 		except Exception as e:
-			raise e
+			return e
 		return True;#return=boolean
 		#DONE
 
@@ -223,12 +307,17 @@ class HorseIDBayesianNetwork(object):
 
 	
 	def define_evidences(self, request):#request=void
-
-
+		"""
+		This function should be used to define or load the parents/envidences for all variables or nodes.
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		#define variable dependencies and dependency size(evidence and evidence card)
 		try:
 			if type(request) == type(None):
-				#EVIDENCE 								EVIDENCE CARD 							EVIDEDENCE VALUE 											ENVIDENCE CARD VALUES
+				#EVIDENCE 								EVIDENCE CARD 							ENVIDENCE VALUES 											ENVIDENCE CARD VALUES
 				self.identifiability_evidence, 		self.identifiability_evidence_card 			= None, 													None;
 				self.location_evidence,				self.location_evidence_card 				= None, 													None;
 				self.chip_work_evidence,			self.chip_work_evidence_card				= [self.location],											[self.location_size];
@@ -257,7 +346,7 @@ class HorseIDBayesianNetwork(object):
 				self.owner_sta_evidence,			self.owner_sta_evidence_card				= request.evidence.owner_sta,								request.evidence_card.owner_sta;
 				self.good_id_evidence,				self.good_id_evidence_card					= request.evidence.good_id,									request.evidence_card.good_id;
 		except Exception as e:
-			raise e
+			return e
 		return True;#return=boolean
 		#DONE
 
@@ -270,26 +359,47 @@ class HorseIDBayesianNetwork(object):
 
 	
 	def define_cpds(self, request):#request=void (to be modified for flexible as time goes on)
-
+		"""
+		This is should be used to load up a conditional probability distritubation table from previous the 
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 
 		#define node cpds: load this on start
 		try:
-			#	CPDs  						CPD TYPE 				VARIABLE 					VARIABLE SIZE 							VALUES 										EVIDENCE(DEPENDENCIES) 							EVIDENCE CARD (DEPENDENCY SIZE)
-			self.identifiability_cpd 	= TabularCPD(variable=self.identifiability, 	variable_card=self.identifiability_size, 	values=self.identifiability_values);		#		None												None
-			self.location_cpd 			= TabularCPD(variable=self.location, 			variable_card=self.location_size, 			values=self.location_values);				#		None												None
-			self.chipped_cpd 			= TabularCPD(variable=self.chipped, 			variable_card=self.chipped_size, 			values=self.chipped_values, 				evidence=self.chipped_evidence, 				evidence_card=self.chipped_evidence_card);
-			self.chip_work_cpd 			= TabularCPD(variable=self.chip_work, 			variable_card=self.chip_work_size, 			values=self.chip_work_values, 				evidence=self.chip_work_evidence, 				evidence_card=self.chip_work_evidence_card);
-			self.passport_cpd 			= TabularCPD(variable=self.passport, 			variable_card=self.passport_size, 			values=self.passport_values, 				evidence=self.passport_evidence, 				evidence_card=self.passport_evidence_card);
-			self.passport_available_cpd = TabularCPD(variable=self.passport_available,	variable_card=self.passport_available_size,	values=self.passport_available_values, 		evidence=self.passport_available_evidence, 		evidence_card=self.passport_available_evidence_card);
-			self.id_using_cpd 			= TabularCPD(variable=self.id_using, 			variable_card=self.id_using_size, 			values=self.id_using_values, 				evidence=self.id_using_evidence, 				evidence_card=self.id_using_evidence_card);
-			self.id_verifying_cpd 		= TabularCPD(variable=self.id_verifying, 		variable_card=self.id_verifying_size, 		values=self.id_verifying_values);			#		None												None
-			self.markings_correct_cpd 	= TabularCPD(variable=self.markings_correct, 	variable_card=self.markings_correct_size, 	values=self.markings_correct_values);		#		None												None
-			self.distinctive_traits_cpd = TabularCPD(variable=self.distinctive_traits, 	variable_card=self.distinctive_traits_size,	values=self.distinctive_traits_values);		#		None												None
-			self.id_using_marking_cpd 	= TabularCPD(variable=self.id_using_marking, 	variable_card=self.id_using_marking_size,	values=self.id_using_marking_values, 		evidence=self.id_using_marking_evidence,		evidence_card=self.id_using_marking_evidence_card);
-			self.owner_sta_cpd 			= TabularCPD(variable=self.owner_sta, 			variable_card=self.owner_sta_size, 			values=self.owner_sta_values);				#		None												None
-			self.good_id_cpd 			= TabularCPD(variable=self.good_id, 			variable_card=self.good_id_size, 			values=self.good_id_values, 				evidence=self.good_id_evidence, 				evidence_card=self.good_id_evidence_card);
+			if type(request.data) == type(None):
+				#	CPDs  						CPD TYPE 				VARIABLE 					VARIABLE SIZE 							VALUES 										EVIDENCE(DEPENDENCIES) 							EVIDENCE CARD (DEPENDENCY SIZE)
+				self.identifiability_cpd 	= TabularCPD(variable=self.identifiability, 	variable_card=self.identifiability_size, 	values=self.identifiability_values);		#		None												None
+				self.location_cpd 			= TabularCPD(variable=self.location, 			variable_card=self.location_size, 			values=self.location_values);				#		None												None
+				self.chipped_cpd 			= TabularCPD(variable=self.chipped, 			variable_card=self.chipped_size, 			values=self.chipped_values, 				evidence=self.chipped_evidence, 				evidence_card=self.chipped_evidence_card);
+				self.chip_work_cpd 			= TabularCPD(variable=self.chip_work, 			variable_card=self.chip_work_size, 			values=self.chip_work_values, 				evidence=self.chip_work_evidence, 				evidence_card=self.chip_work_evidence_card);
+				self.passport_cpd 			= TabularCPD(variable=self.passport, 			variable_card=self.passport_size, 			values=self.passport_values, 				evidence=self.passport_evidence, 				evidence_card=self.passport_evidence_card);
+				self.passport_available_cpd = TabularCPD(variable=self.passport_available,	variable_card=self.passport_available_size,	values=self.passport_available_values, 		evidence=self.passport_available_evidence, 		evidence_card=self.passport_available_evidence_card);
+				self.id_using_cpd 			= TabularCPD(variable=self.id_using, 			variable_card=self.id_using_size, 			values=self.id_using_values, 				evidence=self.id_using_evidence, 				evidence_card=self.id_using_evidence_card);
+				self.id_verifying_cpd 		= TabularCPD(variable=self.id_verifying, 		variable_card=self.id_verifying_size, 		values=self.id_verifying_values);			#		None												None
+				self.markings_correct_cpd 	= TabularCPD(variable=self.markings_correct, 	variable_card=self.markings_correct_size, 	values=self.markings_correct_values);		#		None												None
+				self.distinctive_traits_cpd = TabularCPD(variable=self.distinctive_traits, 	variable_card=self.distinctive_traits_size,	values=self.distinctive_traits_values);		#		None												None
+				self.id_using_marking_cpd 	= TabularCPD(variable=self.id_using_marking, 	variable_card=self.id_using_marking_size,	values=self.id_using_marking_values, 		evidence=self.id_using_marking_evidence,		evidence_card=self.id_using_marking_evidence_card);
+				self.owner_sta_cpd 			= TabularCPD(variable=self.owner_sta, 			variable_card=self.owner_sta_size, 			values=self.owner_sta_values);				#		None												None
+				self.good_id_cpd 			= TabularCPD(variable=self.good_id, 			variable_card=self.good_id_size, 			values=self.good_id_values, 				evidence=self.good_id_evidence, 				evidence_card=self.good_id_evidence_card);
+			else: 						
+				self.identifiability_cpd 	= TabularCPD(variable=request.variables.identifiability, 	variable_card=request.variable_card.identifiability, 	values=request.values.identifiability_values);			#		None												None
+				self.location_cpd 			= TabularCPD(variable=request.variables.location, 			variable_card=request.variable_card.location, 			values=request.values.location_values);					#		None												None
+				self.chipped_cpd 			= TabularCPD(variable=request.variables.chipped, 			variable_card=request.variable_card.chipped, 			values=request.values.chipped_values, 					evidence=request.evidence.chipped, 					evidence_card=request.evidence_card.chipped);
+				self.chip_work_cpd 			= TabularCPD(variable=request.variables.chip_work, 			variable_card=request.variable_card.chip_work, 			values=request.values.chip_work_values, 				evidence=request.evidence.chip_work, 				evidence_card=request.evidence_card.chip_work);
+				self.passport_cpd 			= TabularCPD(variable=request.variables.passport, 			variable_card=request.variable_card.passport, 			values=request.values.passport_values, 					evidence=request.evidence.passport, 				evidence_card=request.evidence_card.passport);
+				self.passport_available_cpd = TabularCPD(variable=request.variables.passport_available,	variable_card=request.variable_card.passport_available,	values=request.values.passport_available_values, 		evidence=request.evidence.passport_available, 		evidence_card=request.evidence_card.passport_available);
+				self.id_using_cpd 			= TabularCPD(variable=request.variables.id_using, 			variable_card=request.variable_card.id_using, 			values=request.values.id_using_values, 					evidence=request.evidence.id_using, 				evidence_card=request.evidence_card.id_using);
+				self.id_verifying_cpd 		= TabularCPD(variable=request.variables.id_verifying, 		variable_card=request.variable_card.id_verifying, 		values=request.values.id_verifying_values);				#		None												None
+				self.markings_correct_cpd 	= TabularCPD(variable=request.variables.markings_correct, 	variable_card=request.variable_card.markings_correct, 	values=request.values.markings_correct_values);			#		None												None
+				self.distinctive_traits_cpd = TabularCPD(variable=request.variables.distinctive_traits, variable_card=request.variable_card.distinctive_traits,	values=request.values.distinctive_traits_values);		#		None												None
+				self.id_using_marking_cpd 	= TabularCPD(variable=request.variables.id_using_marking, 	variable_card=request.variable_card.id_using_marking,	values=request.values.id_using_marking_values, 			evidence=request.evidence.id_using_marking,			evidence_card=request.evidence_card.id_using_marking);
+				self.owner_sta_cpd 			= TabularCPD(variable=request.variables.owner_sta, 			variable_card=request.variable_card.owner_sta, 			values=request.values.owner_sta_values);				#		None												None
+				self.good_id_cpd 			= TabularCPD(variable=request.variables.good_id, 			variable_card=request.variable_card.good_id, 			values=request.values.good_id_values, 					evidence=request.evidence.good_id, 					evidence_card=request.evidence_card.good_id);
 		except Exception as e:
-			raise e		
+			return e		
 		return True;
 		#DONE
 
@@ -300,6 +410,13 @@ class HorseIDBayesianNetwork(object):
 
 
 	def load_cpds(self, request):#request=void
+		"""
+		This is synonymous to self.define_cpds 
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		return self.define_cpds(request);#request=void 
 		#DONE
 
@@ -307,10 +424,29 @@ class HorseIDBayesianNetwork(object):
 
 
 
+	def load_default_graph(self, request):#request=void
+		"""
+		This is synonymous to draw_default_graph
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
+		return self.draw_default_graph(request);
+
+
+
+
 
 
 	def draw_default_graph(self, request):#request=void
-
+		"""
+		This should be used to tra
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 
 		#define causuality/dependency graph.	
 		self.horse_id_graph = [			
@@ -338,10 +474,29 @@ class HorseIDBayesianNetwork(object):
 
 
 
+	def load_graph(self, request):#request=void
+		"""
+		This is synonymous to draw_graph
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
+		return self.draw_graph(request);
 
 
-	#define set graph
+
+
+
+
 	def draw_graph(self, request):#request={'graph': [(A1,B1),(A2,B2), ... (AN,BN),]}
+		"""
+		This should be used to draw the causality/dependency graph of the House Identification Bayesian Belief Network model.
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		self.horse_id_graph	= request.graph;
 		return True;
 		#DONE
@@ -355,6 +510,13 @@ class HorseIDBayesianNetwork(object):
 
 	
 	def build_model(self, request):#request=void
+		"""
+		This should be used to build the Horse Identification Bayesian Belief Network model after the desired graph or network has been initialised and loaded.
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 
 		#Build graph and load model: load on start
 		#methods							METHOD CLASS 					FIRST ARG
@@ -374,8 +536,14 @@ class HorseIDBayesianNetwork(object):
 
 	
 	def load_cpds_to_model(self, request):#request=void
+		"""
+		This should be used to load the Conditional Probability Distribution Tables on the Horse Identification Bayesain Belief Network model.
 
-
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		#add nodes/CPDs to HorseID model graph: load this on start
 		#add cpds to horse model
 		self.horse_id_model.add_cpds(
@@ -395,6 +563,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def load_model(self, request):#request=void
+		"""
+		This should be used to load the the Horse Identification Bayesian Belief Network model after the graph to use have been defined.
+		
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		#update model
 		self.build_model(request);
 		#load cpds to model
@@ -411,14 +587,20 @@ class HorseIDBayesianNetwork(object):
 
 
 	def train_model(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
-
-
-		#use this to train model.
+		"""
+		This should be used to train the Horse Identificiation Bayesian Belief Network.
+		
+			Request Format:
+				request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+			Mathematical Statement:
+				...
+		"""
+    	#use this to train model.
 		self.current_dataframe = pd.DataFrame(request.data);
 		if type(request.graph) != type(None):
-			horse_id_model = BayesianModel(request.graph);
-    	horse_id_model.fit(self.current_dataframe);
-		self.last_updated_time = "";
+			self.horse_id_model = BayesianModel(request.graph);
+		self.horse_id_model.fit(self.current_dataframe);
+		self.last_updated_time = ""; 
 		self.current_accuracy 	=	self.test_model(request);
 		return {time: self.last_updated_time, accuracy: self.current_accuracy}
 		#NEED REVIEW
@@ -430,16 +612,23 @@ class HorseIDBayesianNetwork(object):
 
 
 	def update_model(self, request):#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
-
+		"""
+		This function should be used to update the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+			Mathematical Statement:
+				...
+		"""
 		#use this to train model online. 
-
 		self.current_dataframe = pd.DataFrame(request.data);#concatenate
 		if type(request.graph) != type(None):
-			horse_id_model = BayesianModel(request.graph);
-    	horse_id_model.fit(self.current_dataframe);
+			self.horse_id_model = BayesianModel(request.graph);
+		self.horse_id_model.fit(self.current_dataframe);
 		self.last_updated_time = "";
 		self.current_accuracy 	=	self.test_model(request);
-		return {time: self.last_updated_time, accuracy: self.current_accuracy}
+		ret = {'time': self.last_updated_time, 'accuracy': self.current_accuracy};
+		return ret
 		#NEED REVIEW
 
 
@@ -448,8 +637,16 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	#use this to test model accuracy. Takes in pandas test dataframe.
+	
 	def test_model(self, request):
+		"""
+		This function should be used to test model accuracy.
+		
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		# TODO: test model based on dataframe and return test accuracy.
 		# self.horse_id_model.query() 	
 		return 0;
@@ -463,6 +660,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def describe_node(self, request):#request={'node':value}
+		"""
+		This function should be used to descibe a node of interest.
+		
+			Request Format:
+				request={'node':value}
+			Mathematical Statement:
+				...
+		"""
 		return self.get_cpds(request);
 		#DONE
 
@@ -474,6 +679,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def check_model(self, request):#request=void
+		"""
+		This function should be used to check the Horse ID Bayesian Belief Network model state.
+		
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		#no input request required.
 		return self.horse_id_model.check_model();
 		#DONE
@@ -482,7 +695,15 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def get_nodes(self, request):#come back and check
+	def get_nodes(self, request):#TODO: come back and check
+		"""
+		This function should be used to get nodes that exist in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		return self.horse_id_model.get_nodes();
 		#NEED REVIEW
 
@@ -490,6 +711,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_edges(self, request):#come back and check
+		"""
+		This function should be used to get all the edges that exist in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request=void
+			Mathematical Statement:
+				...
+		"""
 		return self.horse_id_model.get_edges();
 		#NEED REVIEW
 
@@ -498,6 +727,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_cpds(self, request):#request={'node':value}
+		"""
+		This function should be used to get all of( or a defined node ) the conditional probability distribution tables that exist in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request={'node':value}
+			Mathematical Statement:
+				...
+		"""
 		return self.horse_id_model.get_cpds(node=request.node);
 		#DONE
 	
@@ -509,6 +746,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_cardinality(self, request):#request={'node':value}
+		"""
+		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request={'node':value}
+			Mathematical Statement:
+				...
+		"""
 		return self.horse_id_model.get_cardinality(node=request.node);
 		#DONE
 	
@@ -520,6 +765,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_local_independencies(self, request):#request={'variables':values}
+		"""
+		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request={'variables':values}
+			Mathematical Statement:
+				...
+		"""
 		#request.variables
 		return self.horse_id_model.local_independencies(variables=request.variables);
 		#DONE
@@ -531,6 +784,14 @@ class HorseIDBayesianNetwork(object):
 
 
 	def get_active_trail_nodes(self, request):#request={'variables':values, 'observed':values}
+		"""
+		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request={'variables':values, 'observed':values}
+			Mathematical Statement:
+				...
+		"""
 		#request.variables, 	request.observed;
 		return self.horse_id_model.active_trail_nodes(variables=request.variables, observed=request.observed)
 		#DONE
@@ -541,7 +802,20 @@ class HorseIDBayesianNetwork(object):
 
 
 
+
+
+
+
+
 	def query(self, request):#request={'variables':value, 'evidence':value, 'elimination_order':value}
+		"""
+		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request={'variables':value, 'evidence':value, 'elimination_order':value}
+			Mathematical Statement:
+				...
+		"""
 		#request.variables 		request.evidence 		request.elimination_order
 		return self.horse_inference.query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
 		#DONE
@@ -552,7 +826,18 @@ class HorseIDBayesianNetwork(object):
 
 
 
+
+
+
 	def map_query(self, request):#request={'variables':value, 'evidence':value, 'elimination_order':value}
+		"""
+		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
+		
+			Request Format:
+				request={'variables':value, 'evidence':value, 'elimination_order':value}
+			Mathematical Statement:
+				...
+		"""
 		#request.variables 		request.evidence 		request.elimination_order
 		return self.horse_inference.map_query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
 		#DONE
