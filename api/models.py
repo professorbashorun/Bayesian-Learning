@@ -7,7 +7,7 @@ from .bbn import HorseIDBayesianNetwork;
 
 bbn = HorseIDBayesianNetwork();
 bbn.clear_values(None);
-bbn.declere_variables(None);
+bbn.declare_variables(None);
 
 
 # Create your models here.
@@ -29,6 +29,7 @@ class Variables(models.Model):
 	owner_sta 				= models.BooleanField(default=False);
 	good_id 				= models.BooleanField(default=False);
 
+
 	def __str__(self):
 		return str({ bbn.IDENTIFIABILITY:	self.identifiablity,
 		bbn.LOCATION:					self.location,
@@ -46,14 +47,14 @@ class Variables(models.Model):
 
 
 
-
-class Graph(model.Model):
+"""
+class Graph(models.Model):
 	nodes					= models.Array();
 	edges 					= models.Array();
 
 	def __str__(self):
 		return str({'nodes': nodes, 'edges':edges});
-
+"""
 
 
 
