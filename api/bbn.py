@@ -2,13 +2,15 @@
 from pgmpy.models import BayesianModel
 from pgmpy.factors.discrete import TabularCPD
 from pgmpy.inference import VariableElimination
-import urllib2 as url;
-import pandas as pd;
 
 
 
 
 class HorseIDBayesianNetwork(object):
+
+
+	current_dataframe = None;#Dataframe
+	last_updated_time = None;#Datetime
 
 
 	def build(self, request):#request=void
@@ -110,7 +112,7 @@ class HorseIDBayesianNetwork(object):
 		self.chipped_values 					= [[0.2, 0.2], [0.8, 0.8]];
 		self.passport_values					= [[0.2, 0.2], [0.8, 0.8]];
 		self.passport_available_values  		= [[0.2, 0.2], [0.8, 0.8]];
-		self.id_using_values 					= [[0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
+		self.id_using_values 					= [[0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
 		self.id_using_marking_values			= [[0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
 		self.id_verifying_values				= [[0.7], [0.3]];				
 		self.markings_correct_values 			= [[0.9], [0.1]];				
@@ -412,16 +414,10 @@ class HorseIDBayesianNetwork(object):
 
 
 		#use this to train model.
-
-		# Cross validate dataset
-		self.update_values(request);
-		self.load_cpds(request);
-		#draw graph
-		if request.graph == None:
-			self.draw_default_graph(request);
-		else:
-			self.draw_graph(request);
-		self.load_model(request);
+		self.current_dataframe = pd.DataFrame(request.data);
+		if type(request.graph) != type(None):
+			horse_id_model = BayesianModel(request.graph);
+    	horse_id_model.fit(self.current_dataframe);
 		self.last_updated_time = "";
 		self.current_accuracy 	=	self.test_model(request);
 		return {time: self.last_updated_time, accuracy: self.current_accuracy}
@@ -437,22 +433,14 @@ class HorseIDBayesianNetwork(object):
 
 		#use this to train model online. 
 
-		# Cross validate dataset
-		self.update_values(request);
-		self.load_cpds(request);
-		#draw graph
-		if request.graph == None:
-			self.draw_default_graph(request);
-		else:
-			self.draw_graph(request);
-		self.load_model(request);
+		self.current_dataframe = pd.DataFrame(request.data);#concatenate
+		if type(request.graph) != type(None):
+			horse_id_model = BayesianModel(request.graph);
+    	horse_id_model.fit(self.current_dataframe);
 		self.last_updated_time = "";
 		self.current_accuracy 	=	self.test_model(request);
 		return {time: self.last_updated_time, accuracy: self.current_accuracy}
 		#NEED REVIEW
-
-
-
 
 
 
@@ -468,43 +456,6 @@ class HorseIDBayesianNetwork(object):
 		#NEED REVIEW	
 
 
-
-
-
-
-	"""
-
-		# TODO: OBTAIN DATA HERE
-		#use this to extract database into dataframe values as required by the model
-		def load_data(self, url):
-
-			#	TODO: extract database in dataframe, cross_validate data, and return training dataframe and test dataframe;
-			#	all necessary counting processes is done in this function.
-			raw_data = url.urlopen(self.url);
-			self.dataframe = prepare_data(raw_data);
-
-
-
-
-
-
-
-
-		#TODO SCRUB DATA HERE
-		def prepare_data(self, request):
-
-			#	check the current data format.
-			raw_dataframe = pd.Dataframe(request.dataframe);
-			dataframe = pd.Dataframe(columns=[
-				#SET 1								SET 2								SET 3
-				self.IDENTIFIABILITY, 				self.LOCATION, 						self.CHIP_WORK, 
-				self.CHIPPED,		 				self.PASSPORT, 						self.PASSPORT_AVAILABLE, 
-				self.ID_USING, 						self.ID_VERIFYING, 					self.ID_USING_MARKING, 
-				self.MARKINGS_CORRECT, 				self.DISTINCTIVE_TRAITS, 			self.OWNER_STA, 
-				self.GOOD_ID]);
-			return dataframe;#NEED REVIEW
-
-	"""
 
 
 
@@ -602,7 +553,7 @@ class HorseIDBayesianNetwork(object):
 
 
 	def map_query(self, request):#request={'variables':value, 'evidence':value, 'elimination_order':value}
-		#request.variables 	request.evidence 	request.elimination_order
+		#request.variables 		request.evidence 		request.elimination_order
 		return self.horse_inference.map_query(variables=request.variables, evidence=request.evidence, elimination_order=request.elimination_order);
 		#DONE
 
