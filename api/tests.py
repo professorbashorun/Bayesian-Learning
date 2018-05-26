@@ -6,7 +6,7 @@ from django.test import TestCase
 # Create your tests here.
 
 import unittest
-from bbn import HorseIDBayesianNetwork
+from .bbn import HorseIDBayesianNetwork
 
 
 bbn = HorseIDBayesianNetwork();

@@ -416,12 +416,12 @@ class HorseIDBayesianNetwork(object):
 
 
 		#use this to train model.
-		self.current_dataframe = pd.DataFrame(request.data);
+		self.current_dataframe = pd.DataFrame(request.data)
 		if type(request.graph) != type(None):
-			horse_id_model = BayesianModel(request.graph);
-    	horse_id_model.fit(self.current_dataframe);
-		self.last_updated_time = "";
-		self.current_accuracy 	=	self.test_model(request);
+			horse_id_model = BayesianModel(request.graph)
+		horse_id_model.fit(self.current_dataframe)
+		self.last_updated_time = ""
+		self.current_accuracy 	=	self.test_model(request)
 		return {time: self.last_updated_time, accuracy: self.current_accuracy}
 		#NEED REVIEW
 
@@ -438,7 +438,7 @@ class HorseIDBayesianNetwork(object):
 		self.current_dataframe = pd.DataFrame(request.data);#concatenate
 		if type(request.graph) != type(None):
 			horse_id_model = BayesianModel(request.graph);
-    	horse_id_model.fit(self.current_dataframe);
+		horse_id_model.fit(self.current_dataframe);
 		self.last_updated_time = "";
 		self.current_accuracy 	=	self.test_model(request);
 		return {time: self.last_updated_time, accuracy: self.current_accuracy}

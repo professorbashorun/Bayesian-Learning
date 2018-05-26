@@ -2,12 +2,12 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from .bbn import HorseIDBayesianNetwork;
+from .bbn import HorseIDBayesianNetwork
 
 
-bbn = HorseIDBayesianNetwork();
-bbn.clear_values(None);
-bbn.declare_variables(None);
+bbn = HorseIDBayesianNetwork()
+bbn.clear_values(None)
+bbn.declare_variables(None)
 
 
 # Create your models here.
