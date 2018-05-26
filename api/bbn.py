@@ -2,7 +2,7 @@
 from pgmpy.models import BayesianModel
 from pgmpy.factors.discrete import TabularCPD
 from pgmpy.inference import VariableElimination
-import urllib2 as url;
+#import urllib2 as url;
 import pandas as pd;
 
 
