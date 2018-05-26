@@ -1,0 +1,6 @@
+pgmpy
+pandas
+urllib2
+django==1.11.13
+
+django-rest-framework

@@ -24,7 +24,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def run(self)::#request=void
+	def run(self):#request=void
 		request = None;
 		self.assertEquals(bbn.run(request),	True);
 

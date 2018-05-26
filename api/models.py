@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from bbn import HorseIDBayesianNetwork;
+from .bbn import HorseIDBayesianNetwork;
 
 
 bbn = HorseIDBayesianNetwork();
