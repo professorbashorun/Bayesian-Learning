@@ -17,10 +17,10 @@ class HorseIDBayesianNetwork(object):
 
 		STEP 1		BUILD THE SYSTEM
 			I.		initialise space
-			II.		define universe
+			II.		set universe
 			III.	use default values / set new values
-			IV.		define evidences or causal nodes properties
-			V.		define Conditional Probability Distribution Table
+			IV.		set evidences or causal nodes properties
+			V.		set Conditional Probability Distribution Table
 			VI.		draw default Horse Identification BBN Graph / draw new Horse Identification BBN Graph.
 		STEP 2		RUN THE SYSTEM
 			I.		load model
@@ -83,11 +83,11 @@ class HorseIDBayesianNetwork(object):
 				....
 		"""
 		self.initialise_space(request);	
-		self.define_universe(request);
+		self.set_universe(request);
 		self.use_default_values(request);
 		self.declare_variables(request);
-		self.define_evidences(request);
-		self.define_cpds(request);
+		self.set_evidences(request);
+		self.set_cpds(request);
 		self.draw_default_graph(request);
 		return True;
 		#DONE
@@ -185,9 +185,9 @@ class HorseIDBayesianNetwork(object):
 
 
 
-	def define_universe(self, request=None):
+	def set_universe(self, request=None):
 		"""
-		This function should be used to define all possible values of the global variables such as IDENTIFIABILITY keyword, identifiability symbol, and the size of this variable.
+		This function should be used to set all possible values of the global variables such as IDENTIFIABILITY keyword, identifiability symbol, and the size of this variable.
 
 			Request Format:
 				request=void
@@ -425,7 +425,7 @@ class HorseIDBayesianNetwork(object):
 
 
 	
-	def define_evidences(self, request=None):
+	def set_evidences(self, request=None):
 		"""
 		This function should be used to define or load the parents/envidences for all variables or nodes.
 			
@@ -441,19 +441,19 @@ class HorseIDBayesianNetwork(object):
 		#define variable dependencies and dependency size(evidence and evidence card)
 		try:
 			if type(request) == type(None):
-				#EVIDENCE 								EVIDENCE CARD 							ENVIDENCE VALUES 											ENVIDENCE CARD VALUES
-				self.identifiability_evidence, 		self.identifiability_evidence_card 			= None, 													None;
-				self.location_evidence,				self.location_evidence_card 				= None, 													None;
-				self.chip_work_evidence,			self.chip_work_evidence_card				= [self.location],											[self.location_size];
-				self.chipped_evidence, 				self.chipped_evidence_card					= [self.location],											[self.location_size];
-				self.passport_evidence,				self.passport_evidence_card					= [self.location],											[self.location_size];
-				self.passport_available_evidence,	self.passport_available_evidence_card		= [self.passport],											[self.passport_size];
-				self.id_using_evidence,				self.id_using_evidence_card					= [self.chip_work, self.chipped, self.passport_available],	[self.chip_work_size, self.chipped_size, self.passport_available_size];
-				self.id_verifying_evidence,			self.id_verifying_evidence_card				= None,														None;
+				#EVIDENCE 								EVIDENCE CARD 							ENVIDENCE VALUES 												ENVIDENCE CARD VALUES
+				self.identifiability_evidence, 		self.identifiability_evidence_card 			= None, 														None;
+				self.location_evidence,				self.location_evidence_card 				= None, 														None;
+				self.chip_work_evidence,			self.chip_work_evidence_card				= [self.location],												[self.location_size];
+				self.chipped_evidence, 				self.chipped_evidence_card					= [self.location],												[self.location_size];
+				self.passport_evidence,				self.passport_evidence_card					= [self.location],												[self.location_size];
+				self.passport_available_evidence,	self.passport_available_evidence_card		= [self.passport],												[self.passport_size];
+				self.id_using_evidence,				self.id_using_evidence_card					= [self.chip_work, self.chipped, self.passport_available],		[self.chip_work_size, self.chipped_size, self.passport_available_size];
+				self.id_verifying_evidence,			self.id_verifying_evidence_card				= None,															None;
 				self.id_using_marking_evidence,		self.id_using_marking_evidence_card			= [self.markings_correct, self.distinctive_traits, self.passport_available],			[self.markings_correct_size, self.distinctive_traits_size, self.passport_available_size];
-				self.markings_correct_evidence,		self.markings_correct_evidence_card			= None,														None;
-				self.distinctive_traits_evidence,	self.distinctive_traits_evidence_card		= None,														None;
-				self.owner_sta_evidence,			self.owner_sta_evidence_card				= None,														None;
+				self.markings_correct_evidence,		self.markings_correct_evidence_card			= None,															None;
+				self.distinctive_traits_evidence,	self.distinctive_traits_evidence_card		= None,															None;
+				self.owner_sta_evidence,			self.owner_sta_evidence_card				= None,															None;
 				self.good_id_evidence,				self.good_id_evidence_card					= [self.id_verifying, 				self.id_using, 			self.id_using_marking, 			self.owner_sta, self.identifiability],	[self.id_verifying_size, 			self.id_using_size, 	self.id_using_marking_size, 	self.owner_sta_size, self.identifiability_size];
 			else:
 				self.identifiability_evidence, 		self.identifiability_evidence_card 			= request.evidence[self.IDENTIFIABILITY], 						request.evidence_card[self.IDENTIFIABILITY];
@@ -482,7 +482,7 @@ class HorseIDBayesianNetwork(object):
 
 
 	
-	def define_cpds(self, request=None):
+	def set_cpds(self, request=None):
 		"""
 		This is should be used to load up a conditional probability distritubation table from previous the 
 			
@@ -540,7 +540,7 @@ class HorseIDBayesianNetwork(object):
 
 	def load_cpds(self, request=None):	
 		"""
-		This is synonymous to self.define_cpds 
+		This is synonymous to self.set_cpds 
 			
 			Request Format:
 				request=void
@@ -551,7 +551,7 @@ class HorseIDBayesianNetwork(object):
 			Mathematical Statement:
 				...
 		"""
-		return self.define_cpds(request);
+		return self.set_cpds(request);
 		#DONE
 
 
@@ -595,9 +595,7 @@ class HorseIDBayesianNetwork(object):
 
 			Mathematical Statement:
 				...
-		"""
-
-		#define causuality/dependency graph.	
+		"""	
 		self.horse_id_graph = [			
 			#VARIABLES FROM 			VARIABLES TO							#ARROW FROM 							ARROW TO
 			(self.identifiability, 		self.good_id),							#identifiability 		------> 		good_id
@@ -616,8 +614,11 @@ class HorseIDBayesianNetwork(object):
 			(self.id_using_marking, 	self.good_id),							#id_using_marking 		------> 		good_id
 			(self.owner_sta, 			self.good_id),							#owner_sta 				------> 		good_id
 		];
-		return True;									#return=boolean
+		return True;
 		#DONE
+
+
+
 
 
 
@@ -1017,6 +1018,7 @@ class HorseIDBayesianNetwork(object):
 				#model engine							#request.variables
 		return self.horse_id_model.local_independencies(variables=request.variables);
 		#DONE
+
 
 
 

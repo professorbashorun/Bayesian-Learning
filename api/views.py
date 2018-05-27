@@ -11,8 +11,16 @@ from .serializer import FunctionResponseSerializer
 from .bbn import HorseIDBayesianNetwork;
 from .tests import HorseIDBayesianNetworkTest
 
+
+
+
+
+
 bbn = HorseIDBayesianNetwork();
 bbn_test = HorseIDBayesianNetworkTest();
+
+
+
 
 
 
@@ -21,6 +29,9 @@ def createSerializedResponse(response):
 		#serializer = FunctionResponseSerializer(response);
 		response = {"output": response};
 		return Response(response);
+
+
+
 
 
 
@@ -50,6 +61,14 @@ class VariablesList(APIView):
 
 
 class HorseIDBayesianNetworkAPI(object):
+	"""
+	The General Format for API Use:
+
+		GET:	calls the void unit testing on the function
+		POST:	calls unit testing on function with request.data as the testing data
+		PUT:	calls the function with request.data as the input variable to the function
+
+	"""
 
 	
 
@@ -109,6 +128,7 @@ class HorseIDBayesianNetworkAPI(object):
 
 	class initialise_space(APIView):
 
+
 		def get(self, request):
 			return createSerializedResponse(bbn_test.initialise_space());
 
@@ -126,20 +146,20 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 
-	class define_universe(APIView):
+	class set_universe(APIView):
 
 		def get(self, request):
-			return createSerializedResponse(bbn_test.define_universe());
+			return createSerializedResponse(bbn_test.set_universe());
 
 
 
 		def put(self, request):
-			return createSerializedResponse(bbn.define_universe(request.data));
+			return createSerializedResponse(bbn.set_universe(request.data));
 
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.define_universe(request.data));
+			return createSerializedResponse(bbn_test.set_universe(request.data));
 
 
 
@@ -232,35 +252,35 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 
-	class define_evidences(APIView):
+	class set_evidences(APIView):
 
 		def get(self, request):
-			return createSerializedResponse(bbn_test.define_evidences());
+			return createSerializedResponse(bbn_test.set_evidences());
 
 
 		def put(self, request):
-			return createSerializedResponse(bbn.define_evidences(request.data));
+			return createSerializedResponse(bbn.set_evidences(request.data));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.define_evidences(request.data));
+			return createSerializedResponse(bbn_test.set_evidences(request.data));
 
 
 
 
 
-	class define_cpds(APIView):
+	class set_cpds(APIView):
 
 		def get(self, request):
-			return createSerializedResponse(bbn_test.define_cpds());
+			return createSerializedResponse(bbn_test.set_cpds());
 
 
 		def put(self, request):
-			return createSerializedResponse(bbn.define_cpds(request.data));
+			return createSerializedResponse(bbn.set_cpds(request.data));
 
 
 		def post(self, request):
-			return createSerializedResponse(bbn_test.define_cpds(request.data));
+			return createSerializedResponse(bbn_test.set_cpds(request.data));
 
 
 
@@ -296,6 +316,28 @@ class HorseIDBayesianNetworkAPI(object):
 
 		def post(self, request):
 			return createSerializedResponse(bbn_test.draw_default_graph(request.data));
+
+
+
+
+
+
+	#define load graph
+	class load_graph(APIView):
+
+		def get(self, request):
+			return createSerializedResponse(bbn_test.load_graph());
+
+
+		def put(self, request):
+			return createSerializedResponse(bbn.load_graph(request.data));
+
+
+		def post(self, request):
+			return createSerializedResponse(bbn_test.load_graph(request.data));
+
+
+
 
 
 

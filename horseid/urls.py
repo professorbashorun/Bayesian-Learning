@@ -20,6 +20,11 @@ from api import views
 
 network = views.HorseIDBayesianNetworkAPI();
 
+
+
+
+
+
 urlpatterns = [
 	#API URLs 													REPONSE FUNCTIONS
     url(r'^admin/', 											admin.site.urls),
@@ -28,16 +33,17 @@ urlpatterns = [
     url(r'^model/run/',											views.HorseIDBayesianNetworkAPI.run.as_view()),
     url(r'^model/update/',										views.HorseIDBayesianNetworkAPI.update.as_view()),
     url(r'^model/initialise_space/',							views.HorseIDBayesianNetworkAPI.initialise_space.as_view()),
-    url(r'^model/define_universe/',								views.HorseIDBayesianNetworkAPI.define_universe.as_view()),
+    url(r'^model/set_universe/',								views.HorseIDBayesianNetworkAPI.set_universe.as_view()),
     url(r'^model/clear_values/',								views.HorseIDBayesianNetworkAPI.clear_values.as_view()),
     url(r'^model/use_default_values/',							views.HorseIDBayesianNetworkAPI.use_default_values.as_view()),
     url(r'^model/declare_variables/',							views.HorseIDBayesianNetworkAPI.declare_variables.as_view()),
     url(r'^model/update_values/',								views.HorseIDBayesianNetworkAPI.update_values.as_view()),
     url(r'^model/load_sizes/',									views.HorseIDBayesianNetworkAPI.load_sizes.as_view()),
-    url(r'^model/define_evidences/',							views.HorseIDBayesianNetworkAPI.define_evidences.as_view()),
-    url(r'^model/define_cpds/',									views.HorseIDBayesianNetworkAPI.define_cpds.as_view()),#stop here
+    url(r'^model/set_evidences/',							    views.HorseIDBayesianNetworkAPI.set_evidences.as_view()),
+    url(r'^model/set_cpds/',									views.HorseIDBayesianNetworkAPI.set_cpds.as_view()),#stop here
     url(r'^model/load_cpds/',									views.HorseIDBayesianNetworkAPI.load_cpds.as_view()),
     url(r'^model/draw_default_graph/',							views.HorseIDBayesianNetworkAPI.draw_default_graph.as_view()),
+    url(r'^model/load_graph/',                                  views.HorseIDBayesianNetworkAPI.load_graph.as_view()),
     url(r'^model/draw_graph/',									views.HorseIDBayesianNetworkAPI.draw_graph.as_view()),
     url(r'^model/build_model/',									views.HorseIDBayesianNetworkAPI.build_model.as_view()),
     url(r'^model/load_cpds_to_model/',							views.HorseIDBayesianNetworkAPI.load_cpds_to_model.as_view()),

@@ -15,8 +15,8 @@ bbn = HorseIDBayesianNetwork();
 class HorseIDBayesianNetworkTest(unittest.TestCase):
 	"""Brief Introduction to BayesianNetworkTest"""
 
-	GOOD 			= "OK";
-	BAD				= "NEED_REVIEW"
+	GOOD 			= "TEST PASSED";
+	BAD				= "TEST FAILED";
 
 
 
@@ -55,17 +55,32 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def update(self, request=None):				
+	def update(self, request=None):#TODO:	Needs data to test			
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system update function
 		
 			Request Format:
-				#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+				request = { 
+					dataset:	{
+						'variable1': [values1], 
+						... 
+						'variableN': [valuesN] 
+					}, 
+					'graph': [
+						(variable1_i, variable1_j),
+						(variable2_i, variable2_j),
+						...
+						(variableN_i, variableN_j)
+					]
+				}
+
+			Response Format:
+				response=Boolean
 
 		"""
 		bbn.build(request);
 		if type(request) == None :
-			request = {'data': {
+			request = {'dataset': {
 				bbn.IDENTIFIABILITY:		[[0.1], [0.9]],		
 				bbn.LOCATION:				[[0.9], [0.1]],		
 				bbn.CHIP_WORK:				[[0.3, 0.3], [0.7, 0.7]],
@@ -111,7 +126,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def initialise_space(self, request=None):						#request=void
+	def initialise_space(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system initialise function
 		
@@ -129,15 +144,15 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def define_universe(self, request=None):						#request=void
+	def set_universe(self, request=None):
 		"""
-		This function is used for testing the Horse Identification Bayesian Network system define universe function
+		This function is used for testing the Horse Identification Bayesian Network system set universe function
 		
 			Request Format:
 				request=void
 
 		"""
-		self.assertEquals(bbn.define_universe(request), True);
+		self.assertEquals(bbn.set_universe(request), True);
 		return self.GOOD;
 		#DONE
 
@@ -146,7 +161,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def clear_values(self, request=None):							#request=void
+	def clear_values(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system clear value function
 		
@@ -164,7 +179,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def use_default_values(self, request=None):						#request=void
+	def use_default_values(self, request=None):	
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system use_default_values function
 		
@@ -181,7 +196,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def declare_variables(self, request=None):						#request=void
+	def declare_variables(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system declare variables function
 
@@ -196,7 +211,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def update_values(self, request=None):							#request={data:{'variable1': values1, ... 'variableN': valuesN }}
+	def update_values(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system update function
 
@@ -231,7 +246,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def load_sizes(self, request=None):					#request=void
+	def load_sizes(self, request=None):	
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system load_sizes function
 
@@ -248,15 +263,15 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def define_evidences(self, request=None):			#request=void
+	def set_evidences(self, request=None):
 		"""
-		This function is used for testing the Horse Identification Bayesian Network system define evidence function
+		This function is used for testing the Horse Identification Bayesian Network system set evidence function
 
 			Request Format:
 				request=void
 
 		"""
-		self.assertEquals(bbn.define_evidences(request), True);
+		self.assertEquals(bbn.set_evidences(request), True);
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -266,15 +281,15 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def define_cpds(self, request=None):				#request=void
+	def set_cpds(self, request=None):
 		"""
-		This function is used for testing the Horse Identification Bayesian Network system define_cpds function
+		This function is used for testing the Horse Identification Bayesian Network system set_cpds function
 
 			Request Format:
 				request=void
 
 		"""
-		self.assertEquals(bbn.define_cpds(request), True);
+		self.assertEquals(bbn.set_cpds(request), True);
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -284,7 +299,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def load_cpds(self, request=None):					#request=void
+	def load_cpds(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system load_cpds function
 
@@ -292,7 +307,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.define_cpds(request), True);
+		self.assertEquals(bbn.set_cpds(request), True);
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -302,7 +317,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def draw_default_graph(self, request=None):			#request=void
+	def draw_default_graph(self, request=None):	
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system draw_default_graph function
 
@@ -320,7 +335,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def draw_graph(self, request=None):					#request={'graph': [(A1,B1),(A2,B2), ... (AN,BN),]}
+	def draw_graph(self, request=None):	
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system draw_graph function
 
@@ -356,7 +371,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def build_model(self, request=None):				#request=void
+	def build_model(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system build_model function
 
@@ -373,7 +388,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def load_cpds_to_model(self, request=None):			#request=void
+	def load_cpds_to_model(self, request=None):	
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system load_cpds_to_model function
 
@@ -392,7 +407,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def load_model(self, request=None):					#request=void
+	def load_model(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system load_model function
 
@@ -411,7 +426,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def train_model(self, request=None):				#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+	def train_model(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system train_model function
 
@@ -463,7 +478,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def test_model(self, request=None):#void
+	def test_model(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system test_model function
 
@@ -479,7 +494,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def update_model(self, request=None):				#request={data:{'variable1': values1, ... 'variableN': valuesN }, 'graph': [(variable1_i, variable1_j),(variable2_i, variable2_j),,}
+	def update_model(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system update_model function
 
@@ -531,7 +546,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def describe_node(self, request=None):#request={'node':value}
+	def describe_node(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system describe_node function
 
@@ -548,7 +563,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def check_model(self, request=None):#request=void
+	def check_model(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system check_model function
 
@@ -596,7 +611,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def get_cpds(self, request=None):#request={'node':value}
+	def get_cpds(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system get_cpds function
 
@@ -612,7 +627,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def get_cardinality(self, request=None):#request={'node':value}
+	def get_cardinality(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system get_cardinality function
 
@@ -629,7 +644,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def get_local_independencies(self, request=None):#request={'variables':values}
+	def get_local_independencies(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system get_local_independencies function
 
@@ -646,7 +661,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def get_active_trail_nodes(self, request=None):#request={'variables':values, 'observed':values}
+	def get_active_trail_nodes(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system get_active_trail_nodes function
 
@@ -664,7 +679,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def query(self, request=None):#request={'variables':value, 'evidence':value, 'elimination_order':value}
+	def query(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system query function
 
@@ -681,7 +696,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 
 
-	def map_query(self, request=None):#request={'variables':value, 'evidence':value, 'elimination_order':value}
+	def map_query(self, request=None):
 		"""
 		This function is used for testing the Horse Identification Bayesian Network system map_query function
 
@@ -730,14 +745,14 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 		"run":						self.run(request),
 		"update":					self.update(request),
 		"initialise_space":			self.initialise_space(request),
-		"define_universe":			self.define_universe(request),
+		"set_universe":				self.set_universe(request),
 		"clear_values":				self.clear_values(request),
 		"use_default_values":		self.use_default_values(request),
 		"declare_variables":		self.declare_variables(request),
 		"update_values":			self.update_values(request),
 		"load_sizes":				self.load_sizes(request),
-		"define_evidence":			self.define_evidence(request),
-		"define_cpds":				self.define_cpds(request),
+		"set_evidence":				self.set_evidence(request),
+		"set_cpds":					self.set_cpds(request),
 		"load_cpds":				self.load_cpds(request),
 		"draw_default_graph":		self.draw_default_graph(request),
 		"draw_graph":				self.draw_graph(request),
