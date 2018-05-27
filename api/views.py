@@ -197,7 +197,6 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 
-	#use this to update dataset values for cpds
 	class update_values(APIView):
 
 		def get(self, request):
@@ -216,7 +215,6 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 
-	#this declares and initialises the variables sizes to be used
 	class load_sizes(APIView):
 
 		def get(self, request):
@@ -234,7 +232,6 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 
-	#define variable dependencies and dependency size(evidence and evidence card)
 	class define_evidences(APIView):
 
 		def get(self, request):
@@ -252,11 +249,10 @@ class HorseIDBayesianNetworkAPI(object):
 
 
 
-	#define node cpds: load this on start
 	class define_cpds(APIView):
 
 		def get(self, request):
-			return createSerializedResponse(bbn.define_cpds());
+			return createSerializedResponse(bbn_test.define_cpds());
 
 
 		def put(self, request):

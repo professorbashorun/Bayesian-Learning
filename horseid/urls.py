@@ -42,8 +42,6 @@ urlpatterns = [
     url(r'^model/build_model/',									views.HorseIDBayesianNetworkAPI.build_model.as_view()),
     url(r'^model/load_cpds_to_model/',							views.HorseIDBayesianNetworkAPI.load_cpds_to_model.as_view()),
     url(r'^model/load_model/',									views.HorseIDBayesianNetworkAPI.load_model.as_view()),
-    url(r'^model/load_data/',									views.HorseIDBayesianNetworkAPI.load_data.as_view()),
-    url(r'^model/prepare_data/',								views.HorseIDBayesianNetworkAPI.prepare_data.as_view()),
     url(r'^model/train_model/',									views.HorseIDBayesianNetworkAPI.train_model.as_view()),
     url(r'^model/update_model/',								views.HorseIDBayesianNetworkAPI.update_model.as_view()),
     url(r'^model/test_model/',									views.HorseIDBayesianNetworkAPI.test_model.as_view()),
