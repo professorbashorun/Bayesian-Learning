@@ -1,0 +1,7 @@
+pgmpy
+pandas
+#urllib2
+django==1.11.13
+wrapt
+django-rest-framework
+django-nose

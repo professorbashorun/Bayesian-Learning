@@ -764,7 +764,6 @@ class HorseIDBayesianNetwork(object):
 
 
 
-
 	def train_model(self, request):
 		"""
 		This should be used to train the Horse Identificiation Bayesian Belief Network.
@@ -807,8 +806,6 @@ class HorseIDBayesianNetwork(object):
     		return e
     	"""
 		#NEED REVIEW
-
-
 
 
 
