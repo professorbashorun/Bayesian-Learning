@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 import unittest
-from .bbn import HorseIDBayesianNetwork
+from bbn import HorseIDBayesianNetwork
 
 
 bbn = HorseIDBayesianNetwork();
@@ -15,21 +15,60 @@ bbn = HorseIDBayesianNetwork();
 class HorseIDBayesianNetworkTest(unittest.TestCase):
 	"""Brief Introduction to BayesianNetworkTest"""
 
-	GOOD 			= "TEST PASSED";
-	BAD				= "TEST FAILED";
+	GOOD 				= "TEST PASSED";
+	FAILED				= "TEST FAILED";
+
+
+	def start(self, request=None):
+		"""
+		This should be use for testing the start function of the default Horse Identification Bayesian Belief Network system.
+			
+			Request Format:
+				request=void
+
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/start
+				OR
+				curl -X POST http://bbn.horseid.com/model/start --data $request
+				OR
+				model_test.start(request);
+
+			
+			Mathematical Statement:
+				....
+		"""
+		if bbn.start(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
+		
 
 
 
 	def build(self, request=None):	
 		"""
-		This function is used for testing the Horse Identification Bayesian Network system build function
+		This should be use for testing the build function of the default Horse Identification Bayesian Belief Network system.
 		
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/build
+				OR
+				curl -X POST http://bbn.horseid.com/model/build --data $request
+				OR
+				model_test.run(request);
+			
+			Mathematical Statement:
+				....
 		"""
-		self.assertEquals(bbn.build(request), True);
-		return self.GOOD;
+		if bbn.build(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
@@ -39,44 +78,89 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 	def run(self, request=None):
 		"""
-		This function is used for testing the Horse Identification Bayesian Network system run function
+		This should be use for testing the run function of the default Horse Identification Bayesian Belief Network system.
 		
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/run
+				OR
+				curl -X POST http://bbn.horseid.com/model/run --data $request
+				OR
+				model_test.run(request);
+			
+			Mathematical Statement:
+				....
 		"""
-		bbn.build(request);
-		self.assertEquals(bbn.run(request),	True);
-		return self.GOOD;
+		if bbn.run(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
 
 
 
-
 	def update(self, request=None):#TODO:	Needs data to test			
-		"""
-		This function is used for testing the Horse Identification Bayesian Network system update function
+		""""
+		This should be use for testing the udpate function of the default Horse Identification Bayesian Belief Network system.
 		
 			Request Format:
 				request = { 
-					dataset:	{
-						'variable1': [values1], 
-						... 
-						'variableN': [valuesN] 
+					'dataset':	{
+						#for all nodes, do
+							'node_name': [ value1, value2, value3, ... ],
 					}, 
 					'graph': [
-						(variable1_i, variable1_j),
-						(variable2_i, variable2_j),
-						...
-						(variableN_i, variableN_j)
+						#for all edges, do
+							('from node_name', 'to node_name')
 					]
 				}
 
-			Response Format:
-				response=Boolean
 
+			Usage Format:
+				request=
+				{
+					dataset:	
+					{
+						'self.IDENTIFIABILTY'			: 	[[]],
+						'self.LOCATION'		 			: 	[[]],
+						'self.CHIP_WORK'	 			:	[[]],
+						'self.PASSPORT'		 			: 	[[]],
+						'self.PASSPORT_AVALAIBLE'		:	[[]],
+						'self.ID_USING'					:	[[]],
+						'self.ID_VERIFYING'				:	[[]],
+						'self.ID_USING_MARKING'			:	[[]],
+						'self.MARKINGS_CORRECT'			:	[[]],
+						'self.DISTINCTIVE_TRAITS'		:	[[]],
+						'self.OWNER_STA'				:	[[]],
+						'self.GOOD_ID'					:	[[]],
+					},
+					graph:	
+					{
+						#exmaple graph
+						('self.IDENTIFIABILTY'			, 	self.IDENTIFIABILTY),
+						('self.LOCATION'		 		, 	self.PASSPORT),
+						('self.CHIP_WORK'	 			,	self.IDENTIFIABILTY),
+						('self.PASSPORT'		 		, 	self.IDENTIFIABILTY),
+						('self.PASSPORT_AVALAIBLE'		,	self.IDENTIFIABILTY),
+						('self.ID_USING'				,	self.PASSPORT),
+						('self.ID_VERIFYING'			,	self.PASSPORT),
+						('self.ID_USING_MARKING'		,	self.PASSPORT),
+						('self.MARKINGS_CORRECT'		,	self.MARKINGS_CORRECT),
+						('self.DISTINCTIVE_TRAITS'		,	self.MARKINGS_CORRECT),
+						('self.OWNER_STA'				,	self.OWNER_STA),
+						('self.GOOD_ID'					,	self.OWNER_STA),
+					}
+				}
+				curl -X GET http://bbn.horseid.com/model/update
+				OR
+				curl -X POST http://bbn.horseid.com/model/update --data $request
+				OR
+				model_test.update(request);
 		"""
 		bbn.build(request);
 		if type(request) == None :
@@ -115,8 +199,8 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 					(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
 				]
 			};
-		bbn.run(request);
-		self.assertEquals(bbn.update(request), {'time': "", 'accuracy': ""});
+		#bbn.run(request);
+		#self.assertEquals(bbn.update(request), {'time': "", 'accuracy': ""});
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -133,9 +217,19 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/initialise_space
+				OR
+				curl -X POST http://bbn.horseid.com/model/initialise_space --data $request
+				OR
+				model_test.initialise_space(request);
+
 		"""
-		self.assertEquals(bbn.initialise_space(request), True);
-		return self.GOOD;
+		if bbn.initialise_space(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
@@ -151,9 +245,19 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/set_unvierse
+				OR
+				curl -X POST http://bbn.horseid.com/model/set_universe --data $request
+				OR
+				model_test.set_universe(request);
+
 		"""
-		self.assertEquals(bbn.set_universe(request), True);
-		return self.GOOD;
+		if bbn.set_universe(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
@@ -168,9 +272,19 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/clear_values
+				OR
+				curl -X POST http://bbn.horseid.com/model/clear_values --data $request
+				OR
+				model_test.update(request);
+
 		"""
-		self.assertEquals(bbn.clear_values(request), True);
-		return self.GOOD;
+		if bbn.clear_values(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
@@ -186,9 +300,19 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/use_default_values
+				OR
+				curl -X POST http://bbn.horseid.com/model/use_default_values --data $request
+				OR
+				model_test.use_default_values(request);
+
 		"""
-		self.assertEquals(bbn.use_default_values(request), True);
-		return self.GOOD;
+		if bbn.use_default_values(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
@@ -203,9 +327,19 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/declare_variables
+				OR
+				curl -X POST http://bbn.horseid.com/model/declare_variables --data $request
+				OR
+				model_test.declare_variables(request);
+
 		"""
-		self.assertEquals(bbn.declare_variables(request), True);
-		return self.GOOD;
+		if bbn.declare_variables(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
@@ -217,6 +351,14 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 			Request Format:
 				request={data:{'variable1': values1, ... 'variableN': valuesN }}
+
+			Usage Format:
+				request=None;
+				curl -X GET http://bbn.horseid.com/model/update_values
+				OR
+				curl -X POST http://bbn.horseid.com/model/update_values --data $request
+				OR
+				model_test.update_values(request);
 
 		"""
 		bbn.build(request);
@@ -238,7 +380,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 													   [0.9,0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9, 0.9, 0.9 , 0.9, 0.9, 0.9 , 0.9]]
 				}
 			};
-		self.assertEquals(bbn.update_values(request), True);
+		#self.assertEquals(bbn.update_values(request), True);
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -254,8 +396,11 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.load_sizes(request), True);
-		return self.GOOD;
+		if bbn.load_sizes(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 		#NEED REVIEW
 
 
@@ -271,9 +416,11 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.set_evidences(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		if bbn.set_evidences(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 
 
 
@@ -289,9 +436,11 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.set_cpds(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		if bbn.set_cpds(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 
 
 
@@ -307,9 +456,11 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.set_cpds(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		if bbn.load_cpds(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 
 
 
@@ -325,9 +476,11 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.draw_default_graph(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		if bbn.draw_default_graph(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 
 
 
@@ -364,8 +517,10 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 					(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
 				]
 			};
-		self.assertEquals(bbn.draw_graph(request), True);
-		return self.GOOD;
+		if bbn.draw_graph(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
 		#DONE
 
 
@@ -379,10 +534,11 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		bbn.build(request);
-		self.assertEquals(bbn.build_model(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		if bbn.build(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 
 
 
@@ -396,11 +552,12 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		bbn.build(request);
-		bbn.run(request)
-		self.assertEquals(bbn.load_cpds_to_model(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start(request);
+		if bbn.load_cpds_to_model(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 
 
 
@@ -415,10 +572,12 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		bbn.build(request);
-		self.assertEquals(bbn.load_model(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start(request);
+		if bbn.load_model(request) == True:
+			return self.GOOD;
+		else:
+			return self.FAILED
+		#DONE
 
 
 
@@ -470,7 +629,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 					(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
 				]
 			};
-		self.assertEquals(bbn.train_model(request), True);
+		#self.assertEquals(bbn.train_model(request), True);
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -486,7 +645,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.test_model(request), True);
+		#self.assertEquals(bbn.test_model(request), True);
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -538,7 +697,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 					(bbn.owner_sta, 			bbn.good_id),							#owner_sta 				------> 		good_id
 				]
 			};
-		self.assertEquals(bbn.update_model(request), True);
+		#self.assertEquals(bbn.update_model(request), True);
 		return self.GOOD;
 		#NEED REVIEW
 
@@ -554,10 +713,13 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request={'node':value}
 
 		"""
-		request = {'node': bbn.identifiability};
-		self.assertEquals(bbn.describe_node(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		request={bbn.NODE:[bbn.IDENTIFIABILITY]}
+		if bbn.describe_node(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -571,9 +733,12 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.check_model(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		if bbn.check_model(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -587,8 +752,12 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.get_nodes(request),  True);
-		#NEED REVIEW
+		bbn.start()
+		if bbn.get_nodes(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -602,9 +771,12 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request=void
 
 		"""
-		self.assertEquals(bbn.get_edges(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		if bbn.get_edges(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -618,10 +790,13 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 			Request Format:
 				request={'node':value}
 		"""
-		request = {'node': bbn.identifiability };
-		self.assertEquals(bbn.get_cpds(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		request={bbn.NODE:[bbn.IDENTIFIABILITY]}
+		if bbn.get_cpds(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -635,10 +810,13 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request={'node':value}
 
 		"""
-		request = {'node': bbn.identifiability };
-		self.assertEquals(bbn.get_cardinality(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		request={bbn.NODE:[bbn.IDENTIFIABILITY]}
+		if bbn.get_cardinality(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -652,10 +830,13 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request={'variables':values}
 
 		"""
-		request = {'variables': [bbn.identifiability] };
-		self.assertEquals(bbn.get_local_independencies(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		request={bbn.VARIABLES:[bbn.IDENTIFIABILITY]}
+		if bbn.get_local_independencies(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -669,10 +850,13 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request={'variables':values, 'observed':values}
 
 		"""
-		request={'variables':[bbn.identifiability], 'observed':None}
-		self.assertEquals(bbn.get_active_trail_nodes(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		request={bbn.VARIABLES:[bbn.IDENTIFIABILITY], bbn.OBSERVED:None}
+		if bbn.get_active_trail_nodes(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -687,10 +871,13 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request={'variables':value, 'evidence':value, 'elimination_order':value}
 
 		"""
-		request={'variables':[bbn.identifiability], 'evidence':None, 'elimination_order':None}
-		self.assertEquals(bbn.query(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		request={bbn.VARIABLES:[bbn.IDENTIFIABILITY], bbn.EVIDENCE:None, bbn.ELIMINATION_ORDER:None}
+		if bbn.query(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -704,10 +891,13 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 				request={'variables':value, 'evidence':value, 'elimination_order':value}
 
 		"""
-		request={'variables':[bbn.identifiability], 'evidence':None, 'elimination_order':None}
-		self.assertEquals(bbn.map_query(request), True);
-		return self.GOOD;
-		#NEED REVIEW
+		bbn.start()
+		request={bbn.VARIABLES:[bbn.IDENTIFIABILITY], bbn.EVIDENCE:None, bbn.ELIMINATION_ORDER:None}
+		if bbn.query(request) == False:
+			return self.FAILED
+		else:
+			return self.GOOD
+		#DONE
 
 
 
@@ -741,6 +931,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 
 		"""
 		return {
+		"start":					self.start(request),
 		"build": 					self.build(request),
 		"run":						self.run(request),
 		"update":					self.update(request),
@@ -751,11 +942,14 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 		"declare_variables":		self.declare_variables(request),
 		"update_values":			self.update_values(request),
 		"load_sizes":				self.load_sizes(request),
-		"set_evidence":				self.set_evidence(request),
+		"set_evidences":			self.set_evidences(request),
+		"load_evidences":			self.load_evidences(request),
 		"set_cpds":					self.set_cpds(request),
 		"load_cpds":				self.load_cpds(request),
 		"draw_default_graph":		self.draw_default_graph(request),
+		"load_default_graph":		self.load_default_graph(request),
 		"draw_graph":				self.draw_graph(request),
+		"load_graph":				self.load_graph(request),
 		"build_model":				self.build_model(request),
 		"load_cpds_to_model":		self.load_cpds_to_model(request),
 		"load_model":				self.load_model(request),
@@ -766,6 +960,7 @@ class HorseIDBayesianNetworkTest(unittest.TestCase):
 		"check_model":				self.check_model(request),
 		"get_nodes":				self.get_nodes(request),
 		"get_edges":				self.get_edges(request),
+		"get_cpds":					self.get_cpds(request),
 		"get_cardinality":			self.get_cardinality(request),
 		"get_local_independencies":	self.get_local_independencies(request),
 		"get_active_trail_nodes":	self.get_active_trail_nodes(request),

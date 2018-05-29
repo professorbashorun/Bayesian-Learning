@@ -9,6 +9,19 @@ import pandas as pd;
 
 class HorseIDBayesianNetwork(object):
 
+	SYSTEM={}
+	SPACE='space'
+	NODE='node'
+	DATA='data'
+	DATASET='dataset'
+	GRAPH='graph'
+	SIZE='size'
+	CPD="cpd"
+	VARIABLES='variables'
+	EVIDENCE='evidence'
+	EVIDENCE_CARD='evidence_card'
+	ELIMINATION_ORDER='elimination_order'
+	OBSERVED="observed"
 
 	current_dataframe = None;#Dataframe
 	last_updated_time = None;#Datetime
@@ -31,39 +44,50 @@ class HorseIDBayesianNetwork(object):
 
 
 		General Request Object Format:
-			request =	{	
-				data:	{	
-					'variable1': 		values1,
-					'variable2': 		values2,
-					... 
-					'variableN': 		valuesN 
+			request =	
+			{	
+				'data':	
+				{
+					#for all nodes, do
+						'node_name': [ value1, value2, value3, ... ],
 				}, 
-				dataset:{	
-					'variable1': 		[values1],
-					'variable2': 		[values2],
-					... 
-					'variableN': 		[valuesN] 
-				},
-				'graph': [
-					(variable1_i, 		variable1_j),
-					(variable2_i, 		variable2_j),
-					...
-					(variableN_i, 		variableN_j)
+				'dataset':	
+				{
+					#for all nodes, do
+						'node_name': [ value1, value2, value3, ... ],
+				}, 
+				'graph': 
+				[
+					#for all edges, do
+						('from node_name', 'to node_name')
 				],
 				'node'		:			'value',
 				'variables'	:			{variable1: values, variable2: values, ... variableN: values},
-				'variable_card':		{variable1: values, variable2: values, ... variableN: values},
-				'values':				[values],
+				'values': 
+				{
+					#for all nodes, do
+						node_name :	'node's Probablity Distribution Matrix value',
+				}
 				'observed'	:			'values',
-				'evidence'	:			[values],
-				'evidence_card':		[values],
+				'evidence: 
+				{
+					#for all nodes, do
+						node.node_name :	'evidence_value',
+				},
+				evidence_card: 
+				{
+					#for all nodes, do
+						node.node_name :	'evidence_card_value',
+				}
 				'elimination_order':	[values]
 			}
 
 
 
 		General Response Object Format:
-			response = {
+			response=Boolean
+			response= 
+			{
 				time:		latest_updated_time,
 				accuracy:	current_accuracy
 			}
@@ -71,25 +95,62 @@ class HorseIDBayesianNetwork(object):
 	"""
 
 
-
-	def build(self, request=None):
+	def start(self, request=None):
 		"""
-		This should be use for building the default Horse Identification Bayesian Belief Network graph from initialisation of the variables to drawing the graph.
+		This should be use for starting the default Horse Identification Bayesian Belief Network system. Builds and Run the default model.
 			
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/start --data $request
+				OR
+				model.start(request);
+
+			Response Format:
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
 			Mathematical Statement:
 				....
 		"""
-		self.initialise_space(request);	
-		self.set_universe(request);
-		self.use_default_values(request);
-		self.declare_variables(request);
-		self.set_evidences(request);
-		self.set_cpds(request);
-		self.draw_default_graph(request);
-		return True;
+		s1=self.build(request);
+		s2=self.run(request);
+		return s1 and s2;
+
+
+
+
+
+	def build(self, request=None):
+		"""
+		This should be use for building the default Horse Identification Bayesian Belief Network graph globally. Starting from initialisation of the variables to drawing the graph.
+			
+			Request Format:
+				request=void
+
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/build --data $request
+				OR
+				model.build(request);
+
+			Response Format:
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
+			Mathematical Statement:
+				....
+		"""
+		s1=self.declare_variables(request);	
+		s2=self.initialise_space(request);
+		s3=self.set_universe(request);
+		s4=self.use_default_values(request);
+		s5=self.set_evidences(request);
+		s6=self.set_cpds(request);
+		s7=self.draw_default_graph(request);
+		return s1 and s2 and s3 and s4 and s5 and s6 and s7;
 		#DONE
 
 
@@ -103,11 +164,20 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/run --data $request
+				OR
+				model.run(request);
+
+			Response Format:
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
 			Mathematical Statement:
 				...
 		"""
-		self.load_model(request);
-		return True;
+		return self.load_model(request);
 		#DONE
 
 
@@ -120,21 +190,65 @@ class HorseIDBayesianNetwork(object):
 			
 			Request Format:
 				request = { 
-					dataset:	{
-						'variable1': [values1], 
-						... 
-						'variableN': [valuesN] 
+					'dataset':	{
+						#for all nodes, do
+							'node_name': [ value1, value2, value3, ... ],
 					}, 
 					'graph': [
-						(variable1_i, variable1_j),
-						(variable2_i, variable2_j),
-						...
-						(variableN_i, variableN_j)
+						#for all edges, do
+							('from node_name', 'to node_name')
 					]
 				}
 
+
+			Usage Format:
+				request=
+				{
+					dataset:	
+					{
+						'self.IDENTIFIABILTY'			: 	[[]],
+						'self.LOCATION'		 			: 	[[]],
+						'self.CHIP_WORK'	 			:	[[]],
+						'self.PASSPORT'		 			: 	[[]],
+						'self.PASSPORT_AVALAIBLE'		:	[[]],
+						'self.ID_USING'					:	[[]],
+						'self.ID_VERIFYING'				:	[[]],
+						'self.ID_USING_MARKING'			:	[[]],
+						'self.MARKINGS_CORRECT'			:	[[]],
+						'self.DISTINCTIVE_TRAITS'		:	[[]],
+						'self.OWNER_STA'				:	[[]],
+						'self.GOOD_ID'					:	[[]],
+					},
+					graph:	
+					{
+						#exmaple graph
+						('self.IDENTIFIABILTY'			, 	self.IDENTIFIABILTY),
+						('self.LOCATION'		 		, 	self.PASSPORT),
+						('self.CHIP_WORK'	 			,	self.IDENTIFIABILTY),
+						('self.PASSPORT'		 		, 	self.IDENTIFIABILTY),
+						('self.PASSPORT_AVALAIBLE'		,	self.IDENTIFIABILTY),
+						('self.ID_USING'				,	self.PASSPORT),
+						('self.ID_VERIFYING'			,	self.PASSPORT),
+						('self.ID_USING_MARKING'		,	self.PASSPORT),
+						('self.MARKINGS_CORRECT'		,	self.MARKINGS_CORRECT),
+						('self.DISTINCTIVE_TRAITS'		,	self.MARKINGS_CORRECT),
+						('self.OWNER_STA'				,	self.OWNER_STA),
+						('self.GOOD_ID'					,	self.OWNER_STA),
+					}
+				}
+
+				curl -X PUT http://bbn.horseid.com/model/update --data $request
+				OR
+				model.update(request);
+
+
 			Response Format:
-				response=Boolean
+				response=False OR
+				response=
+				{
+					time:		latest_updated_time,
+					accuracy:	current_accuracy
+				}
 
 			Mathematical Statement:
 				...
@@ -154,27 +268,39 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/initialise_space --data $request
+				OR
+				model.initialise_space(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
-		
-		# VARIABLE SPACE 						POSSIBLE VALUES
-		self.identifiablity_space 				= [0, 1];								# If the outcome of the previous id is GOOD, then 1; else if it is not GOOD then 0;
-		self.location_space 					= ["ireland", "not_ireland"];			# Currently using 5 locations in the EU as default.
-		self.chip_work_space					= [True, False];						# If 
-		self.passport_space						= [True, False];
-		self.passport_available_space 			= [True, False];	
-		self.id_using_space						= [True, False];
-		self.id_verifying_space					= [True, False];
-		self.id_using_marking_space				= [True, False];
-		self.markings_correct_space				= [True, False];
-		self.distinctive_traits_space			= [True, False];
-		self.owner_sta_space					= [True, False];
-		self.good_id_space						= [True, False];
-		return True;
+		try:
+			#------------------------------------------------------------------------------------------------------------
+			# VARIABLE SPACE 							ALL POSSIBLE VALUES
+			#------------------------------------------------------------------------------------------------------------
+			self.SYSTEM[self.SPACE] = {};
+			self.SYSTEM[self.SPACE][self.IDENTIFIABILITY] 				= [0, 1];								# If identifiability is good or not.
+			self.SYSTEM[self.SPACE][self.LOCATION]						= ["ireland", "not_ireland"];			# Currently using 2 locations subsets. Ireland and Not-Ireland.
+			self.SYSTEM[self.SPACE][self.CHIP_WORK]						= [True, False];
+			self.SYSTEM[self.SPACE][self.PASSPORT]						= [True, False];
+			self.SYSTEM[self.SPACE][self.PASSPORT_AVAILABLE]			= [True, False];	
+			self.SYSTEM[self.SPACE][self.ID_USING]						= [True, False];
+			self.SYSTEM[self.SPACE][self.ID_VERIFYING]					= [True, False];
+			self.SYSTEM[self.SPACE][self.ID_USING_MARKING]				= [True, False];
+			self.SYSTEM[self.SPACE][self.MARKINGS_CORRECT]				= [True, False];
+			self.SYSTEM[self.SPACE][self.DISTINCTIVE_TRAITS]			= [True, False];
+			self.SYSTEM[self.SPACE][self.OWNER_STA]						= [True, False];
+			self.SYSTEM[self.SPACE][self.GOOD_ID]						= [True, False];
+			return True
+		except Exception as e:
+			return e
 		#DONE
 
 
@@ -192,16 +318,23 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/set_universe --data $request
+				OR
+				model.set_universe(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
-		self.clear_values(request);	
-		self.declare_variables(request);
-		return True;
-		#DONE
+		s1=self.clear_values(request);	
+		s2=self.declare_variables(request);
+		return s1 and s2;
+		#NEED REVIEW
 
 
 
@@ -218,28 +351,40 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/clear_values --data $request
+				OR
+				model.clear_values(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
-
-		#DEFINE VARIBLES 						SET EMPTY MATRIX 
-		self.identifiability_values 			= [[]];		
-		self.location_values					= [[]];	
-		self.chip_work_values 					= [[]];
-		self.chipped_values 					= [[]];
-		self.passport_values					= [[]];
-		self.passport_available_values  		= [[]];
-		self.id_using_values 					= [[]];
-		self.id_verifying_values				= [[]];
-		self.id_using_marking_values			= [[]];
-		self.markings_correct_values 			= [[]];	
-		self.distinctive_traits_values 			= [[]];			
-		self.owner_sta_values 					= [[]];		
-		self.good_id_values						= [[]];
-		return True;
+		try:
+			#---------------------------------------------------------------------------------
+			#	DEFINE VARIBLES 								SET EMPTY MATRIX 
+			#----------------------------------------------------------------------------------
+			self.SYSTEM[self.DATA]={}
+			self.SYSTEM[self.DATA][self.IDENTIFIABILITY] 			= [[]]				
+			self.SYSTEM[self.DATA][self.LOCATION]					= [[]]
+			self.SYSTEM[self.DATA][self.CHIP_WORK]					= [[]]
+			self.SYSTEM[self.DATA][self.CHIPPED]					= [[]]
+			self.SYSTEM[self.DATA][self.PASSPORT]					= [[]]
+			self.SYSTEM[self.DATA][self.PASSPORT_AVAILABLE]  		= [[]]
+			self.SYSTEM[self.DATA][self.ID_USING] 					= [[]]
+			self.SYSTEM[self.DATA][self.ID_USING_MARKING]			= [[]]
+			self.SYSTEM[self.DATA][self.ID_VERIFYING]				= [[]]				
+			self.SYSTEM[self.DATA][self.MARKINGS_CORRECT] 			= [[]]				
+			self.SYSTEM[self.DATA][self.DISTINCTIVE_TRAITS] 		= [[]]				
+			self.SYSTEM[self.DATA][self.OWNER_STA] 					= [[]]				
+			self.SYSTEM[self.DATA][self.good_id]					= [[]]
+			return True
+		except Exception as e:
+			return e
 		#DONE
 
 
@@ -248,7 +393,7 @@ class HorseIDBayesianNetwork(object):
 
 
 
-
+	#feel free to come and set different default Probability Distribution Matrix manually
 	def use_default_values(self, request=None):	
 		"""
 		This function should be used to set probability distribution maxtrix to default values\
@@ -256,29 +401,39 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/use_default_values --data $request
+				model.use_defualt_values(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
-
-		#VARIABLES 								DEFAULT PROBABILITY TENSORS
-		self.identifiability_values 			= [[0.1], [0.9]];				
-		self.location_values					= [[0.5], [0.5]];	
-		self.chip_work_values 					= [[0.2, 0.2], [0.8, 0.8]];
-		self.chipped_values 					= [[0.2, 0.2], [0.8, 0.8]];
-		self.passport_values					= [[0.2, 0.2], [0.8, 0.8]];
-		self.passport_available_values  		= [[0.2, 0.2], [0.8, 0.8]];
-		self.id_using_values 					= [[0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
-		self.id_using_marking_values			= [[0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
-		self.id_verifying_values				= [[0.7], [0.3]];				
-		self.markings_correct_values 			= [[0.9], [0.1]];				
-		self.distinctive_traits_values 			= [[0.8], [0.2]];				
-		self.owner_sta_values 					= [[0.8], [0.2]];				
-		self.good_id_values						= [[0.2,0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], 
-												   [0.8,0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
-		return True;
+		try:
+			self.SYSTEM[self.DATA]={}
+			#------------------------------------------------------------------------------------------------------------
+			#	VARIABLES 										DEFAULT PROBABILITY DISTRIBUTION MATRIX
+			#------------------------------------------------------------------------------------------------------------
+			self.SYSTEM[self.DATA][self.IDENTIFIABILITY] 				= [[0.1], [0.9]];				
+			self.SYSTEM[self.DATA][self.LOCATION]						= [[0.5], [0.5]];	
+			self.SYSTEM[self.DATA][self.CHIP_WORK]						= [[0.2, 0.2], [0.8, 0.8]];
+			self.SYSTEM[self.DATA][self.CHIPPED]						= [[0.2, 0.2], [0.8, 0.8]];
+			self.SYSTEM[self.DATA][self.PASSPORT]						= [[0.2, 0.2], [0.8, 0.8]];
+			self.SYSTEM[self.DATA][self.PASSPORT_AVAILABLE]  			= [[0.2, 0.2], [0.8, 0.8]];
+			self.SYSTEM[self.DATA][self.ID_USING] 						= [[0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
+			self.SYSTEM[self.DATA][self.ID_USING_MARKING]				= [[0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], [0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
+			self.SYSTEM[self.DATA][self.ID_VERIFYING]					= [[0.7], [0.3]];				
+			self.SYSTEM[self.DATA][self.MARKINGS_CORRECT] 				= [[0.9], [0.1]];				
+			self.SYSTEM[self.DATA][self.DISTINCTIVE_TRAITS] 			= [[0.8], [0.2]];				
+			self.SYSTEM[self.DATA][self.OWNER_STA] 						=	 [[0.8], [0.2]];				
+			self.SYSTEM[self.DATA][self.good_id]						= [[0.2,0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2 , 0.2, 0.2, 0.2 , 0.2], [0.8,0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8, 0.8, 0.8 , 0.8, 0.8, 0.8 , 0.8]];
+			return self.load_sizes(request);
+		except Exception as e:
+			return e
 		#DONE
 
 
@@ -296,31 +451,43 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Request Format:
+				request=void
+
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/load_sizes --data $request
+				model.load_sizes(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
 		#define variables and variables size
-		try:
-			#VARIABLE DEFINATION    	SYMBOLICS					VARIABLE SIZE 					VARIABLE DEFINITION 	SYMBOLICS 		SET VARIABLE SIZE
-			self.IDENTIFIABILITY,		self.identifiability, 		self.identifiability_size 		= "identifiability",		"V0", 		len(self.identifiability_values); 		# variable symbols are defined so that it is consistent with the mathematical presentation.
-			self.LOCATION,				self.location, 				self.location_size 				= "location",				"V1", 		len(self.location_values); 				# TODO: all values to be corrected.
-			self.CHIP_WORK,				self.chip_work, 			self.chip_work_size 			= "chip_work", 				"V2",		len(self.chip_work_values);				#
-			self.CHIPPED,				self.chipped, 				self.chipped_size 				= "chipped",				"V3",		len(self.chipped_values);
-			self.PASSPORT,				self.passport, 				self.passport_size 				= "passport",				"V4",		len(self.passport_values);
-			self.PASSPORT_AVAILABLE,	self.passport_available, 	self.passport_available_size 	= "passport_available",		"V5",		len(self.passport_available_values);
-			self.ID_USING,				self.id_using, 				self.id_using_size 				= "id_using",				"V6",		len(self.id_using_values);
-			self.ID_VERIFYING,			self.id_verifying, 			self.id_verifying_size 			= "id_verifying",			"V7",		len(self.id_verifying_values);
-			self.ID_USING_MARKING,		self.id_using_marking, 		self.id_using_marking_size 		= "id_using_marking",		"V8",		len(self.id_using_marking_values);
-			self.MARKINGS_CORRECT,		self.markings_correct, 		self.markings_correct_size 		= "markings_correct",		"V9",		len(self.markings_correct_values);
-			self.DISTINCTIVE_TRAITS,	self.distinctive_traits, 	self.distinctive_traits_size 	= "distinctive_traits",		"V10",		len(self.distinctive_traits_values);
-			self.OWNER_STA,				self.owner_sta, 			self.owner_sta_size 			= "owner_sta",				"V11",		len(self.owner_sta_values);
-			self.GOOD_ID,				self.good_id, 				self.good_id_size 				= "good_id",				"V12",		len(self.good_id_values);
+		try:	
+			#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			#	VARIABLE DEFINATION    	SET VARIABLE DEFINITION				VARIABLES										SET VARIABLE				SYMBOLICS 					SET SYMBOLICS 
+			#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			self.SYSTEM[self.VARIABLES]={}
+			self.IDENTIFIABILITY		= "identifiability";		self.SYSTEM[self.VARIABLES][self.IDENTIFIABILITY]		= self.IDENTIFIABILITY;		self.identifiability		= "identifiability" 		# variable symbols are defined so that it is consistent with the mathematical presentation.
+			self.LOCATION				= "location";				self.SYSTEM[self.VARIABLES][self.LOCATION]				= self.LOCATION;			self.location 				= "location"				# TODO: all values to be corrected.
+			self.CHIP_WORK				= "chip_work";				self.SYSTEM[self.VARIABLES][self.CHIP_WORK]				= self.CHIP_WORK;			self.chip_work 				= "chip_work"				#
+			self.CHIPPED				= "chipped";				self.SYSTEM[self.VARIABLES][self.CHIPPED]				= self.CHIPPED;				self.chipped 				= "chipped"
+			self.PASSPORT				= "passport";				self.SYSTEM[self.VARIABLES][self.PASSPORT]				= self.PASSPORT;			self.passport 				= "passport"
+			self.PASSPORT_AVAILABLE		= "passport_available";		self.SYSTEM[self.VARIABLES][self.PASSPORT_AVAILABLE]	= self.PASSPORT_AVAILABLE;	self.passport_available 	= "passport_available"
+			self.ID_USING				= "id_using";				self.SYSTEM[self.VARIABLES][self.ID_USING]				= self.ID_USING;			self.id_using 				= "id_using"
+			self.ID_VERIFYING			= "id_verifying";			self.SYSTEM[self.VARIABLES][self.ID_VERIFYING]			= self.ID_VERIFYING;		self.id_verifying 			= "id_verifying"
+			self.ID_USING_MARKING		= "id_using_marking";		self.SYSTEM[self.VARIABLES][self.ID_USING_MARKING]		= self.ID_USING_MARKING;	self.id_using_marking 		= "id_using_marking"
+			self.MARKINGS_CORRECT		= "markings_correct";		self.SYSTEM[self.VARIABLES][self.MARKINGS_CORRECT]		= self.MARKINGS_CORRECT;	self.markings_correct 		= "markings_correct"
+			self.DISTINCTIVE_TRAITS		= "distinctive_traits";		self.SYSTEM[self.VARIABLES][self.DISTINCTIVE_TRAITS]	= self.DISTINCTIVE_TRAITS;	self.distinctive_traits 	= "distinctive_traits"
+			self.OWNER_STA				= "owner_sta";				self.SYSTEM[self.VARIABLES][self.OWNER_STA]				= self.OWNER_STA;			self.owner_sta 				= "owner_sta"
+			self.GOOD_ID				= "good_id";				self.SYSTEM[self.VARIABLES][self.GOOD_ID]				= self.GOOD_ID;				self.good_id 				= "good_id"
+			return True;
 		except Exception as e:
-			return e
-		return True;
+			return False
 		#DONE
 
 
@@ -336,41 +503,59 @@ class HorseIDBayesianNetwork(object):
 		This function should be used to update the probability distribution matrix for all the variables/nodes.
 
 			Request Format:
-				request 	=	{
-					data:	{
-						'variable1': values1, 
-						'variable2': values2,
-						... 
-						'variableN': valuesN 
+				request=
+				{
+					'data'	:
+					{
+						#for all nodes, do
+							'node_name'		:	'probabilty distribution matrix value'
 					}
 				}
 
+			Usage Format:
+				request=
+				{
+					data:	
+					{
+						'self.IDENTIFIABILTY'			: 	[[]],
+						'self.LOCATION'		 			: 	[[]],
+						'self.CHIP_WORK'	 			:	[[]],
+						'self.PASSPORT'		 			: 	[[]],
+						'self.PASSPORT_AVALAIBLE'		:	[[]],
+						'self.ID_USING'					:	[[]],
+						'self.ID_VERIFYING'				:	[[]],
+						'self.ID_USING_MARKING'			:	[[]],
+						'self.MARKINGS_CORRECT'			:	[[]],
+						'self.DISTINCTIVE_TRAITS'		:	[[]],
+						'self.OWNER_STA'				:	[[]],
+						'self.GOOD_ID'					:	[[]],
+					}
+				}
+
+				curl -X PUT http://bbn.horseid.com/model/update_values --data $request
+				OR
+				model.update_values(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
 
 			Mathematical Statement:
 				...
+
 		"""
 		try:
-			self.clear_values(request);	
-			#DEFINE VARIABLES 						SET VALUES 
-			self.identifiability_values 			= self.identifiability_values.append(request.data[self.IDENTIFIABILITY]);
-			self.location_values 					= self.location_values.append(request.data[self.LOCATION]);
-			self.chip_work_values 					= self.chip_work_values.append(request.data[self.CHIP_WORK]);
-			self.chipped_values 					= self.chipped_values.append(request.data[self.CHIPPED]);
-			self.passport_values 					= self.passport_values.append(request.data[self.PASSPORT]);
-			self.passport_available_values 			= self.passport_available_values.append(request.data[self.PASSPORT_AVAILABLE]);
-			self.id_using_values 					= self.id_using_values.append(request.data[self.ID_USING]);
-			self.id_verifying_values 				= self.id_verifying_values.append(request.data[self.ID_VERIFYING]);
-			self.id_using_marking_values 			= self.id_using_marking_values.append(request.data[self.ID_USING_MARKING]);
-			self.markings_correct_values 			= self.markings_correct_values.append(request.data[self.MARKINGS_CORRECT]);
-			self.distinctive_traits_values 			= self.distinctive_traits_values.append(request.data[self.DISTINCTIVE_TRAITS]);
-			self.owner_sta_values 					= self.owner_sta_values.append(request.data[self.OWNER_STA]);
-			self.good_id_values 					= self.good_id_values.append(request.data[self.GOOD_ID]);
-			load_sizes(request);	
+			s1=self.clear_values(request);	
+			for node_name in self[self.DATA]:
+				#------------------------------------------------------------------------------------------------------------
+				#	DEFINE VARIABLES 						SET VALUES 
+				#------------------------------------------------------------------------------------------------------------
+				self.SYSTEM[self.DATA][node_name] 					= request[self.DATA][node_name];
+			s2=load_sizes(request);
+			return s1 and s2;	
 		except Exception as e:
-			return e
-		return True;						
+			return False;						
 		#DONE
 
 
@@ -389,30 +574,27 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/load_sizes --data $request
+				OR
+				model.load_sizes(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				for all variables or nodes, load length or sizes of probability distribution matrix to the system.
+
 		"""
-		#this declares and initialises the variables sizes to be used
 		try:
-			self.identifiability_size 			= len(self.identifiability_values);
-			self.location_size					= len(self.location_values);
-			self.chip_work_size					= len(self.chip_work_values);
-			self.chipped_size					= len(self.chipped_values);
-			self.passport_size 					= len(self.passport_values);
-			self.passport_available_size		= len(self.passport_available_values);
-			self.id_using_size 					= len(self.id_using_values);
-			self.id_verifying_size				= len(self.id_verifying_values);
-			self.id_using_marking_size			= len(self.id_using_marking_values);
-			self.markings_correct_size 			= len(self.markings_correct_values);
-			self.distinctive_traits_size		= len(self.distinctive_traits_values);
-			self.owner_sta_size					= len(self.owner_sta_values);
-			self.good_id_size					= len(self.good_id_values);
+			self.SYSTEM[self.SIZE]={};
+			for key in self.SYSTEM[self.VARIABLES]:
+				self.SYSTEM[self.SIZE][key] 			= len(self.SYSTEM[self.DATA][key]);
+			return True
 		except Exception as e:
-			return e
-		return True;
+			return False
 		#DONE
 
 
@@ -427,51 +609,182 @@ class HorseIDBayesianNetwork(object):
 	
 	def set_evidences(self, request=None):
 		"""
-		This function should be used to define or load the parents/envidences for all variables or nodes.
+		This function should be used to define or load the parents/evidences for all nodes.
 			
 			Request Format:
-				request=void
+				request=
+				{
+					evidence: 
+					{
+						#for all nodes, do:
+							node.node_name :	'evidence_value',
+					},
+					evidence_card: 
+					{
+						#for all nodes, do:
+							node.node_name :	'evidence_card_value',
+					}
+				}
+
+			Usage Format:
+
+				request=
+				{
+					'evidence':
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_value',
+						'self.LOCATION'		 			: 	'location_value',
+						'self.CHIP_WORK'	 			:	'chip_work_value',
+						'self.PASSPORT'		 			: 	'passport_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
+						'self.ID_USING'					:	'id_using_value',
+						'self.ID_VERIFYING'				:	'id_verifying_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
+						'self.OWNER_STA'				:	'owner_sta_value',
+						'self.GOOD_ID'					:	'good_id_value'
+					},
+					'evidence_card':
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_card_value',
+						'self.LOCATION'		 			: 	'location_card_value',
+						'self.CHIP_WORK'	 			:	'chip_work_card_value',
+						'self.PASSPORT'		 			: 	'passport_card_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_card_value',
+						'self.ID_USING'					:	'id_using_card_value',
+						'self.ID_VERIFYING'				:	'id_verifying_card_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_card_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_card_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_card_value',
+						'self.OWNER_STA'				:	'owner_sta_card_value',
+						'self.GOOD_ID'					:	'good_id_card_value'
+					}
+				}
+
+				curl -X PUT http://bbn.horseid.com/model/set_evidences --data $request
+				OR
+				model.set_evidences(request);
+
 
 			Response Format:
 				response=Boolean
+				OR
+				response=
+				{
+					output:	Boolean
+				}
+				Returns true if it works, else it returns false. Check your request format. 
 
-			Mathematical Statement:
-				...
 		"""
 		#define variable dependencies and dependency size(evidence and evidence card)
 		try:
-			if type(request) == type(None):
-				#EVIDENCE 								EVIDENCE CARD 							ENVIDENCE VALUES 												ENVIDENCE CARD VALUES
-				self.identifiability_evidence, 		self.identifiability_evidence_card 			= None, 														None;
-				self.location_evidence,				self.location_evidence_card 				= None, 														None;
-				self.chip_work_evidence,			self.chip_work_evidence_card				= [self.location],												[self.location_size];
-				self.chipped_evidence, 				self.chipped_evidence_card					= [self.location],												[self.location_size];
-				self.passport_evidence,				self.passport_evidence_card					= [self.location],												[self.location_size];
-				self.passport_available_evidence,	self.passport_available_evidence_card		= [self.passport],												[self.passport_size];
-				self.id_using_evidence,				self.id_using_evidence_card					= [self.chip_work, self.chipped, self.passport_available],		[self.chip_work_size, self.chipped_size, self.passport_available_size];
-				self.id_verifying_evidence,			self.id_verifying_evidence_card				= None,															None;
-				self.id_using_marking_evidence,		self.id_using_marking_evidence_card			= [self.markings_correct, self.distinctive_traits, self.passport_available],			[self.markings_correct_size, self.distinctive_traits_size, self.passport_available_size];
-				self.markings_correct_evidence,		self.markings_correct_evidence_card			= None,															None;
-				self.distinctive_traits_evidence,	self.distinctive_traits_evidence_card		= None,															None;
-				self.owner_sta_evidence,			self.owner_sta_evidence_card				= None,															None;
-				self.good_id_evidence,				self.good_id_evidence_card					= [self.id_verifying, 				self.id_using, 			self.id_using_marking, 			self.owner_sta, self.identifiability],	[self.id_verifying_size, 			self.id_using_size, 	self.id_using_marking_size, 	self.owner_sta_size, self.identifiability_size];
+			self.SYSTEM[self.EVIDENCE],		self.SYSTEM[self.EVIDENCE_CARD]		=	{},		{};
+			if type(request) == type(None) or type(request[self.EVIDENCE]) == type(None) or type(request[self.EVIDENCE_CARD])==type(None):
+				#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+				#EVIDENCE 												EVIDENCE CARD 													SET DEFUALT EVIDENCE VALUES CONFIG 							SET DEFAULT EVIDENCE CARD VALUES CONFIG
+				#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+				self.SYSTEM[self.EVIDENCE][self.IDENTIFIABILITY], 		self.SYSTEM[self.EVIDENCE_CARD][self.IDENTIFIABILITY] 			= None, 														None;
+				self.SYSTEM[self.EVIDENCE][self.LOCATION],				self.SYSTEM[self.EVIDENCE_CARD][self.LOCATION] 					= None, 														None;
+				self.SYSTEM[self.EVIDENCE][self.CHIP_WORK],				self.SYSTEM[self.EVIDENCE_CARD][self.CHIP_WORK]					= [self.location],												[self.SYSTEM[self.SIZE][self.LOCATION]];
+				self.SYSTEM[self.EVIDENCE][self.CHIPPED],  				self.SYSTEM[self.EVIDENCE_CARD][self.CHIPPED]					= [self.location],												[self.SYSTEM[self.SIZE][self.LOCATION]];
+				self.SYSTEM[self.EVIDENCE][self.PASSPORT],				self.SYSTEM[self.EVIDENCE_CARD][self.PASSPORT]					= [self.location],												[self.SYSTEM[self.SIZE][self.LOCATION]];
+				self.SYSTEM[self.EVIDENCE][self.PASSPORT_AVAILABLE],	self.SYSTEM[self.EVIDENCE_CARD][self.PASSPORT_AVAILABLE]		= [self.passport],												[self.SYSTEM[self.SIZE][self.PASSPORT]];
+				self.SYSTEM[self.EVIDENCE][self.ID_USING],				self.SYSTEM[self.EVIDENCE_CARD][self.ID_USING]					= [self.chip_work, self.chipped, self.passport_available],		[self.SYSTEM[self.SIZE][self.CHIP_WORK], self.SYSTEM[self.SIZE][self.CHIPPED], self.SYSTEM[self.SIZE][self.PASSPORT_AVAILABLE]];
+				self.SYSTEM[self.EVIDENCE][self.ID_VERIFYING],			self.SYSTEM[self.EVIDENCE_CARD][self.ID_VERIFYING]				= None,															None;
+				self.SYSTEM[self.EVIDENCE][self.ID_USING_MARKING],		self.SYSTEM[self.EVIDENCE_CARD][self.ID_USING_MARKING]			= [self.markings_correct, self.distinctive_traits, self.passport_available],	[self.SYSTEM[self.SIZE][self.MARKINGS_CORRECT], self.SYSTEM[self.SIZE][self.DISTINCTIVE_TRAITS], self.SYSTEM[self.SIZE][self.PASSPORT_AVAILABLE]];
+				self.SYSTEM[self.EVIDENCE][self.MARKINGS_CORRECT],		self.SYSTEM[self.EVIDENCE_CARD][self.MARKINGS_CORRECT]			= None,															None;
+				self.SYSTEM[self.EVIDENCE][self.DISTINCTIVE_TRAITS],	self.SYSTEM[self.EVIDENCE_CARD][self.DISTINCTIVE_TRAITS]		= None,															None;
+				self.SYSTEM[self.EVIDENCE][self.OWNER_STA],				self.SYSTEM[self.EVIDENCE_CARD][self.OWNER_STA]					= None,															None;
+				self.SYSTEM[self.EVIDENCE][self.GOOD_ID],				self.SYSTEM[self.EVIDENCE_CARD][self.GOOD_ID]					= [self.id_verifying, self.id_using, self.id_using_marking, self.owner_sta, self.identifiability],	[self.SYSTEM[self.SIZE][self.ID_VERIFYING], self.SYSTEM[self.SIZE][self.ID_USING], self.SYSTEM[self.SIZE][self.ID_USING_MARKING], self.SYSTEM[self.SIZE][self.OWNER_STA], self.SYSTEM[self.SIZE][self.IDENTIFIABILITY]];
 			else:
-				self.identifiability_evidence, 		self.identifiability_evidence_card 			= request.evidence[self.IDENTIFIABILITY], 						request.evidence_card[self.IDENTIFIABILITY];
-				self.location_evidence,				self.location_evidence_card 				= request.evidence[self.LOCATION], 								request.evidence_card[self.LOCATION];
-				self.chip_work_evidence,			self.chip_work_evidence_card				= request.evidence[self.CHIP_WORK],								request.evidence_card[self.CHIP_WORK];
-				self.chipped_evidence, 				self.chipped_evidence_card					= request.evidence[self.CHIPPED],								request.evidence_card[self.CHIPPED];
-				self.passport_evidence,				self.passport_evidence_card					= request.evidence[self.PASSPORT],								request.evidence_card[self.PASSPORT];
-				self.passport_available_evidence,	self.passport_available_evidence_card		= request.evidence[self.PASSPORT_AVAILABLE],					request.evidence_card[self.PASSPORT_AVAILABLE];
-				self.id_using_evidence,				self.id_using_evidence_card					= request.evidence[self.ID_USING],								request.evidence_card[self.ID_USING];
-				self.id_verifying_evidence,			self.id_verifying_evidence_card				= request.evidence[self.ID_VERIFYING],							request.evidence_card[self.ID_VERIFYING];
-				self.id_using_marking_evidence,		self.id_using_marking_evidence_card			= request.evidence[self.ID_USING_MARKING],						request.evidence_card[self.ID_USING_MARKING];
-				self.markings_correct_evidence,		self.markings_correct_evidence_card			= request.evidence[self.MARKINGS_CORRECT],						request.evidence_card[self.MARKINGS_CORRECT];
-				self.distinctive_traits_evidence,	self.distinctive_traits_evidence_card		= request.evidence[self.DISTINCTIVE_TRAITS],					request.evidence_card[self.DISTINCTIVE_TRAITS];
-				self.owner_sta_evidence,			self.owner_sta_evidence_card				= request.evidence[self.OWNER_STA],								request.evidence_card[self.OWNER_STA];
-				self.good_id_evidence,				self.good_id_evidence_card					= request.evidence[self.GOOD_ID],								request.evidence_card[self.GOOD_ID];
+				for key in request[self.EVIDENCE]:
+					#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					#	EVIDENCE 											EVIDENCE CARD 								SET DEFUALT EVIDENCE VALUES CONFIG 				SET DEFAULT EVIDENCE CARD VALUES CONFIG
+					#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					self.SYSTEM[self.EVIDENCE][key], 					self.SYSTEM[self.EVIDENCE_CARD][key] 			= request[self.EVIDENCE][key], 					request[self.EVIDENCE_CARD][key];
+			return True
 		except Exception as e:
-			return e
-		return True;
+			return False
+		#DONE
+
+
+
+
+
+
+
+	def load_evidences(self, request=None):
+		"""
+		This function should be used to define or load the parents/evidences for all nodes.
+			
+			Request Format:
+				request=
+				{
+					evidence: 
+					{
+						#for all nodes, do:
+							node.node_name :	'evidence_value',
+					},
+					evidence_card: 
+					{
+						#for all nodes, do:
+							node.node_name :	'evidence_card_value',
+					}
+				}
+
+			Usage Format:
+
+				request=
+				{
+					'evidence':
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_value',
+						'self.LOCATION'		 			: 	'location_value',
+						'self.CHIP_WORK'	 			:	'chip_work_value',
+						'self.PASSPORT'		 			: 	'passport_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
+						'self.ID_USING'					:	'id_using_value',
+						'self.ID_VERIFYING'				:	'id_verifying_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
+						'self.OWNER_STA'				:	'owner_sta_value',
+						'self.GOOD_ID'					:	'good_id_value'
+					},
+					'evidence_card':
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_card_value',
+						'self.LOCATION'		 			: 	'location_card_value',
+						'self.CHIP_WORK'	 			:	'chip_work_card_value',
+						'self.PASSPORT'		 			: 	'passport_card_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_card_value',
+						'self.ID_USING'					:	'id_using_card_value',
+						'self.ID_VERIFYING'				:	'id_verifying_card_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_card_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_card_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_card_value',
+						'self.OWNER_STA'				:	'owner_sta_card_value',
+						'self.GOOD_ID'					:	'good_id_card_value'
+					}
+				}
+
+				curl -X PUT http://bbn.horseid.com/model/load_evidences --data $request
+				OR
+				model.load_evidences(request);
+
+
+			Response Format:
+				response=Boolean
+				OR
+				response=
+				{
+					output:	Boolean
+				}
+				Returns true if it works, else it returns false. Check your request format. 
+
+		"""
+		return self.set_evidences(request);
 		#DONE
 
 
@@ -484,52 +797,121 @@ class HorseIDBayesianNetwork(object):
 	
 	def set_cpds(self, request=None):
 		"""
-		This is should be used to load up a conditional probability distritubation table from previous the 
+		This is should be used to load up a conditional probability distritubation table from the current state of the HorseIDBayesianNetwork
 			
 			Request Format:
-				request=void
+				request=
+				{
+					'variable_value': 
+					{
+						#for all nodes, do:
+							node_name :	'node's probablity distribution matrix value',
+					},
+					evidence: 
+					{
+						#for all nodes, do:
+							node_name :	'evidence_value',
+					},
+					evidence_card: 
+					{
+						#for all nodes, do:
+							node_name :	'evidence_card_value',
+					}
+				}
+
+			Usage Format:
+
+				request=
+				{
+					'variable_value':
+						#NODES 								#PROBABILITY DISTRIBUTION MATRIX
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_value',
+						'self.LOCATION'		 			: 	'location_value',
+						'self.CHIP_WORK'	 			:	'chip_work_value',
+						'self.PASSPORT'		 			: 	'passport_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
+						'self.ID_USING'					:	'id_using_value',
+						'self.ID_VERIFYING'				:	'id_verifying_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
+						'self.OWNER_STA'				:	'owner_sta_value',
+						'self.GOOD_ID'					:	'good_id_value'
+					},
+					'evidence':
+						#NODES 								#EVIDENCE VALUE
+					{
+						'self.IDENTIFIABILTY'			: 	'identifiabilt_value',
+						'self.LOCATION'		 			: 	'location_value',
+						'self.CHIP_WORK'	 			:	'chip_work_value',
+						'self.PASSPORT'		 			: 	'passport_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
+						'self.ID_USING'					:	'id_using_value',
+						'self.ID_VERIFYING'				:	'id_verifying_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
+						'self.OWNER_STA'				:	'owner_sta_value',
+						'self.GOOD_ID'					:	'good_id_value'
+					},
+					'evidence_card':
+						#NODES 								#EVIDENCE CARD VALUE
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_card_value',
+						'self.LOCATION'		 			: 	'location_card_value',
+						'self.CHIP_WORK'	 			:	'chip_work_card_value',
+						'self.PASSPORT'		 			: 	'passport_card_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_card_value',
+						'self.ID_USING'					:	'id_using_card_value',
+						'self.ID_VERIFYING'				:	'id_verifying_card_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_card_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_card_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_card_value',
+						'self.OWNER_STA'				:	'owner_sta_card_value',
+						'self.GOOD_ID'					:	'good_id_card_value'
+					}
+				}
+
+				curl -X PUT http://bbn.horseid.com/model/set_cpds --data $request
+				OR
+				model.set_cpds(request);
+
 
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
-
-		#define node cpds: load this on start
 		try:
-			if type(request)==type(None) or type(request.data)==type(None):
-				#	CPDs  						CPD TYPE 				VARIABLE 					VARIABLE SIZE 							VALUES 										EVIDENCE(DEPENDENCIES) 							EVIDENCE CARD (DEPENDENCY SIZE)
-				self.identifiability_cpd 	= TabularCPD(variable=self.identifiability, 	variable_card=self.identifiability_size, 	values=self.identifiability_values);		#		None												None
-				self.location_cpd 			= TabularCPD(variable=self.location, 			variable_card=self.location_size, 			values=self.location_values);				#		None												None
-				self.chipped_cpd 			= TabularCPD(variable=self.chipped, 			variable_card=self.chipped_size, 			values=self.chipped_values, 				evidence=self.chipped_evidence, 				evidence_card=self.chipped_evidence_card);
-				self.chip_work_cpd 			= TabularCPD(variable=self.chip_work, 			variable_card=self.chip_work_size, 			values=self.chip_work_values, 				evidence=self.chip_work_evidence, 				evidence_card=self.chip_work_evidence_card);
-				self.passport_cpd 			= TabularCPD(variable=self.passport, 			variable_card=self.passport_size, 			values=self.passport_values, 				evidence=self.passport_evidence, 				evidence_card=self.passport_evidence_card);
-				self.passport_available_cpd = TabularCPD(variable=self.passport_available,	variable_card=self.passport_available_size,	values=self.passport_available_values, 		evidence=self.passport_available_evidence, 		evidence_card=self.passport_available_evidence_card);
-				self.id_using_cpd 			= TabularCPD(variable=self.id_using, 			variable_card=self.id_using_size, 			values=self.id_using_values, 				evidence=self.id_using_evidence, 				evidence_card=self.id_using_evidence_card);
-				self.id_verifying_cpd 		= TabularCPD(variable=self.id_verifying, 		variable_card=self.id_verifying_size, 		values=self.id_verifying_values);			#		None												None
-				self.markings_correct_cpd 	= TabularCPD(variable=self.markings_correct, 	variable_card=self.markings_correct_size, 	values=self.markings_correct_values);		#		None												None
-				self.distinctive_traits_cpd = TabularCPD(variable=self.distinctive_traits, 	variable_card=self.distinctive_traits_size,	values=self.distinctive_traits_values);		#		None												None
-				self.id_using_marking_cpd 	= TabularCPD(variable=self.id_using_marking, 	variable_card=self.id_using_marking_size,	values=self.id_using_marking_values, 		evidence=self.id_using_marking_evidence,		evidence_card=self.id_using_marking_evidence_card);
-				self.owner_sta_cpd 			= TabularCPD(variable=self.owner_sta, 			variable_card=self.owner_sta_size, 			values=self.owner_sta_values);				#		None												None
-				self.good_id_cpd 			= TabularCPD(variable=self.good_id, 			variable_card=self.good_id_size, 			values=self.good_id_values, 				evidence=self.good_id_evidence, 				evidence_card=self.good_id_evidence_card);
-			else: 						
-				self.identifiability_cpd 	= TabularCPD(variable=request.variables[self.IDENTIFIABILITY], 		variable_card=request.variable_card[self.IDENTIFIABILITY], 		values=request.values[self.IDENTIFIABILITY]);		#		None												None
-				self.location_cpd 			= TabularCPD(variable=request.variables[self.LOCATION], 			variable_card=request.variable_card[self.LOCATION], 			values=request.values[self.LOCATION]);				#		None												None
-				self.chipped_cpd 			= TabularCPD(variable=request.variables[self.CHIPPED], 				variable_card=request.variable_card[self.CHIPPED], 				values=request.values[self.CHIPPED], 				evidence=request.evidence[self.CHIPPED], 			evidence_card=request.evidence_card[self.CHIPPED]);
-				self.chip_work_cpd 			= TabularCPD(variable=request.variables[self.CHIP_WORK], 			variable_card=request.variable_card[self.CHIP_WORK], 			values=request.values[self.CHIP_WORK], 				evidence=request.evidence[self.CHIP_WORK], 			evidence_card=request.evidence_card[self.CHIP_WORK]);
-				self.passport_cpd 			= TabularCPD(variable=request.variables[self.PASSPORT], 			variable_card=request.variable_card[self.PASSPORT], 			values=request.values[self.PASSPORT], 				evidence=request.evidence[self.PASSPORT], 			evidence_card=request.evidence_card[self.PASSPORT]);
-				self.passport_available_cpd = TabularCPD(variable=request.variables[self.PASSPORT_AVAILABLE],	variable_card=request.variable_card[self.PASSPORT_AVAILABLE],	values=request.values[self.PASSPORT_AVAILABLE], 	evidence=request.evidence[self.PASSPORT_AVAILABLE], evidence_card=request.evidence_card[self.PASSPORT_AVAILABLE]);
-				self.id_using_cpd 			= TabularCPD(variable=request.variables[self.ID_USING], 			variable_card=request.variable_card[self.ID_USING], 			values=request.values[self.ID_USING], 				evidence=request.evidence[self.ID_USING], 			evidence_card=request.evidence_card[self.ID_USING]);
-				self.id_verifying_cpd 		= TabularCPD(variable=request.variables[self.ID_VERIFYING], 		variable_card=request.variable_card[self.ID_VERIFYING], 		values=request.values[self.ID_VERIFYING]);			#		None												None
-				self.markings_correct_cpd 	= TabularCPD(variable=request.variables[self.MARKINGS_CORRECT], 	variable_card=request.variable_card[self.MARKINGS_CORRECT], 	values=request.values[self.MARKINGS_CORRECT]);		#		None												None
-				self.distinctive_traits_cpd = TabularCPD(variable=request.variables[self.DISTINCTIVE_TRAITS], 	variable_card=request.variable_card[self.DISTINCTIVE_TRAITS],	values=request.values[self.DISTINCTIVE_TRAITS]);	#		None												None
-				self.id_using_marking_cpd 	= TabularCPD(variable=request.variables[self.ID_USING_MARKING], 	variable_card=request.variable_card[self.ID_USING_MARKING],		values=request.values[self.ID_USING_MARKING], 		evidence=request.evidence[self.ID_USING_MARKING],	evidence_card=request.evidence_card[self.ID_USING_MARKING]);
-				self.owner_sta_cpd 			= TabularCPD(variable=request.variables[self.OWNER_STA], 			variable_card=request.variable_card[self.OWNER_STA], 			values=request.values[self.OWNER_STA]);				#		None												None
-				self.good_id_cpd 			= TabularCPD(variable=request.variables[self.GOOD_ID], 				variable_card=request.variable_card[self.GOOD_ID], 				values=request.values[self.GOOD_ID], 				evidence=request.evidence[self.GOOD_ID], 			evidence_card=request.evidence_card[self.GOOD_ID]);
+			s1,	s2,	s3	=	True,True, True;
+			self.SYSTEM[self.CPD]={}
+			if type(request)!=type(None) and type(request.data)!=type(None):
+				s1=self.update_values(request);
+				s2=self.load_sizes(request);
+				s3=self.load_evidences(request); 	
+				
+			#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			#	CPDs  									CPD TYPE 						NODE NAMES							NODE POSSIBILITIES SIZE 								VALUES 												EVIDENCE(DEPENDENCIES) 										EVIDENCE CARD (DEPENDENCY SIZE)
+			#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			self.SYSTEM[self.CPD][self.IDENTIFIABILITY] 	= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.IDENTIFIABILITY], 		variable_card=self.SYSTEM[self.SIZE][self.IDENTIFIABILITY], 	values=self.SYSTEM[self.DATA][self.IDENTIFIABILITY]);		#		None															None
+			self.SYSTEM[self.CPD][self.LOCATION]			= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.LOCATION], 				variable_card=self.SYSTEM[self.SIZE][self.LOCATION],			values=self.SYSTEM[self.DATA][self.LOCATION]);				#		None															None
+			self.SYSTEM[self.CPD][self.CHIPPED] 			= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.CHIPPED], 				variable_card=self.SYSTEM[self.SIZE][self.CHIPPED], 			values=self.SYSTEM[self.DATA][self.CHIPPED], 				evidence=self.SYSTEM[self.EVIDENCE][self.CHIPPED], 					evidence_card=self.SYSTEM[self.EVIDENCE_CARD][self.CHIPPED]);
+			self.SYSTEM[self.CPD][self.CHIP_WORK] 			= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.CHIP_WORK], 				variable_card=self.SYSTEM[self.SIZE][self.CHIP_WORK],			values=self.SYSTEM[self.DATA][self.CHIP_WORK], 				evidence=self.SYSTEM[self.EVIDENCE][self.CHIP_WORK], 				evidence_card=self.SYSTEM[self.EVIDENCE_CARD][self.CHIP_WORK]);
+			self.SYSTEM[self.CPD][self.PASSPORT] 			= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.PASSPORT], 				variable_card=self.SYSTEM[self.SIZE][self.PASSPORT],  			values=self.SYSTEM[self.DATA][self.PASSPORT], 				evidence=self.SYSTEM[self.EVIDENCE][self.PASSPORT], 				evidence_card=self.SYSTEM[self.EVIDENCE_CARD][self.PASSPORT]);
+			self.SYSTEM[self.CPD][self.PASSPORT_AVAILABLE] 	= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.PASSPORT_AVAILABLE],		variable_card=self.SYSTEM[self.SIZE][self.PASSPORT_AVAILABLE], 	values=self.SYSTEM[self.DATA][self.PASSPORT_AVAILABLE], 	evidence=self.SYSTEM[self.EVIDENCE][self.PASSPORT_AVAILABLE], 		evidence_card=self.SYSTEM[self.EVIDENCE_CARD][self.PASSPORT_AVAILABLE]);
+			self.SYSTEM[self.CPD][self.ID_USING] 			= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.ID_USING], 				variable_card=self.SYSTEM[self.SIZE][self.ID_USING],			values=self.SYSTEM[self.DATA][self.ID_USING], 				evidence=self.SYSTEM[self.EVIDENCE][self.ID_USING], 				evidence_card=self.SYSTEM[self.EVIDENCE_CARD][self.ID_USING]);
+			self.SYSTEM[self.CPD][self.ID_VERIFYING] 		= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.ID_VERIFYING], 			variable_card=self.SYSTEM[self.SIZE][self.ID_VERIFYING], 		values=self.SYSTEM[self.DATA][self.ID_VERIFYING]);			#		None															None
+			self.SYSTEM[self.CPD][self.MARKINGS_CORRECT] 	= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.MARKINGS_CORRECT], 		variable_card=self.SYSTEM[self.SIZE][self.MARKINGS_CORRECT], 	values=self.SYSTEM[self.DATA][self.MARKINGS_CORRECT]);		#		None															None
+			self.SYSTEM[self.CPD][self.DISTINCTIVE_TRAITS] 	= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.DISTINCTIVE_TRAITS], 	variable_card=self.SYSTEM[self.SIZE][self.DISTINCTIVE_TRAITS],	values=self.SYSTEM[self.DATA][self.DISTINCTIVE_TRAITS]);	#		None															None
+			self.SYSTEM[self.CPD][self.ID_USING_MARKING] 	= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.ID_USING_MARKING], 		variable_card=self.SYSTEM[self.SIZE][self.ID_USING_MARKING], 	values=self.SYSTEM[self.DATA][self.ID_USING_MARKING], 		evidence=self.SYSTEM[self.EVIDENCE][self.ID_USING_MARKING],			evidence_card=self.SYSTEM[self.EVIDENCE_CARD][self.ID_USING_MARKING]);
+			self.SYSTEM[self.CPD][self.OWNER_STA] 			= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.OWNER_STA], 				variable_card=self.SYSTEM[self.SIZE][self.OWNER_STA],			values=self.SYSTEM[self.DATA][self.OWNER_STA]);				#		None															None
+			self.SYSTEM[self.CPD][self.GOOD_ID] 			= TabularCPD(variable=self.SYSTEM[self.VARIABLES][self.GOOD_ID], 				variable_card=self.SYSTEM[self.SIZE][self.GOOD_ID], 			values=self.SYSTEM[self.DATA][self.GOOD_ID], 				evidence=self.SYSTEM[self.EVIDENCE][self.GOOD_ID], 					evidence_card=self.SYSTEM[self.EVIDENCE_CARD][self.GOOD_ID]);
+			return s1 and s2 and s3
 		except Exception as e:
-			return e		
-		return True;
+			return False
 		#DONE
 
 
@@ -543,10 +925,88 @@ class HorseIDBayesianNetwork(object):
 		This is synonymous to self.set_cpds 
 			
 			Request Format:
-				request=void
+				request=
+				{
+					'variable_value': 
+					{
+						#for all nodes, do:
+							node_name :	'node's probablity distribution matrix value',
+					},
+					evidence: 
+					{
+						#for all nodes, do:
+							node_name :	'evidence_value',
+					},
+					evidence_card: 
+					{
+						#for all nodes, do:
+							node_name :	'evidence_card_value',
+					}
+				}
+
+			Usage Format:
+
+				request=
+				{
+					#for example
+					'variable_value':
+						#NODES 								#PROBABILITY DISTRIBUTION MATRIX
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_value',
+						'self.LOCATION'		 			: 	'location_value',
+						'self.CHIP_WORK'	 			:	'chip_work_value',
+						'self.PASSPORT'		 			: 	'passport_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
+						'self.ID_USING'					:	'id_using_value',
+						'self.ID_VERIFYING'				:	'id_verifying_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
+						'self.OWNER_STA'				:	'owner_sta_value',
+						'self.GOOD_ID'					:	'good_id_value'
+					},
+					'evidence':
+						#NODES 								#EVIDENCE VALUES
+					{
+						'self.IDENTIFIABILTY'			: 	'identifiabilt_value',
+						'self.LOCATION'		 			: 	'location_value',
+						'self.CHIP_WORK'	 			:	'chip_work_value',
+						'self.PASSPORT'		 			: 	'passport_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
+						'self.ID_USING'					:	'id_using_value',
+						'self.ID_VERIFYING'				:	'id_verifying_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
+						'self.OWNER_STA'				:	'owner_sta_value',
+						'self.GOOD_ID'					:	'good_id_value'
+					},
+					'evidence_card':
+						#NODES 								#EVIDENCE CARD VALUES
+					{
+						'self.IDENTIFIABILTY'			: 	'evidence_card_value',
+						'self.LOCATION'		 			: 	'location_card_value',
+						'self.CHIP_WORK'	 			:	'chip_work_card_value',
+						'self.PASSPORT'		 			: 	'passport_card_value',
+						'self.PASSPORT_AVALAIBLE'		:	'passport_available_card_value',
+						'self.ID_USING'					:	'id_using_card_value',
+						'self.ID_VERIFYING'				:	'id_verifying_card_value',
+						'self.ID_USING_MARKING'			:	'id_using_marking_card_value',
+						'self.MARKINGS_CORRECT'			:	'markings_correct_card_value',
+						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_card_value',
+						'self.OWNER_STA'				:	'owner_sta_card_value',
+						'self.GOOD_ID'					:	'good_id_card_value'
+					}
+				}
+
+				curl -X PUT http://bbn.horseid.com/model/set_evidences --data $request
+				OR
+				model.set_evidences(request);
+
 
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
@@ -567,8 +1027,14 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/load_sizes --data $request
+				model.load_sizes(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
@@ -590,31 +1056,43 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/draw_default_graph --data $request
+				OR
+				model.draw_defualt_graph(request);
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""	
-		self.horse_id_graph = [			
-			#VARIABLES FROM 			VARIABLES TO							#ARROW FROM 							ARROW TO
-			(self.identifiability, 		self.good_id),							#identifiability 		------> 		good_id
-			(self.location, 			self.chipped),							#location 				------> 		chipped
-			(self.location, 			self.chip_work),						#location 				------> 		chip_work
-			(self.location, 			self.passport),							#location  				------> 		passport
-			(self.chipped, 				self.id_using),							#chipped 				------> 		id_using	
-			(self.chip_work, 			self.id_using),							#chip_work  			------> 		id_using
-			(self.passport, 			self.passport_available),				#passport 				------> 		passport_available			
-			(self.passport_available, 	self.id_using),							#passport_available 	------> 		id_using
-			(self.markings_correct, 	self.id_using_marking),					#markings_correct 		------> 		id_using_marking
-			(self.distinctive_traits, 	self.id_using_marking),					#distinctive_traits 	------> 		id_using_marking
-			(self.passport_available, 	self.id_using_marking),					#passport_available  	------>		 	id_using_marking
-			(self.id_verifying, 		self.good_id),							#id_verifying  			------> 		good_id
-			(self.id_using, 			self.good_id),							#id_using 				------> 		good_id
-			(self.id_using_marking, 	self.good_id),							#id_using_marking 		------> 		good_id
-			(self.owner_sta, 			self.good_id),							#owner_sta 				------> 		good_id
-		];
-		return True;
+		try:
+			self.horse_id_graph = [
+				#--------------------------------------------------------------------------------------------------------------------------------------------		
+				#EDGE FROM NODE 			EDGE TO	NODE							#ARROW FROM 							ARROW TO
+				#--------------------------------------------------------------------------------------------------------------------------------------------
+				(self.IDENTIFIABILITY, 		self.GOOD_ID),							#identifiability 		------> 		good_id
+				(self.LOCATION, 			self.CHIPPED),							#location 				------> 		chipped
+				(self.LOCATION, 			self.CHIP_WORK),						#location 				------> 		chip_work
+				(self.LOCATION, 			self.PASSPORT),							#location  				------> 		passport
+				(self.CHIPPED, 				self.ID_USING),							#chipped 				------> 		id_using	
+				(self.CHIP_WORK, 			self.ID_USING),							#chip_work  			------> 		id_using
+				(self.PASSPORT, 			self.PASSPORT_AVAILABLE),				#passport 				------> 		passport_available			
+				(self.PASSPORT_AVAILABLE, 	self.ID_USING),							#passport_available 	------> 		id_using
+				(self.MARKINGS_CORRECT, 	self.ID_USING_MARKING),					#markings_correct 		------> 		id_using_marking
+				(self.DISTINCTIVE_TRAITS, 	self.ID_USING_MARKING),					#distinctive_traits 	------> 		id_using_marking
+				(self.PASSPORT_AVAILABLE, 	self.ID_USING_MARKING),					#passport_available  	------>		 	id_using_marking
+				(self.ID_VERIFYING, 		self.GOOD_ID),							#id_verifying  			------> 		good_id
+				(self.ID_USING, 			self.GOOD_ID),							#id_using 				------> 		good_id
+				(self.ID_USING_MARKING, 	self.GOOD_ID),							#id_using_marking 		------> 		good_id
+				(self.OWNER_STA, 			self.GOOD_ID),							#owner_sta 				------> 		good_id
+			];
+			return True;
+		except Exception as e:
+			return False;
 		#DONE
 
 
@@ -630,13 +1108,36 @@ class HorseIDBayesianNetwork(object):
 			
 			Request Format:
 				request =	{
-					'graph': 	[
-						(variable1_i, variable1_j),
-						(variable2_i, variable2_j),
-						...
-						(variableN_i, variableN_j)
+					'graph': 	
+					[
+						#for all edges, do
+							(edge.from.node_name, 	edge.to.node_name),
 					]
 				}
+
+
+			Usage Format:
+				request =	{
+					'graph': 	
+					[
+						#exmaple graph
+						('self.IDENTIFIABILTY'			, 	self.IDENTIFIABILTY),
+						('self.LOCATION'		 		, 	self.PASSPORT),
+						('self.CHIP_WORK'	 			,	self.IDENTIFIABILTY),
+						('self.PASSPORT'		 		, 	self.IDENTIFIABILTY),
+						('self.PASSPORT_AVALAIBLE'		,	self.IDENTIFIABILTY),
+						('self.ID_USING'				,	self.PASSPORT),
+						('self.ID_VERIFYING'			,	self.PASSPORT),
+						('self.ID_USING_MARKING'		,	self.PASSPORT),
+						('self.MARKINGS_CORRECT'		,	self.MARKINGS_CORRECT),
+						('self.DISTINCTIVE_TRAITS'		,	self.MARKINGS_CORRECT),
+						('self.OWNER_STA'				,	self.OWNER_STA),
+						('self.GOOD_ID'					,	self.OWNER_STA),
+					]
+				}
+				curl -X PUT http://bbn.horseid.com/model/load_graph --data $request
+				OR
+				model.load_graph(request);
 			
 			Response Format:
 				response=Boolean
@@ -657,10 +1158,49 @@ class HorseIDBayesianNetwork(object):
 		This should be used to draw the causality/dependency graph of the House Identification Bayesian Belief Network model.
 			
 			Request Format:
-				request=void
+				request=
+				{
+					'graph': 
+					[
+						#for all edges, do
+							('from node_name', 'to node_name')
+					]
+				}
+				curl -X PUT http://bbn.horseid.com/model/draw_graph --data $request
+				OR
+				model.draw_graph(request);
+
+
+			Usage Format:
+				request=
+				{
+					'graph':	
+					[
+						#exmaple graph
+						#	EDGE FROM NODE					EDGE TO NODE
+						('self.IDENTIFIABILTY'			, 	self.IDENTIFIABILTY),
+						('self.LOCATION'		 		, 	self.PASSPORT),
+						('self.CHIP_WORK'	 			,	self.IDENTIFIABILTY),
+						('self.PASSPORT'		 		, 	self.IDENTIFIABILTY),
+						('self.PASSPORT_AVALAIBLE'		,	self.IDENTIFIABILTY),
+						('self.ID_USING'				,	self.PASSPORT),
+						('self.ID_VERIFYING'			,	self.PASSPORT),
+						('self.ID_USING_MARKING'		,	self.PASSPORT),
+						('self.MARKINGS_CORRECT'		,	self.MARKINGS_CORRECT),
+						('self.DISTINCTIVE_TRAITS'		,	self.MARKINGS_CORRECT),
+						('self.OWNER_STA'				,	self.OWNER_STA),
+						('self.GOOD_ID'					,	self.OWNER_STA),
+					]
+				}
+				curl -X PUT http://bbn.horseid.com/model/draw_graph --data $request
+				OR
+				model.draw_graph(request);
+
 
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. If false, check your request format. 
+
 
 			Mathematical Statement:
 				...
@@ -684,19 +1224,34 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/build_model --data $request
+				OR
+				model.build_model(request);
+
+
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
 
 			Mathematical Statement:
 				...
 		"""
 
 		#Build graph and load model: load on start
-		#methods							METHOD CLASS 					FIRST ARG
-		self.horse_id_model 				= BayesianModel(				self.horse_id_graph);
-		self.load_cpds_to_model(request);
-		self.horse_inference 				= VariableElimination(			self.horse_id_model); 
-		return True;
+		try:
+			#------------------------------------------------------------------------------------------------------------
+			#		methods							METHOD CLASS 					FIRST ARG
+			#-------------------------------------------------------------------------------------------------------------------
+			self.horse_id_model 				= BayesianModel(				self.horse_id_graph);
+			self.load_cpds_to_model(request);
+			self.horse_inference 				= VariableElimination(			self.horse_id_model); 
+			return True
+		except Exception as e:
+			return False
 		#DONE
 
 
@@ -715,22 +1270,35 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/load_cpds_to_model --data $request
+				OR
+				model.load_cpds_to_model(request);
+
+
 			Response Format:
 				response=Boolean
+				Returns true if it works, else it returns false. Check your request format. 
+
 
 			Mathematical Statement:
 				...
 		"""
-		#add nodes/CPDs to HorseID model graph: load this on start
-		#add cpds to horse model
-		self.horse_id_model.add_cpds(
-			#SET 1							#SET 2							#SET 3
-			self.identifiability_cpd, 		self.location_cpd, 				self.chip_work_cpd, 				
-			self.chipped_cpd, 				self.passport_cpd, 				self.passport_available_cpd, 
-			self.id_using_cpd, 				self.id_verifying_cpd, 			self.id_using_marking_cpd, 		
-			self.markings_correct_cpd,		self.distinctive_traits_cpd, 	self.owner_sta_cpd, 
-			self.good_id_cpd);
-		return True;
+		try:
+			self.horse_id_model.add_cpds(
+				#----------------------------------------------------------------------------------------------------------------------------------------------
+				#	#SET 1												#SET 2												#SET 3
+				#----------------------------------------------------------------------------------------------------------------------------------------------
+				self.SYSTEM[self.CPD][self.IDENTIFIABILITY], 		self.SYSTEM[self.CPD][self.LOCATION], 				self.SYSTEM[self.CPD][self.CHIP_WORK], 				
+				self.SYSTEM[self.CPD][self.CHIPPED], 				self.SYSTEM[self.CPD][self.PASSPORT], 				self.SYSTEM[self.CPD][self.PASSPORT_AVAILABLE], 
+				self.SYSTEM[self.CPD][self.ID_USING], 				self.SYSTEM[self.CPD][self.ID_VERIFYING], 			self.SYSTEM[self.CPD][self.ID_USING_MARKING], 		
+				self.SYSTEM[self.CPD][self.MARKINGS_CORRECT],		self.SYSTEM[self.CPD][self.DISTINCTIVE_TRAITS], 	self.SYSTEM[self.CPD][self.OWNER_STA], 
+				self.SYSTEM[self.CPD][self.GOOD_ID]);
+			return True
+		except Exception as e:
+			return False
 		#DONE
 
 
@@ -745,16 +1313,22 @@ class HorseIDBayesianNetwork(object):
 		
 			Request Format:
 				request=void
+			
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/load_model --data $request
+				OR
+				model.load_model(request);
 
 			Response Format:
-				response=Boolean
+				[response=Boolean]
+				Returns True if it works, else it returns False. If False, check your request format. 
+
 
 			Mathematical Statement:
 				...
 		"""
-		#update model
-		self.build_model(request);
-		return True;
+		return self.build_model(request);
 		#DONE
 
 
@@ -769,22 +1343,70 @@ class HorseIDBayesianNetwork(object):
 		This should be used to train the Horse Identificiation Bayesian Belief Network.
 		
 			Request Format:
-				request = { 
-					dataset:	{
-						'variable1': [values1], 
-						... 
-						'variableN': [valuesN] 
-					}, 
-					'graph': [
-						(variable1_i, variable1_j),
-						(variable2_i, variable2_j),
-						...
-						(variableN_i, variableN_j)
+				request= 
+				{ 
+					dataset:	
+					{
+						#for all nodes, do
+							'node.node_name'			: 	[datasets value],
+					},
+					'graph': 
+					[
+						#for all edges, do
+							(edge.from.node_name	, 	edge.to.node_name)
 					]
 				}
 
+				curl -X PUT http://bbn.horseid.com/model/train_model --data $request
+				OR
+				model.train_model(request);
+
+
+			Usage Format:
+				request = 
+				{ 
+					dataset:	
+					{
+						'self.IDENTIFIABILTY'			: 	[[],[],[],..],
+						'self.LOCATION'		 			: 	[[],[],[],..],
+						'self.CHIP_WORK'	 			:	[[],[],[],..],
+						'self.PASSPORT'		 			: 	[[],[],[],..],
+						'self.PASSPORT_AVALAIBLE'		:	[[],[],[],..],
+						'self.ID_USING'					:	[[],[],[],..],
+						'self.ID_VERIFYING'				:	[[],[],[],..],
+						'self.ID_USING_MARKING'			:	[[],[],[],..],
+						'self.MARKINGS_CORRECT'			:	[[],[],[],..],
+						'self.DISTINCTIVE_TRAITS'		:	[[],[],[],..],
+						'self.OWNER_STA'				:	[[],[],[],..],
+						'self.GOOD_ID'					:	[[],[],[],..]
+					},
+					'graph': 
+					[
+						#exmaple graph
+						('self.IDENTIFIABILTY'			, 	self.IDENTIFIABILTY),
+						('self.LOCATION'		 		, 	self.PASSPORT),
+						('self.CHIP_WORK'	 			,	self.IDENTIFIABILTY),
+						('self.PASSPORT'		 		, 	self.IDENTIFIABILTY),
+						('self.PASSPORT_AVALAIBLE'		,	self.IDENTIFIABILTY),
+						('self.ID_USING'				,	self.PASSPORT),
+						('self.ID_VERIFYING'			,	self.PASSPORT),
+						('self.ID_USING_MARKING'		,	self.PASSPORT),
+						('self.MARKINGS_CORRECT'		,	self.MARKINGS_CORRECT),
+						('self.DISTINCTIVE_TRAITS'		,	self.MARKINGS_CORRECT),
+						('self.OWNER_STA'				,	self.OWNER_STA),
+						('self.GOOD_ID'					,	self.OWNER_STA)
+					]
+				}
+				curl -X PUT http://bbn.horseid.com/model/train_model --data $request
+				OR
+				model.train_model(request);
+
+
 			Response Format:
-				response = {
+				response=False 
+				OR
+				response=
+				{
 					time:		latest_updated_time,
 					accuracy:	current_accuracy
 				}
@@ -793,19 +1415,21 @@ class HorseIDBayesianNetwork(object):
 			Mathematical Statement:
 				...
 		"""
-		"""
-    	try:
-    		self.current_dataframe = pd.DataFrame(request.data);
-    		if type(request.graph) != type(None):
-    			self.horse_id_model = BayesianModel(request.graph);
+		try:
+			self.current_dataframe = pd.DataFrame(request.data);
+			if type(request.graph) != type(None):
+				self.horse_id_model = BayesianModel(request.graph);
 			self.horse_id_model.fit(self.current_dataframe);
-			self.last_updated_time = ""; 
-			self.current_accuracy 	=	self.test_model(request);
+			self.last_updated_time = "";
+			self.current_accuracy =	self.test_model(request);
 			return {time: self.last_updated_time, accuracy: self.current_accuracy}
-    	except Exception as e:
-    		return e
-    	"""
+		except Exception as e:
+			return False;
 		#NEED REVIEW
+
+
+
+
 
 
 
@@ -816,23 +1440,66 @@ class HorseIDBayesianNetwork(object):
 		This function should be used to update the Horse ID Bayesian Belief Network model.
 		
 			Request Format:
-				request = { 
-					dataset:	{
-						'variable1': [values1], 
-						... 
-						'variableN': [valuesN] 
-					}, 
-					'graph': [
-						(variable1_i, variable1_j),
-						(variable2_i, variable2_j),
-						...
-						(variableN_i, variableN_j)
+				request= 
+				{ 
+					dataset:	
+					{
+						#for all nodes, do
+							node.node_name			: 	value,
+					},
+					'graph': 
+					[
+						#for all edges, do
+							(edge.from.node_name	, 	edge.to.node_name)
 					]
 				}
 
 
+			Usage Format:
+				request = 
+				{ 
+					dataset:	
+					{
+						'self.IDENTIFIABILTY'			: 	[[]],
+						'self.LOCATION'		 			: 	[[]],
+						'self.CHIP_WORK'	 			:	[[]],
+						'self.PASSPORT'		 			: 	[[]],
+						'self.PASSPORT_AVALAIBLE'		:	[[]],
+						'self.ID_USING'					:	[[]],
+						'self.ID_VERIFYING'				:	[[]],
+						'self.ID_USING_MARKING'			:	[[]],
+						'self.MARKINGS_CORRECT'			:	[[]],
+						'self.DISTINCTIVE_TRAITS'		:	[[]],
+						'self.OWNER_STA'				:	[[]],
+						'self.GOOD_ID'					:	[[]],
+					},
+					'graph': 
+					[
+						#example graph
+						('self.IDENTIFIABILTY'			, 	self.IDENTIFIABILTY),
+						('self.LOCATION'		 		, 	self.PASSPORT),
+						('self.CHIP_WORK'	 			,	self.IDENTIFIABILTY),
+						('self.PASSPORT'		 		, 	self.IDENTIFIABILTY),
+						('self.PASSPORT_AVALAIBLE'		,	self.IDENTIFIABILTY),
+						('self.ID_USING'				,	self.PASSPORT),
+						('self.ID_VERIFYING'			,	self.PASSPORT),
+						('self.ID_USING_MARKING'		,	self.PASSPORT),
+						('self.MARKINGS_CORRECT'		,	self.MARKINGS_CORRECT),
+						('self.DISTINCTIVE_TRAITS'		,	self.MARKINGS_CORRECT),
+						('self.OWNER_STA'				,	self.OWNER_STA),
+						('self.GOOD_ID'					,	self.OWNER_STA)
+					]
+				}
+				curl -X PUT http://bbn.horseid.com/model/update_model --data $request
+				OR
+				model.update_model(request);
+
+
 			Response Format:
-				response = {
+				response=False 
+				OR
+				response=
+				{
 					time:		latest_updated_time,
 					accuracy:	current_accuracy
 				}
@@ -849,10 +1516,9 @@ class HorseIDBayesianNetwork(object):
 			self.horse_id_model.fit(self.current_dataframe);
 			self.last_updated_time = "";
 			self.current_accuracy 	=	self.test_model(request);
-			ret = {'time': self.last_updated_time, 'accuracy': self.current_accuracy};
-			return ret
+			return {'time': self.last_updated_time, 'accuracy': self.current_accuracy};
 		except Exception as e:
-			return e
+			return False
 		#NEED REVIEW
 
 
@@ -867,7 +1533,49 @@ class HorseIDBayesianNetwork(object):
 		This function should be used to test model accuracy.
 		
 			Request Format:
-				request=void
+				request= 
+				{ 
+					dataset:	
+					{
+						#for all nodes, do
+							'node.node_name'			: 	value,
+					}
+				}
+
+
+			Usage Format:
+				request = 
+				{ 
+					dataset:	
+					{
+						'self.IDENTIFIABILTY'			: 	[[]],
+						'self.LOCATION'		 			: 	[[]],
+						'self.CHIP_WORK'	 			:	[[]],
+						'self.PASSPORT'		 			: 	[[]],
+						'self.PASSPORT_AVALAIBLE'		:	[[]],
+						'self.ID_USING'					:	[[]],
+						'self.ID_VERIFYING'				:	[[]],
+						'self.ID_USING_MARKING'			:	[[]],
+						'self.MARKINGS_CORRECT'			:	[[]],
+						'self.DISTINCTIVE_TRAITS'		:	[[]],
+						'self.OWNER_STA'				:	[[]],
+						'self.GOOD_ID'					:	[[]],
+					}
+				}
+				curl -X PUT http://bbn.horseid.com/model/test_model --data $request
+				OR
+				model.test_model(request);
+
+
+			Response Format:
+				response=False 
+				OR
+				response=
+				{
+					time:		latest_updated_time,
+					accuracy:	current_accuracy
+				}
+
 
 			Mathematical Statement:
 				...
@@ -889,7 +1597,27 @@ class HorseIDBayesianNetwork(object):
 		This function should be used to descibe a node of interest. Synonymous to get_cpds
 		
 			Request Format:
-				request={ 'node':	value }
+				request=
+				{ 	
+					'node':	['value'] 
+				}
+
+
+			Usage Format:
+				request=
+				{ 	
+					#example
+					'node':	'self.IDENTIFIABILITY' 
+				}
+				curl -X PUT http://bbn.horseid.com/model/describe_node --data $request
+				OR
+				model.describe_node(request);
+
+
+			Response Format:
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
 
 			Mathematical Statement:
 				...
@@ -911,18 +1639,29 @@ class HorseIDBayesianNetwork(object):
 			Request Format:
 				request=void
 
+			Usage Format:
+				request=None;
+				curl -X PUT http://bbn.horseid.com/model/check_model --data $request
+				model.check_model(request);
+
+			Response Format:
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
 			Mathematical Statement:
 				...
 		"""
-				#model engine
-		return self.horse_id_model.check_model();
+		try:
+			return self.horse_id_model.check_model();
+		except Exception as e:
+			return False;
 		#DONE
 
 
 
 
 
-	def get_nodes(self, request):						#TODO: come back and check
+	def get_nodes(self, request=None):						#TODO: come back and check
 		"""
 		This function should be used to get nodes that exist in the Horse ID Bayesian Belief Network model.
 		
@@ -932,16 +1671,18 @@ class HorseIDBayesianNetwork(object):
 			Mathematical Statement:
 				...
 		"""
-				#model engine
-		return self.horse_id_model.get_nodes();
-		#NEED REVIEW
+		try:
+			return self.horse_id_model.nodes;
+		except Exception as e:
+			return False
+		#DONE
 
 
 
 
 
 
-	def get_edges(self, request):						#come back and check
+	def get_edges(self, request=None):						#come back and check
 		"""
 		This function should be used to get all the edges that exist in the Horse ID Bayesian Belief Network model.
 		
@@ -951,8 +1692,11 @@ class HorseIDBayesianNetwork(object):
 			Mathematical Statement:
 				...
 		"""
-		return self.horse_id_model.get_edges();
-		#NEED REVIEW
+		try:
+			return self.horse_id_model.edges;
+		except Exception as e:
+			return False
+		#DONE
 
 
 
@@ -965,13 +1709,33 @@ class HorseIDBayesianNetwork(object):
 		This function should be used to get all of( or a defined node ) the conditional probability distribution tables that exist in the Horse ID Bayesian Belief Network model.
 		
 			Request Format:
-				request={'node':	value}
+				request=
+				{
+					'node':	value
+				}
+
+			Usage Format:
+				request=
+				{
+					'node':	value
+				}
+				curl -X PUT http://bbn.horseid.com/model/get_cpds --data $request
+				OR
+				model.get_cpds(request);
+
+			Response Format:
+				response=Boolean
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
-				#model engine				#request.node
-		return self.horse_id_model.get_cpds(node=request.node);
+		try:
+			node= request[self.NODE] if request.has_key(self.NODE) else None
+					#model engine			#request.node
+			return self.horse_id_model.get_cpds(node=node);
+		except Exception as e:
+			return False
 		#DONE
 	
 
@@ -984,15 +1748,36 @@ class HorseIDBayesianNetwork(object):
 	def get_cardinality(self, request):	
 		"""
 		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
-		
+			
 			Request Format:
-				request={'node':	value}
+				request=
+				{
+					'node':	value
+				}
+
+			Usage Format:
+				request=
+				{
+					#example
+					'node':	self.IDENTIFIABLITY
+				}
+				curl -X PUT http://bbn.horseid.com/model/get_cardinality --data $request
+				OR
+				model.get_cardinality(request);
+
+			Response Format:
+				response=Boolean
+				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
 				...
 		"""
-				#model engine						#request.node
-		return self.horse_id_model.get_cardinality(node=request.node);
+		try:
+			node= request[self.NODE] if request.has_key(self.NODE) else None
+			#model engine							#request.node
+			return self.horse_id_model.get_cardinality(node=node);
+		except Exception as e:
+			return False
 		#DONE
 	
 
@@ -1004,16 +1789,35 @@ class HorseIDBayesianNetwork(object):
 
 	def get_local_independencies(self, request):
 		"""
-		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
+		This function should be used to get all of( or a defined node ) local independencies in the Horse ID Bayesian Belief Network model.
 		
 			Request Format:
-				request={'variables':	[values]}
+				request=
+				{
+					'variables':	[node_names, ... ]
+				}
 
-			Mathematical Statement:
+			Usage Format:
+				request=
+				{
+					#example
+					'variables':	[self.IDENTIFIABLITY, self.CHIP_WORK]
+				}
+				curl -X PUT http://bbn.horseid.com/model/get_local_independencies --data $request
+				OR
+				model.get_local_independencies(request);
+
+			Response Format:
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
 				...
 		"""
-				#model engine							#request.variables
-		return self.horse_id_model.local_independencies(variables=request.variables);
+		try:
+			variables= request[self.VARIABLES] if request.has_key(self.VARIABLES) else None
+			#model engine							#request.variables
+			return self.horse_id_model.local_independencies(variables=request.variables);
+		except Exception as e:
+			return False
 		#DONE
 
 
@@ -1025,7 +1829,7 @@ class HorseIDBayesianNetwork(object):
 
 	def get_active_trail_nodes(self, request):
 		"""
-		This function should be used to get all of( or a defined node ) cardinality table in the Horse ID Bayesian Belief Network model.
+		This function should be used to get all of( or a defined node ) active trail nodes in the Horse ID Bayesian Belief Network model.
 		
 			Request Format:
 				request 	=	{
@@ -1033,11 +1837,34 @@ class HorseIDBayesianNetwork(object):
 					'observed':			values
 				}
 
+
+			Usage Format:
+				request=
+				{
+					#for example
+					'variables':	[self.IDENTIFIABLITY, self.CHIP_WORK],
+					'observed':		self.PASSPORT
+				}
+				curl -X PUT http://bbn.horseid.com/model/get_active_trail_nodes --data $request
+				OR
+				model.get_active_trail_nodes(request);
+
+
+			Response Format:
+				[response=Boolean]
+				Returns true if it works, else it returns false. Check your request format. 
+
+
 			Mathematical Statement:
 				...
 		"""
-				#model engine						#request.variables, 			request.observed;
-		return self.horse_id_model.active_trail_nodes(variables=request.variables, 	observed=request.observed)
+		try:
+			variables = request[self.VARIABLES] if request.has_key(self.VARIABLES) else None
+			observerd = request[self.OBSERVED] if request.has_key(self.OBSERVED) else None
+				#model engine						#request.variables, 	request.observed;
+			return self.horse_id_model.active_trail_nodes(variables=variables, 	observed=observed)
+		except Exception as e:
+			return False;
 		#DONE
 
 
@@ -1056,19 +1883,53 @@ class HorseIDBayesianNetwork(object):
 		This function should be used to query the Horse ID Bayesian Belief Network model and make inference via Variable Elimination Method.
 		
 			Request Format:
-				request 	=	{
-					'variables':			[ variable_symbols,... ], 
-					'evidence':				[ (variable_symbol, variable_value),... ], 
+				request=	
+				{
+					'variables':	
+					[ 
+						variable_symbols,... 
+
+					], 
+					'evidence':	
+					[ 
+						(node_name, evidence_value)
+					], 
 					'elimination_order':	value
 				}
+
+			Usage Format:
+				request=	
+				{
+					'variables':	
+					[ 
+						#for example
+						variable_symbols,... 
+
+					], 
+					'evidence':	
+					[ 
+						#for example
+						(node_name, evidence_value)
+					], 
+					#for example
+					'elimination_order':	value
+				}
+				curl -X PUT http://bbn.horseid.com/model/query --data $request
+				OR
+				model.query(request);
 
 			Response Format:
 
 			Mathematical Statement:
-				...
 		"""
-				#inference engine				#request.variables 			request.evidence 			request.elimination_order
-		return self.horse_inference.query(variables=request.variables, 		evidence=request.evidence, 	elimination_order=request.elimination_order);
+		try:
+			variables 			=request[self.VARIABLES] if request.has_key(self.VARIABLES) else None;
+			evidence 			=request[self.EVIDENCE] if request.has_key(self.EVIDENCE) else None;
+			elimination_order 	=request[self.ELIMINATION_ORDER] if request.has_key(self.ELIMINATION_ORDER) else None;
+					#inference engine		#request.variables 			request.evidence 		request.elimination_order
+			return self.horse_inference.query(variables=variables, 		evidence=evidence, 		elimination_order=elimination_order);
+		except Exception as e:
+			return False
 		#DONE
 
 
@@ -1085,19 +1946,53 @@ class HorseIDBayesianNetwork(object):
 		This function should be used to query the Horse ID Bayesian Belief Network model map and make inference via Variable Elimination Method.
 		
 			Request Format:
-				request 	=	{
-					'variables':			[ variable_symbols,... ], 
-					'evidence':				[ (variable_symbol, variable_value),... ], 
+				request=	
+				{
+					'variables':	
+					[ 
+						variable_symbols,... 
+
+					], 
+					'evidence':	
+					[ 
+						(node_name, evidence_value)
+					], 
 					'elimination_order':	value
 				}
+
+			Usage Format:
+				request=	
+				{
+					'variables':	
+					[ 
+						#for example
+						variable_symbols,... 
+
+					], 
+					'evidence':	
+					[ 
+						#for example
+						(node_name, evidence_value)
+					], 
+					'elimination_order':	value
+				}
+				curl -X PUT http://bbn.horseid.com/model/map_query --data $request
+				OR
+				model.map_query(request);
 
 			Response Format:
 
 			Mathematical Statement:
 				...
 		"""
-				#inference engine				#request.variables 			request.evidence 			request.elimination_order
-		return self.horse_inference.map_query(variables=request.variables, 	evidence=request.evidence, 	elimination_order=request.elimination_order);
+		try:
+			variables 			=request[self.VARIABLES] if request.has_key(self.VARIABLES) else None;
+			evidence 			=request[self.EVIDENCE] if request.has_key(self.EVIDENCE) else None;
+			elimination_order 	=request[self.ELIMINATION_ORDER] if request.has_key(self.ELIMINATION_ORDER) else None;
+					#inference engine		#request.variables 			request.evidence 		request.elimination_order
+			return self.horse_inference.query(variables=variables, 		evidence=evidence, 		elimination_order=elimination_order);
+		except Exception as e:
+			return False
 		#DONE
 
 
