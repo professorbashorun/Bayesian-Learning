@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.generic.base import TemplateView
 from rest_framework.urlpatterns import format_suffix_patterns
 from api import views
 
@@ -26,6 +27,8 @@ network = views.HorseIDBayesianNetworkAPI();
 
 
 urlpatterns = [
+
+
 	#API URLs 													REPONSE FUNCTIONS
     url(r'^admin/', 											admin.site.urls),
     url(r'^variables/', 										views.VariablesList.as_view()),
@@ -65,6 +68,8 @@ urlpatterns = [
  	url(r'^model/query/',										views.HorseIDBayesianNetworkAPI.query.as_view()),
  	url(r'^model/map_query/',									views.HorseIDBayesianNetworkAPI.map_query.as_view()),
     url(r'^model/test_all/',                                    views.HorseIDBayesianNetworkAPI.test_all.as_view()),
+    url(r'^$', TemplateView.as_view(template_name="index.html"),
+        name='home'),
 ];
 
 urlpatterns = format_suffix_patterns(urlpatterns);

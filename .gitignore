@@ -94,4 +94,5 @@ media/
 
 
 #local settings
-config/settings_local.py
+config/settings_local.
+settings_local.py

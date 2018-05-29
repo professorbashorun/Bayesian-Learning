@@ -56,7 +56,7 @@ ROOT_URLCONF = 'horseid.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,3 +120,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+try:
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+    localpath=os.path.join(BASE_DIR, 'horseid/settings_local.py')
+    if  os.path.exists(localpath):
+        with open(localpath) as f:
+            code = compile(f.read(), localpath, 'exec')
+            exec(code, globals(), locals())
+
+except:
+    pass
