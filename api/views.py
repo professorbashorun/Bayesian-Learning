@@ -25,7 +25,6 @@ bbn_test = HorseIDBayesianNetworkTest();
 
 
 def createSerializedResponse(function, data):
-	print(data);
 	try:
 		return Response({"output": function(data)});
 	except Exception as e:

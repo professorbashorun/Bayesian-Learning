@@ -130,6 +130,10 @@ class HorseIDBayesianNetwork(object):
 
 
 
+
+
+
+
 	def build(self, request=None):
 		"""
 		This should be use for building the default Horse Identification Bayesian Belief Network graph globally. Starting from initialisation of the variables to drawing the graph.
@@ -188,6 +192,10 @@ class HorseIDBayesianNetwork(object):
 		"""
 		return self.load_model(request);
 		#DONE
+
+
+
+
 
 
 
@@ -266,6 +274,8 @@ class HorseIDBayesianNetwork(object):
 		"""
 		return self.update_model(request);
 		#NEED REVIEW
+
+
 
 
 
