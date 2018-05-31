@@ -33,24 +33,27 @@
       <div class="card">
     <a href="#"  id="next" class="btn btn-large waves-effect waves-light orange">Chip Works</a>
         </div>
+    <div id="response"></div>
 </div>
 
 
 </body>
 <script>
+
+    alert();
 MODEL = false;
-BBN_HOME = "http://localhost:8000";
+
     $(document).on("click", "#start", function() {
         var sel = this;
-        var data={};
+        var data={"hello":"world"};
          $.ajax({
-            url: BBN_HOME+"/model/start/",
+            url:"/model/start/",
             method: "PUT",
             dataType: "JSON",
             data: data,
             success: function (json) {
-
-               MODEL = json;
+                $("#response").append("<h4>"+json.output+"</h4>");
+                MODEL = json;
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert(textStatus);
@@ -61,19 +64,19 @@ BBN_HOME = "http://localhost:8000";
 
     });
 
+
      $(document).on("click", "#next", function() {
         var sel = this;
-
         var data = { node : "chip_work", result: "True" };
 
          $.ajax({
-            url: BBN_HOME+"/model/build/",
+            url: "/model/build/",
             method: "PUT",
             dataType: "JSON",
             data: data,
             success: function (json) {
 
-                $(this).append(json);
+                $("#response").append("<h4>"+json.output+"</h4>");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert(textStatus);
