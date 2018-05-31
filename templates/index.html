@@ -12,8 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
 
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 
@@ -33,24 +32,35 @@
       <div class="card">
     <a href="#"  id="next" class="btn btn-large waves-effect waves-light orange">Chip Works</a>
         </div>
+
+        <div class="card">
+    <a href="#"  id="query" class="btn btn-large waves-effect waves-light orange">Query</a>
+        </div>
+
+        <div class="card">
+    <a href="#"  id="map_query" class="btn btn-large waves-effect waves-light orange">Map Query</a>
+        </div>
+
     <div id="response"></div>
+
 </div>
 
 
 </body>
 <script>
 
-    alert();
-MODEL = false;
+    MODEL = false;
+    
 
+    //starts the server
     $(document).on("click", "#start", function() {
         var sel = this;
-        var data={"hello":"world"};
+        var data={hello:"world"};
          $.ajax({
             url:"/model/start/",
             method: "PUT",
             dataType: "JSON",
-            data: data,
+            data: JSON.stringify(data),
             success: function (json) {
                 $("#response").append("<h4>"+json.output+"</h4>");
                 MODEL = json;
@@ -58,14 +68,14 @@ MODEL = false;
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert(textStatus);
                 }
-
-        });
-
-
-    });
+            });
+     });
 
 
-     $(document).on("click", "#next", function() {
+
+
+    //builds default system
+    $(document).on("click", "#next", function() {
         var sel = this;
         var data = { node : "chip_work", result: "True" };
 
@@ -73,18 +83,58 @@ MODEL = false;
             url: "/model/build/",
             method: "PUT",
             dataType: "JSON",
-            data: data,
+            data: JSON.stringify(data),
             success: function (json) {
-
                 $("#response").append("<h4>"+json.output+"</h4>");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-
+                alert(textStatus);
+            }
         });
+    });
 
 
+
+
+    //makes query
+    $(document).on("click", "#query", function() {
+        var sel = this;
+        var data = { variables : ["chip_work"], evidences:{id_verifying: 0, id_using: 0, owner_sta: 0} };
+
+        $.ajax({
+            url: "/model/query/",
+            method: "PUT",
+            dataType: "JSON",
+            data: JSON.stringify(data),
+            success: function (json) {
+                $("#response").append("<h4>"+json.output+"</h4>");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+    });
+
+
+
+
+    //makes map queries
+    $(document).on("click", "#map_query", function() {
+        var sel = this;
+        var data = { "variables" : ["chip_work", "identifiability"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
+
+        $.ajax({
+            url: "/model/map_query/",
+            method: "PUT",
+            dataType: "JSON",
+            data: JSON.stringify(data),
+            success: function (json) {
+                $("#response").append("<h4>"+json.output+"</h4>");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
     });
 
 </script>
