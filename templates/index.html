@@ -39,11 +39,12 @@
 </body>
 <script>
 MODEL = false;
+BBN_HOME = "http://localhost:8000";
     $(document).on("click", "#start", function() {
         var sel = this;
         var data={};
          $.ajax({
-            url: "/model/start/",
+            url: BBN_HOME+"/model/start/",
             method: "PUT",
             dataType: "JSON",
             data: data,
@@ -66,7 +67,7 @@ MODEL = false;
         var data = { node : "chip_work", result: "True" };
 
          $.ajax({
-            url: "/model/build/",
+            url: BBN_HOME+"/model/build/",
             method: "PUT",
             dataType: "JSON",
             data: data,

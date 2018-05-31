@@ -1058,7 +1058,7 @@ class HorseIDBayesianNetwork(object):
 			cpds[self.GOOD_ID] 				= TabularCPD(variable=variables[self.GOOD_ID], 					variable_card=sizes[self.GOOD_ID], 				values=data[self.GOOD_ID], 					evidence=evidences[self.GOOD_ID], 					evidence_card=evidence_cards[self.GOOD_ID]);
 			return s1 and s2 and s3
 		except Exception as e:
-			raise e;
+			return False;
 		#DONE
 
 
