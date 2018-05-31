@@ -18,6 +18,17 @@
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+        .card h4 {
+            margin: 0px;
+            margin-top: 5px;
+        }
+
+        .card .col {
+            padding-left: 0px;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,23 +37,44 @@
     <h1>Horse ID</h1>
 
     <div class="card">
-    <a href="#"  id="start" class="btn btn-large waves-effect waves-light orange">Start</a>
+        <div class="row">
+            <div class="col s3">
+                <a href="#"  id="start" class="btn btn-large waves-effect waves-light orange">Start</a>
+            </div>
+            <div class="col s9">
+                <span class="result"></span>
+            </div>
         </div>
+    </div>
 
-      <div class="card">
-    <a href="#"  id="next" class="btn btn-large waves-effect waves-light orange">Chip Works</a>
+    <div class="card">
+        <div class="row">
+            <div class="col s3">
+                <a href="#"   class="btn btn-large  orange ">Chip Works</a>
+            </div>
+            <div class="col s3">
+                <div class="switch left">
+                    <label>
+                        No
+                        <input id="chip_works" type="checkbox">
+                        <span class="lever"></span>
+                        Yes
+                    </label>
+                </div>
+            </div>
+            <div class="col s6">
+                <span class="result"></span>
+            </div>
+        </div>
+        <div class="card">
+            <a href="#"  id="query" class="btn btn-large waves-effect waves-light orange">Query</a>
         </div>
 
         <div class="card">
-    <a href="#"  id="query" class="btn btn-large waves-effect waves-light orange">Query</a>
+            <a href="#"  id="map_query" class="btn btn-large waves-effect waves-light orange">Map Query</a>
         </div>
-
-        <div class="card">
-    <a href="#"  id="map_query" class="btn btn-large waves-effect waves-light orange">Map Query</a>
-        </div>
-
+    </div>
     <div id="response"></div>
-
 </div>
 
 
@@ -50,20 +82,19 @@
 <script>
 
     MODEL = false;
-    
 
     //starts the server
     $(document).on("click", "#start", function() {
-        var sel = this;
-        var data={hello:"world"};
-         $.ajax({
+        var card = $(this).closest(".card");
+        var data={};
+        $.ajax({
             url:"/model/start/",
             method: "PUT",
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $("#response").append("<h4>"+json.output+"</h4>");
-                MODEL = json;
+                $(card).find(".result").html("<h4>"+json.output+"</h4>");
+
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert(textStatus);
@@ -72,20 +103,17 @@
      });
 
 
-
-
-    //builds default system
-    $(document).on("click", "#next", function() {
-        var sel = this;
-        var data = { node : "chip_work", result: "True" };
-
-         $.ajax({
+    $(document).on("change", "#chip_works", function() {
+        var input = $(this).value == "on" ? true : false;
+        var card = $(this).closest(".card");
+        var data = { node : "chip_work", result: input };
+        $.ajax({
             url: "/model/build/",
             method: "PUT",
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $("#response").append("<h4>"+json.output+"</h4>");
+                $(card).find(".result").html("<h4>"+json.output+"</h4>");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert(textStatus);
@@ -96,18 +124,17 @@
 
 
 
-    //makes query
-    $(document).on("click", "#query", function() {
-        var sel = this;
+    $(document).on("change", "#query", function() {
+        var input = $(this).value == "on" ? true : false;
+        var card = $(this).closest(".card");
         var data = { variables : ["chip_work"], evidences:{id_verifying: 0, id_using: 0, owner_sta: 0} };
-
         $.ajax({
-            url: "/model/query/",
+            url: "/model/build/",
             method: "PUT",
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $("#response").append("<h4>"+json.output+"</h4>");
+                $(card).find(".result").html("<h4>"+json.output+"</h4>");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert(textStatus);
@@ -118,24 +145,27 @@
 
 
 
-    //makes map queries
-    $(document).on("click", "#map_query", function() {
-        var sel = this;
-        var data = { "variables" : ["chip_work", "identifiability"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
 
+    $(document).on("change", "#map_query", function() {
+        var input = $(this).value == "on" ? true : false;
+        var card = $(this).closest(".card");
+        var data = { variables : ["chip_work"], evidences:{id_verifying: 0, id_using: 0, owner_sta: 0} };
         $.ajax({
-            url: "/model/map_query/",
+            url: "/model/build/",
             method: "PUT",
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $("#response").append("<h4>"+json.output+"</h4>");
+                $(card).find(".result").html("<h4>"+json.output+"</h4>");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert(textStatus);
             }
         });
     });
+
+
+
 
 </script>
 </html>

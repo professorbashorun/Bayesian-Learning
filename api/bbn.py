@@ -832,7 +832,7 @@ class HorseIDBayesianNetwork(object):
 		try:
 			self.__SYSTEM[self.EVIDENCES]={};				self.__SYSTEM[self.EVIDENCE_CARDS]={};
 			evidences=self.__SYSTEM[self.EVIDENCES];		evidence_cards=self.__SYSTEM[self.EVIDENCE_CARDS];		sizes=self.__SYSTEM[self.SIZES];
-			if request.has_key(self.EVIDENCES) and request.has_key(self.EVIDENCE_CARDS):
+			if self.EVIDENCES in request  and self.EVIDENCE_CARD in request:
 				for key in request[self.EVIDENCES]:
 					#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 					#	EVIDENCE 						EVIDENCE CARD 								SET DEFUALT EVIDENCE VALUES CONFIG 				SET DEFAULT EVIDENCE CARD VALUES CONFIG
