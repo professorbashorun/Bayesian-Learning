@@ -2091,7 +2091,7 @@ class HorseIDBayesianNetwork(object):
 			x = self.horse_inference.query(variables=variables, 		evidence=evidences, 		elimination_order=elimination_order);
 			return { node: { str(self.__SYSTEM[self.SPACES][node][observation]) : x[node].values[observation] for observation in range(len(x[node].values))} for node in x };
 		except Exception as e:
-			raise e
+			return False
 		#DONE
 
 
