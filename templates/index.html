@@ -146,7 +146,7 @@
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $(card).find(".result").html("<h4>"+json.output.chip_work+"</h4>");
+                $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -166,7 +166,7 @@
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $(card).find(".result").html("<h4>"+json.output.chip_work+"</h4>");
+                $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {

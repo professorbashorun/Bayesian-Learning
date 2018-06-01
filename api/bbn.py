@@ -2089,9 +2089,9 @@ class HorseIDBayesianNetwork(object):
 			elimination_order 	=request[self.ELIMINATION_ORDER] if self.ELIMINATION_ORDER in request else None;
 					#inference engine		#request.variables 			request.evidence 		request.elimination_order
 			x = self.horse_inference.query(variables=variables, 		evidence=evidences, 		elimination_order=elimination_order);
-			return { k: x[k].values.tolist() for k in x };
+			return { node: { str(self.__SYSTEM[self.SPACES][node][observation]) : x[node].values[observation] for observation in range(len(x[node].values))} for node in x };
 		except Exception as e:
-			return False
+			raise e
 		#DONE
 
 
