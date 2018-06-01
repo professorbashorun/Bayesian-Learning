@@ -783,34 +783,36 @@ class HorseIDBayesianNetwork(object):
 				request=
 				{
 					'evidence':
+						#NODES 								#EVIDENCE VALUE
 					{
-						'self.IDENTIFIABILTY'			: 	'evidence_value',
-						'self.LOCATION'		 			: 	'location_value',
-						'self.CHIP_WORK'	 			:	'chip_work_value',
-						'self.PASSPORT'		 			: 	'passport_value',
-						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
-						'self.ID_USING'					:	'id_using_value',
-						'self.ID_VERIFYING'				:	'id_verifying_value',
-						'self.ID_USING_MARKING'			:	'id_using_marking_value',
-						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
-						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
-						'self.OWNER_STA'				:	'owner_sta_value',
-						'self.GOOD_ID'					:	'good_id_value'
+						'self.IDENTIFIABILTY'			: 	['A', 'B'],
+						'self.LOCATION'		 			: 	['A', 'B'],
+						'self.CHIP_WORK'	 			:	['A', 'B'],
+						'self.PASSPORT'		 			: 	['A', 'B'],
+						'self.PASSPORT_AVALAIBLE'		:	['A', 'B'],
+						'self.ID_USING'					:	['A', 'B'],
+						'self.ID_VERIFYING'				:	['A', 'B'],
+						'self.ID_USING_MARKING'			:	['A', 'B'],
+						'self.MARKINGS_CORRECT'			:	['A', 'B'],
+						'self.DISTINCTIVE_TRAITS'		:	['A', 'B'],
+						'self.OWNER_STA'				:	['A', 'B'],
+						'self.GOOD_ID'					:	['A', 'B']
 					},
 					'evidence_card':
+						#NODES 								#EVIDENCE CARD VALUE
 					{
-						'self.IDENTIFIABILTY'			: 	'evidence_card_value',
-						'self.LOCATION'		 			: 	'location_card_value',
-						'self.CHIP_WORK'	 			:	'chip_work_card_value',
-						'self.PASSPORT'		 			: 	'passport_card_value',
-						'self.PASSPORT_AVALAIBLE'		:	'passport_available_card_value',
-						'self.ID_USING'					:	'id_using_card_value',
-						'self.ID_VERIFYING'				:	'id_verifying_card_value',
-						'self.ID_USING_MARKING'			:	'id_using_marking_card_value',
-						'self.MARKINGS_CORRECT'			:	'markings_correct_card_value',
-						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_card_value',
-						'self.OWNER_STA'				:	'owner_sta_card_value',
-						'self.GOOD_ID'					:	'good_id_card_value'
+						'self.IDENTIFIABILTY'			: 	[ 2, 2],
+						'self.LOCATION'		 			: 	[ 2, 2],
+						'self.CHIP_WORK'	 			:	[ 2, 2],
+						'self.PASSPORT'		 			: 	[ 2, 2],
+						'self.PASSPORT_AVALAIBLE'		:	[ 2, 2],
+						'self.ID_USING'					:	[ 2, 2],
+						'self.ID_VERIFYING'				:	[ 2, 2],
+						'self.ID_USING_MARKING'			:	[ 2, 2],
+						'self.MARKINGS_CORRECT'			:	[ 2, 2],
+						'self.DISTINCTIVE_TRAITS'		:	[ 2, 2],
+						'self.OWNER_STA'				:	[ 2, 2],
+						'self.GOOD_ID'					:	[ 2, 2]
 					}
 				}
 
@@ -832,12 +834,12 @@ class HorseIDBayesianNetwork(object):
 		try:
 			self.__SYSTEM[self.EVIDENCES]={};				self.__SYSTEM[self.EVIDENCE_CARDS]={};
 			evidences=self.__SYSTEM[self.EVIDENCES];		evidence_cards=self.__SYSTEM[self.EVIDENCE_CARDS];		sizes=self.__SYSTEM[self.SIZES];
-			if self.EVIDENCES in request  and self.EVIDENCE_CARD in request:
+			if request!=None and self.EVIDENCES in request  and self.EVIDENCE_CARDS in request:
 				for key in request[self.EVIDENCES]:
 					#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 					#	EVIDENCE 						EVIDENCE CARD 								SET DEFUALT EVIDENCE VALUES CONFIG 				SET DEFAULT EVIDENCE CARD VALUES CONFIG
 					#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-					evidences[key], 					evidence_cards[key] 						= request[self.EVIDENCE][key], 					request[self.EVIDENCE_CARD][key];
+					evidences[key], 					evidence_cards[key] 						= request[self.EVIDENCES][key], 					request[self.EVIDENCE_CARDS][key];
 			else:
 				#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 				#	EVIDENCE 							EVIDENCE CARD 									SET DEFAULT EVIDENCE VALUES CONFIG 								SET DEFAULT EVIDENCE CARD VALUES CONFIG
@@ -857,7 +859,7 @@ class HorseIDBayesianNetwork(object):
 				evidences[self.GOOD_ID],				evidence_cards[self.GOOD_ID]					= [self.id_verifying, self.id_using, self.id_using_marking, self.owner_sta, self.identifiability],	[sizes[self.ID_VERIFYING], sizes[self.ID_USING], sizes[self.ID_USING_MARKING], sizes[self.OWNER_STA], sizes[self.IDENTIFIABILITY]];
 			return True
 		except Exception as e:
-			return False
+			return False;
 		#DONE
 
 
@@ -890,34 +892,36 @@ class HorseIDBayesianNetwork(object):
 				request=
 				{
 					'evidence':
+						#NODES 								#EVIDENCE VALUE
 					{
-						'self.IDENTIFIABILTY'			: 	'evidence_value',
-						'self.LOCATION'		 			: 	'location_value',
-						'self.CHIP_WORK'	 			:	'chip_work_value',
-						'self.PASSPORT'		 			: 	'passport_value',
-						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
-						'self.ID_USING'					:	'id_using_value',
-						'self.ID_VERIFYING'				:	'id_verifying_value',
-						'self.ID_USING_MARKING'			:	'id_using_marking_value',
-						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
-						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
-						'self.OWNER_STA'				:	'owner_sta_value',
-						'self.GOOD_ID'					:	'good_id_value'
+						'self.IDENTIFIABILTY'			: 	['A', 'B'],
+						'self.LOCATION'		 			: 	['A', 'B'],
+						'self.CHIP_WORK'	 			:	['A', 'B'],
+						'self.PASSPORT'		 			: 	['A', 'B'],
+						'self.PASSPORT_AVALAIBLE'		:	['A', 'B'],
+						'self.ID_USING'					:	['A', 'B'],
+						'self.ID_VERIFYING'				:	['A', 'B'],
+						'self.ID_USING_MARKING'			:	['A', 'B'],
+						'self.MARKINGS_CORRECT'			:	['A', 'B'],
+						'self.DISTINCTIVE_TRAITS'		:	['A', 'B'],
+						'self.OWNER_STA'				:	['A', 'B'],
+						'self.GOOD_ID'					:	['A', 'B']
 					},
 					'evidence_card':
+						#NODES 								#EVIDENCE CARD VALUE
 					{
-						'self.IDENTIFIABILTY'			: 	'evidence_card_value',
-						'self.LOCATION'		 			: 	'location_card_value',
-						'self.CHIP_WORK'	 			:	'chip_work_card_value',
-						'self.PASSPORT'		 			: 	'passport_card_value',
-						'self.PASSPORT_AVALAIBLE'		:	'passport_available_card_value',
-						'self.ID_USING'					:	'id_using_card_value',
-						'self.ID_VERIFYING'				:	'id_verifying_card_value',
-						'self.ID_USING_MARKING'			:	'id_using_marking_card_value',
-						'self.MARKINGS_CORRECT'			:	'markings_correct_card_value',
-						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_card_value',
-						'self.OWNER_STA'				:	'owner_sta_card_value',
-						'self.GOOD_ID'					:	'good_id_card_value'
+						'self.IDENTIFIABILTY'			: 	[ 2, 2],
+						'self.LOCATION'		 			: 	[ 2, 2],
+						'self.CHIP_WORK'	 			:	[ 2, 2],
+						'self.PASSPORT'		 			: 	[ 2, 2],
+						'self.PASSPORT_AVALAIBLE'		:	[ 2, 2],
+						'self.ID_USING'					:	[ 2, 2],
+						'self.ID_VERIFYING'				:	[ 2, 2],
+						'self.ID_USING_MARKING'			:	[ 2, 2],
+						'self.MARKINGS_CORRECT'			:	[ 2, 2],
+						'self.DISTINCTIVE_TRAITS'		:	[ 2, 2],
+						'self.OWNER_STA'				:	[ 2, 2],
+						'self.GOOD_ID'					:	[ 2, 2]
 					}
 				}
 
@@ -978,50 +982,50 @@ class HorseIDBayesianNetwork(object):
 					'variable_value':
 						#NODES 								#PROBABILITY DISTRIBUTION MATRIX
 					{
-						'self.IDENTIFIABILTY'			: 	'evidence_value',
-						'self.LOCATION'		 			: 	'location_value',
-						'self.CHIP_WORK'	 			:	'chip_work_value',
-						'self.PASSPORT'		 			: 	'passport_value',
-						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
-						'self.ID_USING'					:	'id_using_value',
-						'self.ID_VERIFYING'				:	'id_verifying_value',
-						'self.ID_USING_MARKING'			:	'id_using_marking_value',
-						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
-						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
-						'self.OWNER_STA'				:	'owner_sta_value',
-						'self.GOOD_ID'					:	'good_id_value'
+						'self.IDENTIFIABILTY'			: 	[[]],
+						'self.LOCATION'		 			: 	[[]],
+						'self.CHIP_WORK'	 			:	[[]],
+						'self.PASSPORT'		 			: 	[[]],
+						'self.PASSPORT_AVALAIBLE'		:	[[]],
+						'self.ID_USING'					:	[[]],
+						'self.ID_VERIFYING'				:	[[]],
+						'self.ID_USING_MARKING'			:	[[]],
+						'self.MARKINGS_CORRECT'			:	[[]],
+						'self.DISTINCTIVE_TRAITS'		:	[[]],
+						'self.OWNER_STA'				:	[[]],
+						'self.GOOD_ID'					:	[[]]
 					},
 					'evidence':
 						#NODES 								#EVIDENCE VALUE
 					{
-						'self.IDENTIFIABILTY'			: 	'identifiabilt_value',
-						'self.LOCATION'		 			: 	'location_value',
-						'self.CHIP_WORK'	 			:	'chip_work_value',
-						'self.PASSPORT'		 			: 	'passport_value',
-						'self.PASSPORT_AVALAIBLE'		:	'passport_available_value',
-						'self.ID_USING'					:	'id_using_value',
-						'self.ID_VERIFYING'				:	'id_verifying_value',
-						'self.ID_USING_MARKING'			:	'id_using_marking_value',
-						'self.MARKINGS_CORRECT'			:	'markings_correct_value',
-						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_value',
-						'self.OWNER_STA'				:	'owner_sta_value',
-						'self.GOOD_ID'					:	'good_id_value'
+						'self.IDENTIFIABILTY'			: 	['A', 'B'],
+						'self.LOCATION'		 			: 	['A', 'B'],
+						'self.CHIP_WORK'	 			:	['A', 'B'],
+						'self.PASSPORT'		 			: 	['A', 'B'],
+						'self.PASSPORT_AVALAIBLE'		:	['A', 'B'],
+						'self.ID_USING'					:	['A', 'B'],
+						'self.ID_VERIFYING'				:	['A', 'B'],
+						'self.ID_USING_MARKING'			:	['A', 'B'],
+						'self.MARKINGS_CORRECT'			:	['A', 'B'],
+						'self.DISTINCTIVE_TRAITS'		:	['A', 'B'],
+						'self.OWNER_STA'				:	['A', 'B'],
+						'self.GOOD_ID'					:	['A', 'B']
 					},
 					'evidence_card':
 						#NODES 								#EVIDENCE CARD VALUE
 					{
-						'self.IDENTIFIABILTY'			: 	'evidence_card_value',
-						'self.LOCATION'		 			: 	'location_card_value',
-						'self.CHIP_WORK'	 			:	'chip_work_card_value',
-						'self.PASSPORT'		 			: 	'passport_card_value',
-						'self.PASSPORT_AVALAIBLE'		:	'passport_available_card_value',
-						'self.ID_USING'					:	'id_using_card_value',
-						'self.ID_VERIFYING'				:	'id_verifying_card_value',
-						'self.ID_USING_MARKING'			:	'id_using_marking_card_value',
-						'self.MARKINGS_CORRECT'			:	'markings_correct_card_value',
-						'self.DISTINCTIVE_TRAITS'		:	'distinctive_traits_card_value',
-						'self.OWNER_STA'				:	'owner_sta_card_value',
-						'self.GOOD_ID'					:	'good_id_card_value'
+						'self.IDENTIFIABILTY'			: 	[ 2, 2],
+						'self.LOCATION'		 			: 	[ 2, 2],
+						'self.CHIP_WORK'	 			:	[ 2, 2],
+						'self.PASSPORT'		 			: 	[ 2, 2],
+						'self.PASSPORT_AVALAIBLE'		:	[ 2, 2],
+						'self.ID_USING'					:	[ 2, 2],
+						'self.ID_VERIFYING'				:	[ 2, 2],
+						'self.ID_USING_MARKING'			:	[ 2, 2],
+						'self.MARKINGS_CORRECT'			:	[ 2, 2],
+						'self.DISTINCTIVE_TRAITS'		:	[ 2, 2],
+						'self.OWNER_STA'				:	[ 2, 2],
+						'self.GOOD_ID'					:	[ 2, 2]
 					}
 				}
 
@@ -1046,7 +1050,7 @@ class HorseIDBayesianNetwork(object):
 			cpds=self.__SYSTEM[self.CPDS];				variables=self.__SYSTEM[self.VARIABLES];			evidences=self.__SYSTEM[self.EVIDENCES];
 			sizes=self.__SYSTEM[self.SIZES];			data=self.__SYSTEM[self.DATA];					evidence_cards=self.__SYSTEM[self.EVIDENCE_CARDS];
 			#---------------------------------------------------------------------------------------------------------------------------------------------------
-			if request!=None and request.has_key(self.DATA):
+			if request!=None and self.DATA in request:
 				s1=self.update_values(request);
 				s2=self.load_sizes(request);
 				s3=self.load_evidences(request); 	
@@ -1889,7 +1893,7 @@ class HorseIDBayesianNetwork(object):
 				...
 		"""
 		try:
-			node= request[self.NODE] if request.has_key(self.NODE) else None
+			node= request[self.NODE] if self.NODE in request else None
 					#model engine			#request.node
 			return self.horse_id_model.get_cpds(node=node);
 		except Exception as e:
@@ -1931,7 +1935,7 @@ class HorseIDBayesianNetwork(object):
 				...
 		"""
 		try:
-			node=request[self.NODE] if request.has_key(self.NODE) else None
+			node=request[self.NODE] if self.NODE in request else None
 			return self.horse_id_model.get_cardinality(node=node);
 		except Exception as e:
 			return False
@@ -1970,7 +1974,7 @@ class HorseIDBayesianNetwork(object):
 				...
 		"""
 		try:
-			variables= request[self.VARIABLES] if request.has_key(self.VARIABLES) else None
+			variables= request[self.VARIABLES] if self.VARIABLES in request else None
 			#model engine							#request.variables
 			return self.horse_id_model.local_independencies(variables=request.variables);
 		except Exception as e:
@@ -2016,8 +2020,8 @@ class HorseIDBayesianNetwork(object):
 				...
 		"""
 		try:
-			variables = request[self.VARIABLES] if request.has_key(self.VARIABLES) else None
-			observerd = request[self.OBSERVED] if request.has_key(self.OBSERVED) else None
+			variables = request[self.VARIABLES] if self.VARIABLES in request else None
+			observerd = request[self.OBSERVED] if self.OBSERVED in request else None
 				#model engine						#request.variables, 	request.observed;
 			return self.horse_id_model.active_trail_nodes(variables=variables, 	observed=observed)
 		except Exception as e:
@@ -2080,11 +2084,12 @@ class HorseIDBayesianNetwork(object):
 			Mathematical Statement:
 		"""
 		try:
-			variables 			=request[self.VARIABLES] if request.has_key(self.VARIABLES) else None;
-			evidences 			=request[self.EVIDENCES] if request.has_key(self.EVIDENCE) else None;
-			elimination_order 	=request[self.ELIMINATION_ORDER] if request.has_key(self.ELIMINATION_ORDER) else None;
+			variables 			=request[self.VARIABLES] if self.VARIABLES in request else None;
+			evidences 			=request[self.EVIDENCES] if self.EVIDENCES in request else None;
+			elimination_order 	=request[self.ELIMINATION_ORDER] if self.ELIMINATION_ORDER in request else None;
 					#inference engine		#request.variables 			request.evidence 		request.elimination_order
-			return self.horse_inference.query(variables=variables, 		evidence=evidences, 		elimination_order=elimination_order);
+			x = self.horse_inference.query(variables=variables, 		evidence=evidences, 		elimination_order=elimination_order);
+			return { k: x[k].values.tolist() for k in x };
 		except Exception as e:
 			return False
 		#DONE
@@ -2143,11 +2148,11 @@ class HorseIDBayesianNetwork(object):
 				...
 		"""
 		try:
-			variables 			=request[self.VARIABLES] if request.has_key(self.VARIABLES) else None;
-			evidences 			=request[self.EVIDENCES] if request.has_key(self.EVIDENCES) else None;
-			elimination_order 	=request[self.ELIMINATION_ORDER] if request.has_key(self.ELIMINATION_ORDER) else None;
+			variables 			=request[self.VARIABLES] if self.VARIABLES in request else None;
+			evidences 			=request[self.EVIDENCES] if self.EVIDENCES in request else None;
+			elimination_order 	=request[self.ELIMINATION_ORDER] if self.ELIMINATION_ORDER in request else None;
 					#inference engine		#request.variables 			request.evidence 		request.elimination_order
-			return self.horse_inference.query(variables=variables, 		evidence=evidences, 		elimination_order=elimination_order);
+			return self.horse_inference.map_query(variables=variables, 		evidence=evidences, 		elimination_order=elimination_order);
 		except Exception as e:
 			return False
 		#DONE

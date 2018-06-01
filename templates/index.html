@@ -66,15 +66,27 @@
                 <span class="result"></span>
             </div>
         </div>
-        <div class="card">
-            <a href="#"  id="query" class="btn btn-large waves-effect waves-light orange">Query</a>
-        </div>
-
-        <div class="card">
-            <a href="#"  id="map_query" class="btn btn-large waves-effect waves-light orange">Map Query</a>
+    </div>
+    <div class="card">
+        <div class="row">
+            <div class="col s3">
+                <a href="#"  id="query" class="btn btn-large waves-effect waves-light orange">Query</a>
+            </div>
+            <div class="col s9">
+                <span class="result"></span>
+            </div>
         </div>
     </div>
-    <div id="response"></div>
+    <div class="card">
+        <div class="row">
+            <div class="col s3">
+                <a href="#"  id="map_query" class="btn btn-large waves-effect waves-light orange">Map Query</a>
+            </div>
+            <div class="col s9">
+                <span class="result"></span>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -124,47 +136,44 @@
 
 
 
-    $(document).on("change", "#query", function() {
-        var input = $(this).value == "on" ? true : false;
+
+    $(document).on("click", "#query", function() {
         var card = $(this).closest(".card");
-        var data = { variables : ["chip_work"], evidences:{id_verifying: 0, id_using: 0, owner_sta: 0} };
+        var data = { "variables" : ["chip_work"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
         $.ajax({
-            url: "/model/build/",
+            url:"/model/query/",
             method: "PUT",
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $(card).find(".result").html("<h4>"+json.output+"</h4>");
+                $(card).find(".result").html("<h4>"+json.output.chip_work+"</h4>");
+
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(textStatus);
-            }
-        });
-    });
+                    alert(textStatus);
+                }
+            });
+     });
 
 
 
-
-
-    $(document).on("change", "#map_query", function() {
-        var input = $(this).value == "on" ? true : false;
+    $(document).on("click", "#map_query", function() {
         var card = $(this).closest(".card");
-        var data = { variables : ["chip_work"], evidences:{id_verifying: 0, id_using: 0, owner_sta: 0} };
+        var data = { "variables" : ["chip_work"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
         $.ajax({
-            url: "/model/build/",
+            url:"/model/map_query/",
             method: "PUT",
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                $(card).find(".result").html("<h4>"+json.output+"</h4>");
+                $(card).find(".result").html("<h4>"+json.output.chip_work+"</h4>");
+
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(textStatus);
-            }
-        });
-    });
-
-
+                    alert(textStatus);
+                }
+            });
+     });
 
 
 </script>
