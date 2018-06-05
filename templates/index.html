@@ -8,13 +8,15 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+
+
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -34,7 +36,9 @@
 <body>
 
 <div class="container">
-    <h1>Horse ID</h1>
+
+
+    <h3>Confidence in ID of Vintage Year: <span id="confidence_in_id">0</span>%</h3>
 
     <div class="card">
         <div class="row">
@@ -47,16 +51,36 @@
         </div>
     </div>
 
+    <div  class="card">
+        <div class="row">
+            <div class="col s4">
+                <a href="#"   class="btn btn-large  orange ">Current Location?</a>
+            </div>
+            <div class="col s4">
+
+                <select id="location"  class="variable" data-node="location" data-evidence="">
+
+
+                </select>
+
+
+            </div>
+            <div class="col s4">
+                <span class="result"></span>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="row">
             <div class="col s3">
-                <a href="#"   class="btn btn-large  orange ">Chip Works</a>
+                <a href="#"   class="btn btn-large  orange ">Is the Chip Working?</a>
             </div>
             <div class="col s3">
                 <div class="switch left">
                     <label>
                         No
-                        <input id="chip_works" type="checkbox">
+                        <input id="chip_works" type="checkbox" class="variable" data-node="chip_works" data-evidence="">
                         <span class="lever"></span>
                         Yes
                     </label>
@@ -93,7 +117,14 @@
 </body>
 <script>
 
-    MODEL = false;
+    EVIDENCE = {};
+    VARS = {};
+
+    $(document).ready(function(){
+        $('select').formSelect();
+
+    });
+
 
     //starts the server
     $(document).on("click", "#start", function() {
@@ -105,23 +136,47 @@
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
+                populate_variables();
                 $(card).find(".result").html("<h4>"+json.output+"</h4>");
 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-            });
-     });
+                alert(textStatus);
+            }
+        });
+    });
 
 
-    $(document).on("change", "#chip_works", function() {
-        var input = $(this).value == "on" ? true : false;
+    $(document).on("change", ".variable", function() {
+        var input = $(this).val();
+        // convert checkbox to boolean
+        if (input=="on") input = "true";
+        else if (input=="off") input = "false";
+
         var card = $(this).closest(".card");
-        var data = { node : "chip_work", result: input };
+
+        // put new value into data-evidence
+        $(this).data('evidence', input);
+
+        var data = {};
+        $(".variable").each(function(i,d) {
+            // include all evidence which has been entered
+            var evidence = $(this).data('evidence');
+            if (evidence>"") {
+                data[$(this).data('node')] = evidence;
+            }
+        });
+
+        // update model and show result in card
+        update_model(data, card);
+
+    });
+
+
+    function update_model(data, card) {
         $.ajax({
-            url: "/model/build/",
-            method: "PUT",
+            url: "/update/",
+            method: "GET",
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
@@ -131,15 +186,40 @@
                 alert(textStatus);
             }
         });
-    });
+    }
 
 
 
+    function populate_variables(){
+        // populate variables
+        $.ajax({
+            url: "/variables/",
+            method: "GET",
+            dataType: "JSON",
+            success: function (json) {
+                VARS = json;
 
+                // populate location dropdown
+                var html = '<option value="" disabled selected>Choose your location</option>\n';
+                options = $.each(VARS['location'], function (i, d) {
+                    html += '<option value="' + d + '">' + d + '</option>';
+                });
+
+                $("#location").html(html);
+                $('select').formSelect();
+                //$('#location').formSelect();
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+
+    }
 
     $(document).on("click", "#query", function() {
         var card = $(this).closest(".card");
-        var data = { "variables" : ["chip_work"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
+        var data = { "variables" : ["good_id"] };
         $.ajax({
             url:"/model/query/",
             method: "PUT",
@@ -150,10 +230,10 @@
 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-            });
-     });
+                alert(textStatus);
+            }
+        });
+    });
 
 
 
@@ -170,10 +250,10 @@
 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-            });
-     });
+                alert(textStatus);
+            }
+        });
+    });
 
 
 </script>

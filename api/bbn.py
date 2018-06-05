@@ -11,14 +11,14 @@ class HorseIDBayesianNetwork(object):
 	"""
 	The general workflow is:
 
-		STEP 1		BUILD THE __SYSTEM
+		STEP 1		BUILD THE SYSTEM
 			I.		initialise space
 			II.		set universe
 			III.	use default values / set new values
 			IV.		set evidences or causal nodes properties
 			V.		set Conditional Probability Distribution Table
 			VI.		draw default Horse Identification BBN Graph / draw new Horse Identification BBN Graph.
-		STEP 2		RUN THE __SYSTEM
+		STEP 2		RUN THE SYSTEM
 			I.		load model
 		STEP 3		PERFORM INFERENCE, ANALYSIS, AND MODIFICATION TASKS
 			I.		update model
@@ -104,7 +104,7 @@ class HorseIDBayesianNetwork(object):
 
 	def start(self, request=None):
 		"""
-		This should be use for starting the default Horse Identification Bayesian Belief Network __SYSTEM. Builds and Run the default model.
+		This should be use for starting the default Horse Identification Bayesian Belief Network SYSTEM. Builds and Run the default model.
 			
 			Request Format:
 				request=void
@@ -704,7 +704,7 @@ class HorseIDBayesianNetwork(object):
 		try:
 			s1=self.clear_values(request);
 			self.__SYSTEM[self.DATA] = request[self.DATA]
-			s2=load_sizes(request);
+			s2=self.load_sizes(request);
 			return s1 and s2;	
 		except Exception as e:
 			return False;						
@@ -737,7 +737,7 @@ class HorseIDBayesianNetwork(object):
 				Returns true if it works, else it returns false. Check your request format. 
 
 			Mathematical Statement:
-				for all variables or nodes, load length or sizes of probability distribution matrix to the __SYSTEM.
+				for all variables or nodes, load length or sizes of probability distribution matrix to the SYSTEM.
 
 		"""
 		try:
@@ -2162,7 +2162,13 @@ class HorseIDBayesianNetwork(object):
 
 
 
+	def variable_values(self,var_name=None):
+		'''return list of possible values for a specific variable'''
 
+		if var_name:
+			return  self.__SYSTEM[self.SPACES][var_name]
+		else:
+			return self.__SYSTEM[self.SPACES]
 
 
 
