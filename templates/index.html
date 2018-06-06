@@ -174,86 +174,110 @@
 
 
     function update_model(data, card) {
+        //data={ "variables" : ["good_id"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} }
+
+        var payload = {variables: ['good_id'], evidences: data};
         $.ajax({
-            url: "/update/",
-            method: "GET",
-            dataType: "JSON",
-            data: JSON.stringify(data),
-            success: function (json) {
-                $(card).find(".result").html("<h4>"+json.output+"</h4>");
+            url: "/model/update/",
+            method: "PUT",
+            data: JSON.stringify(payload),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(textStatus);
-            }
-        });
-    }
-
-
-
-    function populate_variables(){
-        // populate variables
-        $.ajax({
-            url: "/variables/",
-            method: "GET",
-            dataType: "JSON",
             success: function (json) {
-                VARS = json;
 
-                // populate location dropdown
-                var html = '<option value="" disabled selected>Choose your location</option>\n';
-                options = $.each(VARS['location'], function (i, d) {
-                    html += '<option value="' + d + '">' + d + '</option>';
+                $.ajax({
+                    url: "/model/query/",
+                    method: "PUT",
+                    data: JSON.stringify(payload),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (json) {
+
+                        $(card).find(".result").html("<h4>" + json.output + "</h4>");
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(textStatus);
+                    }
                 });
 
-                $("#location").html(html);
-                $('select').formSelect();
-                //$('#location').formSelect();
-
             },
+
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert(textStatus);
             }
         });
-
     }
 
-    $(document).on("click", "#query", function() {
-        var card = $(this).closest(".card");
-        var data = { "variables" : ["good_id"] };
-        $.ajax({
-            url:"/model/query/",
-            method: "PUT",
-            dataType: "JSON",
-            data: JSON.stringify(data),
-            success: function (json) {
-                $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
 
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(textStatus);
-            }
+
+        function populate_variables(){
+            // populate variables
+            $.ajax({
+                url: "/variables/",
+                method: "GET",
+                dataType: "JSON",
+                success: function (json) {
+                    VARS = json;
+
+                    // populate location dropdown
+                    var html = '<option value="" disabled selected>Choose your location</option>\n';
+                    options = $.each(VARS['location'], function (i, d) {
+                        html += '<option value="' + d + '">' + d + '</option>';
+                    });
+
+                    $("#location").html(html);
+                    $('select').formSelect();
+                    //$('#location').formSelect();
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+
+        }
+
+        $(document).on("click", "#query", function() {
+            var card = $(this).closest(".card");
+            var data = { "variables" : ["good_id"] };
+            $.ajax({
+                url:"/model/query/",
+                method: "PUT",
+                dataType: "JSON",
+                data: JSON.stringify(data),
+                success: function (json) {
+                    $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
+
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
         });
-    });
 
 
 
-    $(document).on("click", "#map_query", function() {
-        var card = $(this).closest(".card");
-        var data = { "variables" : ["chip_work"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
-        $.ajax({
-            url:"/model/map_query/",
-            method: "PUT",
-            dataType: "JSON",
-            data: JSON.stringify(data),
-            success: function (json) {
-                $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
+        $(document).on("click", "#map_query", function() {
+            var card = $(this).closest(".card");
+            var data = { "variables" : ["chip_work"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
+            $.ajax({
+                url:"/model/map_query/",
+                method: "PUT",
+                dataType: "JSON",
+                data: JSON.stringify(data),
+                success: function (json) {
+                    $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
 
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(textStatus);
-            }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
         });
-    });
 
 
 </script>

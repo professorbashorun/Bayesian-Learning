@@ -37,13 +37,13 @@ class VariablesList(APIView):
 class UpdateAndQuery(APIView):
     """Update with new evidence and return updated results"""
 
-    def get(self, request):
-
+    def post(self, request):
+        evidence = request.data['evidences']
         result = bbn.build(request)
-        graph = createSerializedResponse(bbn.draw_graph, request.body)
-        query = createSerializedResponse(bbn.query, request.body)
+        graph = createSerializedResponse(bbn.draw_graph, request)
+        query = createSerializedResponse(bbn.query, request)
         query = bbn.query(request)
-        return JsonResponse(variables)
+        return JsonResponse(query)
 
 
 
