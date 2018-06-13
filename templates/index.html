@@ -30,6 +30,10 @@
         .card .col {
             padding-left: 0px;
         }
+
+        .card.disabled {
+           display:none;
+        }
     </style>
 </head>
 
@@ -40,12 +44,12 @@
 
     <h3>Confidence in ID of Vintage Year: <span id="confidence_in_id">0</span>%</h3>
 
-    <div class="card">
+    <div id="start" class="card">
         <div class="row">
-            <div class="col s3">
+            <div class="col s4">
                 <a href="#"  id="start" class="btn btn-large waves-effect waves-light orange">Start</a>
             </div>
-            <div class="col s9">
+            <div class="col s8">
                 <span class="result"></span>
             </div>
         </div>
@@ -71,12 +75,58 @@
         </div>
     </div>
 
+
     <div class="card">
         <div class="row">
-            <div class="col s3">
+            <div class="col s4">
+                <a href="#"   class="btn btn-large  orange ">Passport Available?</a>
+            </div>
+            <div class="col s4">
+                <div class="switch left">
+                    <label>
+                        No
+                        <input id="chip_works" type="checkbox" class="variable" data-node="passport_available" data-evidence="">
+                        <span class="lever"></span>
+                        Yes
+                    </label>
+                </div>
+            </div>
+            <div class="col s4">
+                <span class="result"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="row">
+            <div class="col s4">
+                <a href="#"   class="btn btn-large  orange ">Chip Reader Available?</a>
+            </div>
+            <div class="col s4">
+                <div class="switch left">
+                    <label>
+                        No
+                        <input id="chip_works" type="checkbox" class="variable" data-node="chip_reader_available" data-evidence="">
+                        <span class="lever"></span>
+                        Yes
+                    </label>
+                </div>
+            </div>
+            <div class="col s4">
+                <span class="result"></span>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="card disabled">
+        <div class="row">
+            <div class="col s4">
                 <a href="#"   class="btn btn-large  orange ">Is the Chip Working?</a>
             </div>
-            <div class="col s3">
+            <div class="col s4">
                 <div class="switch left">
                     <label>
                         No
@@ -86,48 +136,78 @@
                     </label>
                 </div>
             </div>
-            <div class="col s6">
+            <div class="col s4">
                 <span class="result"></span>
             </div>
         </div>
     </div>
+
+
     <div class="card">
         <div class="row">
-            <div class="col s3">
-                <a href="#"  id="query" class="btn btn-large waves-effect waves-light orange">Query</a>
+            <div class="col s4">
+                <a href="#"   class="btn btn-large  orange ">Markings Correct?</a>
             </div>
-            <div class="col s9">
-                <span class="result"></span>
+            <div class="col s4">
+                <div class="switch left">
+                    <label>
+                        No
+                        <input id="markings_correct" type="checkbox" class="variable" data-node="markings_correct" data-evidence="">
+                        <span class="lever"></span>
+                        Yes
+                    </label>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="row">
-            <div class="col s3">
-                <a href="#"  id="map_query" class="btn btn-large waves-effect waves-light orange">Map Query</a>
-            </div>
-            <div class="col s9">
+            <div class="col s4">
                 <span class="result"></span>
             </div>
         </div>
     </div>
 </div>
 
-
+<a href="{% url "view_network"  %}">View Network</a>
 </body>
 <script>
 
     EVIDENCE = {};
     VARS = {};
 
+
     $(document).ready(function(){
-        $('select').formSelect();
+
+
+        check_started();
+
+        //gui javascript
+         $('select').formSelect();
 
     });
 
+    function check_started() {
+        $.ajax({
+            url:"/is_started/",
+            method: "GET",
+            dataType: "JSON",
+            success: function (json) {
+                var start_status;
+                if(json["is_started"]=="False") {
+                    start_status = "No";
+                    start();
+                } else {
+                    start_status = "Yes";
+                    populate_variables();
+                }
+                $("#start").find(".result").html("<h4>"+start_status+"</h4>");
+
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
+        });
+    }
 
     //starts the server
-    $(document).on("click", "#start", function() {
+    function start() {
         var card = $(this).closest(".card");
         var data={};
         $.ajax({
@@ -136,15 +216,17 @@
             dataType: "JSON",
             data: JSON.stringify(data),
             success: function (json) {
-                populate_variables();
+
                 $(card).find(".result").html("<h4>"+json.output+"</h4>");
+                check_started();
+
 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert(textStatus);
             }
         });
-    });
+    }
 
 
     $(document).on("change", ".variable", function() {
@@ -178,8 +260,8 @@
 
         var payload = {variables: ['good_id'], evidences: data};
         $.ajax({
-            url: "/model/update/",
-            method: "PUT",
+            url: "/update/",
+            method: "POST",
             data: JSON.stringify(payload),
             headers: {
                 'Accept': 'application/json',
@@ -187,22 +269,7 @@
             },
             success: function (json) {
 
-                $.ajax({
-                    url: "/model/query/",
-                    method: "PUT",
-                    data: JSON.stringify(payload),
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    success: function (json) {
-
-                        $(card).find(".result").html("<h4>" + json.output + "</h4>");
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert(textStatus);
-                    }
-                });
+                        $("#confidence_in_id").html(json.good_id.True*100);
 
             },
 
@@ -214,70 +281,32 @@
 
 
 
-        function populate_variables(){
-            // populate variables
-            $.ajax({
-                url: "/variables/",
-                method: "GET",
-                dataType: "JSON",
-                success: function (json) {
-                    VARS = json;
+    function populate_variables(){
+        // populate variables
+        $.ajax({
+            url: "/variables/",
+            method: "GET",
+            dataType: "JSON",
+            success: function (json) {
+                VARS = json;
 
-                    // populate location dropdown
-                    var html = '<option value="" disabled selected>Choose your location</option>\n';
-                    options = $.each(VARS['location'], function (i, d) {
-                        html += '<option value="' + d + '">' + d + '</option>';
-                    });
+                // populate location dropdown
+                var html = '<option value="" disabled selected>Choose your location</option>\n';
+                options = $.each(VARS['location'], function (i, d) {
+                    html += '<option value="' + d + '">' + d + '</option>';
+                });
 
-                    $("#location").html(html);
-                    $('select').formSelect();
-                    //$('#location').formSelect();
+                $("#location").html(html);
+                $('select').formSelect();
+                //$('#location').formSelect();
 
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-            });
-
-        }
-
-        $(document).on("click", "#query", function() {
-            var card = $(this).closest(".card");
-            var data = { "variables" : ["good_id"] };
-            $.ajax({
-                url:"/model/query/",
-                method: "PUT",
-                dataType: "JSON",
-                data: JSON.stringify(data),
-                success: function (json) {
-                    $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
-
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-            });
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus);
+            }
         });
 
-
-
-        $(document).on("click", "#map_query", function() {
-            var card = $(this).closest(".card");
-            var data = { "variables" : ["chip_work"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} };
-            $.ajax({
-                url:"/model/map_query/",
-                method: "PUT",
-                dataType: "JSON",
-                data: JSON.stringify(data),
-                success: function (json) {
-                    $(card).find(".result").html("<i>"+JSON.stringify(json.output)+"</i>");
-
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-            });
-        });
+    }
 
 
 </script>

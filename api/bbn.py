@@ -3,7 +3,7 @@ from pgmpy.models import BayesianModel
 from pgmpy.factors.discrete import TabularCPD
 from pgmpy.inference import VariableElimination
 import pandas as pd;
-
+from datetime import datetime
 
 
 
@@ -96,6 +96,7 @@ class HorseIDBayesianNetwork(object):
 	#variable states
 	__SYSTEM={}					#System
 	last_updated_time = None;	#Datetime
+	start_time = None           #Datetime
 	
 
 
@@ -124,6 +125,7 @@ class HorseIDBayesianNetwork(object):
 		"""
 		s1=self.build(request);
 		s2=self.run(request);
+		self.start_time = datetime.now()
 		return s1 and s2;
 
 
@@ -492,7 +494,7 @@ class HorseIDBayesianNetwork(object):
 				self.__SYSTEM[self.DATA]=request[self.DATA];
 				return self.load_sizes(request);
 			else:
-				return use_defualt_values(request);
+				return use_default_values(request);
 		except Exception as e:
 			return False;
 
@@ -1584,7 +1586,7 @@ class HorseIDBayesianNetwork(object):
 			self.horse_id_model.fit(self.current_dataframe);
 			self.last_updated_time = "";
 			self.current_accuracy =	self.test_model(request);
-			return {time: self.last_updated_time, accuracy: self.current_accuracy}
+			return {"time": self.last_updated_time, "accuracy": self.current_accuracy}
 		except Exception as e:
 			return False;
 		#NEED REVIEW
@@ -2021,7 +2023,7 @@ class HorseIDBayesianNetwork(object):
 		"""
 		try:
 			variables = request[self.VARIABLES] if self.VARIABLES in request else None
-			observerd = request[self.OBSERVED] if self.OBSERVED in request else None
+			observed = request[self.OBSERVED] if self.OBSERVED in request else None
 				#model engine						#request.variables, 	request.observed;
 			return self.horse_id_model.active_trail_nodes(variables=variables, 	observed=observed)
 		except Exception as e:
@@ -2093,14 +2095,6 @@ class HorseIDBayesianNetwork(object):
 		except Exception as e:
 			return False
 		#DONE
-
-
-
-
-
-
-
-
 
 
 	def map_query(self, request):

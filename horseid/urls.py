@@ -31,6 +31,9 @@ urlpatterns = [
 	#API URLs 													REPONSE FUNCTIONS
     url(r'^admin/', 											admin.site.urls),
     url(r'^variables/', 										views.VariablesList.as_view()),
+    url(r'^is_started/', 										views.IsStarted.as_view()),
+    url(r'^network_data/', 										views.NetworkData.as_view()),
+    url(r'^view_network/', 										views.ViewNetwork.as_view(), name="view_network"),
     url(r'^update/', 							     			views.UpdateAndQuery.as_view()),
     url(r'^model/start/',                                       views.HorseIDBayesianNetworkAPI.start.as_view()),
     url(r'^model/build/',										views.HorseIDBayesianNetworkAPI.build.as_view()),

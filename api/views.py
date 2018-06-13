@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -34,18 +35,51 @@ class VariablesList(APIView):
         variables = bbn.variable_values()
         return JsonResponse(variables)
 
+class NetworkData(APIView):
+
+    def get(self, request):
+
+        # if calling independantly, will need to start bbn
+        if bbn.start_time == None:
+            bbn.start()
+
+        nodes = bbn.get_nodes()
+        edges = bbn.get_edges()
+        data = {'nodes':[{"id": n, "group": 1} for n in nodes],
+                'links': [ {"source": e[0], "target": e[1], "value": 1} for e in edges],
+                }
+
+        return JsonResponse(data)
+
+class ViewNetwork(TemplateView):
+    template_name = "chart.html"
+
 class UpdateAndQuery(APIView):
     """Update with new evidence and return updated results"""
 
     def post(self, request):
+        variables = request.data['variables']
         evidence = request.data['evidences']
-        result = bbn.build(request)
-        graph = createSerializedResponse(bbn.draw_graph, request)
-        query = createSerializedResponse(bbn.query, request)
-        query = bbn.query(request)
-        return JsonResponse(query)
+
+        bbn.set_cpds({"variables": variables, "evidence": evidence})
+        bbn.run(request)
+
+        result = bbn.query({"variables": variables, "evidence": evidence})
 
 
+        # evidence = request.data['evidences']
+        # result = bbn.build(request)
+        # graph = createSerializedResponse(bbn.draw_graph, request)
+        # query = createSerializedResponse(bbn.query, request)
+        # query = bbn.query(request)
+        return JsonResponse(result)
+
+class IsStarted(APIView):
+    """Check to see if system has been started"""
+
+    def get(self, request):
+        result =  (bbn.start_time != None)
+        return JsonResponse({'is_started': str(result)})
 
 
 class HorseIDBayesianNetworkAPI(object):
