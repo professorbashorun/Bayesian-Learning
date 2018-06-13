@@ -32,7 +32,7 @@
         }
 
         .card.disabled {
-           display:none;
+            display:none;
         }
     </style>
 </head>
@@ -46,10 +46,10 @@
 
     <div id="start" class="card">
         <div class="row">
-            <div class="col s4">
+            <div class="col s6">
                 <a href="#"  id="start" class="btn btn-large waves-effect waves-light orange">Start</a>
             </div>
-            <div class="col s8">
+            <div class="col s6">
                 <span class="result"></span>
             </div>
         </div>
@@ -57,10 +57,10 @@
 
     <div  class="card">
         <div class="row">
-            <div class="col s4">
+            <div class="col s6">
                 <a href="#"   class="btn btn-large  orange ">Current Location?</a>
             </div>
-            <div class="col s4">
+            <div class="col s6">
 
                 <select id="location"  class="variable" data-node="location" data-evidence="">
 
@@ -69,86 +69,37 @@
 
 
             </div>
-            <div class="col s4">
-                <span class="result"></span>
-            </div>
+
         </div>
     </div>
 
 
     <div class="card">
         <div class="row">
-            <div class="col s4">
+            <div class="col s6">
                 <a href="#"   class="btn btn-large  orange ">Passport Available?</a>
             </div>
-            <div class="col s4">
+            <div class="col s6">
                 <div class="switch left">
                     <label>
                         No
-                        <input id="chip_works" type="checkbox" class="variable" data-node="passport_available" data-evidence="">
+                        <input id="passport_available" type="checkbox" class="available" data-group="passport" >
                         <span class="lever"></span>
                         Yes
                     </label>
                 </div>
             </div>
-            <div class="col s4">
-                <span class="result"></span>
-            </div>
+
         </div>
     </div>
 
 
-    <div class="card">
+    <div class="card passport"  style="display:none;">
         <div class="row">
-            <div class="col s4">
-                <a href="#"   class="btn btn-large  orange ">Chip Reader Available?</a>
-            </div>
-            <div class="col s4">
-                <div class="switch left">
-                    <label>
-                        No
-                        <input id="chip_works" type="checkbox" class="variable" data-node="chip_reader_available" data-evidence="">
-                        <span class="lever"></span>
-                        Yes
-                    </label>
-                </div>
-            </div>
-            <div class="col s4">
-                <span class="result"></span>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="card disabled">
-        <div class="row">
-            <div class="col s4">
-                <a href="#"   class="btn btn-large  orange ">Is the Chip Working?</a>
-            </div>
-            <div class="col s4">
-                <div class="switch left">
-                    <label>
-                        No
-                        <input id="chip_works" type="checkbox" class="variable" data-node="chip_works" data-evidence="">
-                        <span class="lever"></span>
-                        Yes
-                    </label>
-                </div>
-            </div>
-            <div class="col s4">
-                <span class="result"></span>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="card">
-        <div class="row">
-            <div class="col s4">
+            <div class="col s6">
                 <a href="#"   class="btn btn-large  orange ">Markings Correct?</a>
             </div>
-            <div class="col s4">
+            <div class="col s6">
                 <div class="switch left">
                     <label>
                         No
@@ -158,14 +109,61 @@
                     </label>
                 </div>
             </div>
-            <div class="col s4">
-                <span class="result"></span>
-            </div>
+
         </div>
     </div>
+
+    <div class="card">
+        <div class="row">
+            <div class="col s6">
+                <a href="#"   class="btn btn-large  orange ">Chip Reader Available?</a>
+            </div>
+            <div class="col s6">
+                <div class="switch left">
+                    <label>
+                        No
+                        <input id="chipreader_available" type="checkbox" class="available" data-group="chiper" >
+                        <span class="lever"></span>
+                        Yes
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="card chiper"  style="display:none;">
+        <div class="row">
+            <div class="col s6">
+                <a href="#"   class="btn btn-large  orange ">Chip Readable?</a>
+            </div>
+            <div class="col s6">
+                <div class="switch left">
+                    <label>
+                        No
+                        <input id="chip_work" type="checkbox" class="variable" data-node="chip_work" data-evidence="">
+                        <span class="lever"></span>
+                        Yes
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <p>
+    <a class="btn" href="{% url "view_network"  %}">View Network</a>
+</p>
+
 </div>
 
-<a href="{% url "view_network"  %}">View Network</a>
+
+
+
 </body>
 <script>
 
@@ -179,8 +177,22 @@
         check_started();
 
         //gui javascript
-         $('select').formSelect();
+        $('select').formSelect();
 
+    });
+
+    $(document).on("change", ".available", function() {
+
+        var group_class = "." + $(this).data('group');
+
+        if(this.checked){
+            // display related
+            $(group_class).slideDown();
+        } else {
+            //hide related
+            $(group_class).slideUp();
+            //TODO: remove any evidence
+        }
     });
 
     function check_started() {
@@ -269,7 +281,7 @@
             },
             success: function (json) {
 
-                        $("#confidence_in_id").html(json.good_id.True*100);
+                $("#confidence_in_id").html(json.good_id.True*100);
 
             },
 

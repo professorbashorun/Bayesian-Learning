@@ -66,12 +66,6 @@ class UpdateAndQuery(APIView):
 
         result = bbn.query({"variables": variables, "evidence": evidence})
 
-
-        # evidence = request.data['evidences']
-        # result = bbn.build(request)
-        # graph = createSerializedResponse(bbn.draw_graph, request)
-        # query = createSerializedResponse(bbn.query, request)
-        # query = bbn.query(request)
         return JsonResponse(result)
 
 class IsStarted(APIView):
