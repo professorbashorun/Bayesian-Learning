@@ -153,8 +153,6 @@
     </div>
 
 
-
-
     <p>
     <a class="btn" href="{% url "view_network"  %}">View Network</a>
 </p>
@@ -172,7 +170,6 @@
 
 
     $(document).ready(function(){
-
 
         check_started();
 
@@ -243,9 +240,12 @@
 
     $(document).on("change", ".variable", function() {
         var input = $(this).val();
+
         // convert checkbox to boolean
-        if (input=="on") input = "true";
-        else if (input=="off") input = "false";
+        if (input=="on") input = 0;
+        else if (input=="off") input = 1;
+        else if (input=="0" || input=="1") input=parseInt(input);
+        
 
         var card = $(this).closest(".card");
 
@@ -256,24 +256,24 @@
         $(".variable").each(function(i,d) {
             // include all evidence which has been entered
             var evidence = $(this).data('evidence');
-            if (evidence>"") {
+            if (evidence!== "") {
                 data[$(this).data('node')] = evidence;
             }
         });
 
         // update model and show result in card
-        update_model(data, card);
+        query_model(data, card);
 
     });
 
 
-    function update_model(data, card) {
+    function query_model(data, card) {
         //data={ "variables" : ["good_id"], "evidences":{"id_verifying": 0, "id_using": 0, "owner_sta": 0} }
 
         var payload = {variables: ['good_id'], evidences: data};
         $.ajax({
-            url: "/update/",
-            method: "POST",
+            url: "/model/query/",
+            method: "PUT",
             data: JSON.stringify(payload),
             headers: {
                 'Accept': 'application/json',
@@ -281,7 +281,8 @@
             },
             success: function (json) {
 
-                $("#confidence_in_id").html(json.good_id.True*100);
+                console.log(json.output)
+                $("#confidence_in_id").html(json.output.good_id.True*100);
 
             },
 
@@ -304,8 +305,10 @@
 
                 // populate location dropdown
                 var html = '<option value="" disabled selected>Choose your location</option>\n';
+                var pos = 0;
                 options = $.each(VARS['location'], function (i, d) {
-                    html += '<option value="' + d + '">' + d + '</option>';
+                    html += '<option value="' + pos + '">' + d + '</option>';
+                    pos++
                 });
 
                 $("#location").html(html);

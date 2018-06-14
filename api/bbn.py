@@ -315,16 +315,16 @@ class HorseIDBayesianNetwork(object):
 			#------------------------------------------------------------------------------------------------------------
 			spaces[self.IDENTIFIABILITY] 				= [0, 1];								# If identifiability is good or not.
 			spaces[self.LOCATION]						= ["ireland", "not_ireland"];			# Currently using 2 locations subsets. Ireland and Not-Ireland.
-			spaces[self.CHIP_WORK]						= [True, False];
-			spaces[self.PASSPORT]						= [True, False];
-			spaces[self.PASSPORT_AVAILABLE]				= [True, False];	
-			spaces[self.ID_USING]						= [True, False];
-			spaces[self.ID_VERIFYING]					= [True, False];
-			spaces[self.ID_USING_MARKING]				= [True, False];
-			spaces[self.MARKINGS_CORRECT]				= [True, False];
-			spaces[self.DISTINCTIVE_TRAITS]				= [True, False];
-			spaces[self.OWNER_STA]						= [True, False];
-			spaces[self.GOOD_ID]						= [True, False];
+			spaces[self.CHIP_WORK]						= [False, True];
+			spaces[self.PASSPORT]						= [False, True];
+			spaces[self.PASSPORT_AVAILABLE]				= [False, True];
+			spaces[self.ID_USING]						= [False, True];
+			spaces[self.ID_VERIFYING]					= [False, True];
+			spaces[self.ID_USING_MARKING]				= [False, True];
+			spaces[self.MARKINGS_CORRECT]				= [False, True];
+			spaces[self.DISTINCTIVE_TRAITS]				= [False, True];
+			spaces[self.OWNER_STA]						= [False, True];
+			spaces[self.GOOD_ID]						= [False, True];
 			return True
 		except Exception as e:
 			return False
@@ -2091,8 +2091,10 @@ class HorseIDBayesianNetwork(object):
 			elimination_order 	=request[self.ELIMINATION_ORDER] if self.ELIMINATION_ORDER in request else None;
 					#inference engine		#request.variables 			request.evidence 		request.elimination_order
 			x = self.horse_inference.query(variables=variables, 		evidence=evidences, 		elimination_order=elimination_order);
+			#return x;
 			return { node: { str(self.__SYSTEM[self.SPACES][node][observation]) : x[node].values[observation] for observation in range(len(x[node].values))} for node in x };
 		except Exception as e:
+			print(e);
 			return False
 		#DONE
 

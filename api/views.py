@@ -85,7 +85,6 @@ class HorseIDBayesianNetworkAPI(object):
         PUT:	calls the function with request.body as the input variable to the function
 
     """
-
     class start(APIView):
 
         def put(self, request):
